@@ -1,0 +1,110 @@
+/* ============================================================
+   CHALK · Login y Registro
+   ============================================================ */
+
+/* ── Envoltorio centrado ─────────────────────────────────── */
+.login-wrap {
+    min-height: calc(100vh - 52px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: linear-gradient(160deg, var(--utp-black) 0%, #2c0a10 60%, var(--utp-black) 100%);
+}
+
+/* ── Tarjeta de formulario ───────────────────────────────── */
+.login-card {
+    background: var(--utp-white);
+    border-radius: var(--radius-xl);
+    padding: 32px 36px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: var(--shadow-lg), 0 0 0 1px rgba(200,16,46,.15);
+    animation: fadeUp var(--transition-normal);
+}
+
+.login-card-wide {
+    max-width: 480px;
+}
+
+/* ── Logo dentro del login ───────────────────────────────── */
+.login-logo {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: var(--utp-black);
+    margin-bottom: 2px;
+}
+
+.login-logo .logo-accent {
+    color: var(--utp-red);
+}
+
+.login-sub {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.login-sub::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--utp-red);
+}
+
+/* ── Franja superior decorativa ──────────────────────────── */
+.login-card::before {
+    content: '';
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg, var(--utp-red), var(--utp-red-dark));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    margin: -32px -36px 28px;
+}
+
+/* ── Grid dos columnas en registro ───────────────────────── */
+.reg-name-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+/* ── Input generado (solo lectura) ──────────────────────── */
+input.fld-readonly {
+    opacity: 0.65;
+    cursor: not-allowed;
+    background: var(--color-bg-secondary);
+}
+
+/* ── Cabecera del formulario ─────────────────────────────── */
+.login-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* ── Pie del login ───────────────────────────────────────── */
+.login-footer {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.login-footer a {
+    color: var(--utp-red);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}

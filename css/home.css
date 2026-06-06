@@ -1,0 +1,229 @@
+/* ============================================================
+   CHALK · Pantalla de inicio — Lista de docentes
+   ============================================================ */
+
+/* ── Héroe de búsqueda ───────────────────────────────────── */
+.search-hero {
+    background: var(--utp-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.search-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--utp-red), var(--utp-red-dark));
+}
+
+.search-hero-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 10px;
+}
+
+.search-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 9px 13px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-primary);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    color: var(--color-text-primary);
+}
+
+.search-input:focus {
+    border-color: var(--utp-red);
+    box-shadow: 0 0 0 3px rgba(200,16,46,.10);
+}
+
+.search-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.search-btn {
+    padding: 9px 20px;
+    background: var(--utp-red);
+    color: var(--utp-white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    background: var(--utp-red-dark);
+}
+
+.filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* ── Contador de resultados ──────────────────────────────── */
+.result-count {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.result-count strong {
+    color: var(--utp-red);
+}
+
+/* ── Lista de docentes ───────────────────────────────────── */
+.prof-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ── Tarjeta de docente en lista ─────────────────────────── */
+.prow {
+    background: var(--utp-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    display: flex;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.prow::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background var(--transition-fast);
+}
+
+.prow:hover {
+    border-color: var(--utp-red);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.prow:hover::before {
+    background: var(--utp-red);
+}
+
+/* ── Avatar en lista ─────────────────────────────────────── */
+.prow-av {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+}
+
+/* ── Cuerpo de la tarjeta ────────────────────────────────── */
+.prow-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.prow-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--utp-black);
+    margin-bottom: 1px;
+}
+
+.prow-dept {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-bottom: 7px;
+    font-weight: 500;
+}
+
+.prow-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* ── Lado derecho de la tarjeta ──────────────────────────── */
+.prow-right {
+    text-align: right;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.big-score {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--utp-red);
+    line-height: 1;
+}
+
+.big-score-label {
+    font-size: 9px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.review-count {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--color-text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--color-text-primary);
+}
+
+.empty-state-desc {
+    font-size: 12px;
+}

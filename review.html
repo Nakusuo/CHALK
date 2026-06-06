@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chalk — Escribe una reseña sobre tu docente UTP y ayuda a otros estudiantes.">
+    <title>Escribir reseña · Chalk UTP</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/professor.css">
+    <link rel="stylesheet" href="css/review.css">
+</head>
+<body>
+
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+
+    <!-- Contenido: Formulario de reseña -->
+    <main class="page-wrap">
+        <div class="breadcrumb">
+            <a href="home.html">Docentes</a>
+            <span>›</span>
+            <a id="review-back-link" href="#">Docente</a>
+            <span>›</span>
+            <span>Escribir reseña</span>
+        </div>
+        <div class="two-col">
+            <!-- Sidebar -->
+            <div>
+                <div class="card" style="padding:0">
+                    <div id="review-sidebar-info"></div>
+                </div>
+            </div>
+            <!-- Formulario multi-paso -->
+            <div class="form-wrap" id="review-form-container"></div>
+        </div>
+    </main>
+
+    <!-- JS -->
+    <script src="js/storage.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/review.js"></script>
+    <script>
+        const user = components.requireAuth();
+        if (user) {
+            components.renderTopbar("review");
+            review.init();
+        }
+    </script>
+
+</body>
+</html>

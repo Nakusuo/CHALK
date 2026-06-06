@@ -1,0 +1,393 @@
+/* ============================================================
+   CHALK · Perfil de docente
+   ============================================================ */
+
+/* ── Layout del perfil ───────────────────────────────────── */
+.prof-page {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* ── Avatar grande ───────────────────────────────────────── */
+.prof-av-big {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── Bloque de puntuación ────────────────────────────────── */
+.score-block {
+    background: var(--utp-black);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius-lg);
+    padding: 16px 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--utp-white);
+    position: relative;
+    overflow: hidden;
+}
+
+.score-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--utp-red), var(--utp-red-dark));
+}
+
+.score-giant {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--utp-white);
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.score-giant span {
+    font-size: 20px;
+    font-weight: 400;
+    opacity: .6;
+    letter-spacing: 0;
+}
+
+.score-stars {
+    color: var(--color-star);
+    font-size: 18px;
+    margin: 6px 0 2px;
+    letter-spacing: 1px;
+}
+
+.score-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,.5);
+    font-weight: 500;
+}
+
+/* ── Bloques de información lateral ──────────────────────── */
+.info-block {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-block-head {
+    padding: 7px 13px;
+    background: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--color-text-secondary);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 13px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 12px;
+}
+
+.info-row:last-child { border: none; }
+
+.info-row-label {
+    color: var(--color-text-secondary);
+    font-size: 11px;
+}
+
+.info-row-val {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* ── Botones de acción del perfil ────────────────────────── */
+.action-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 12px;
+}
+
+/* ── Encabezado del docente ──────────────────────────────── */
+.prof-header-card {
+    background: var(--utp-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.prof-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--utp-red), var(--utp-black));
+}
+
+.prof-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--utp-black);
+    margin-bottom: 3px;
+    letter-spacing: -0.3px;
+}
+
+.prof-subtitle {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.prof-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* ── Grid de criterios (acordes) ─────────────────────────── */
+.accord-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.accord-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.accord-name {
+    font-size: 11px;
+    font-weight: 500;
+    width: 100px;
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+}
+
+.accord-track {
+    flex: 1;
+    height: 8px;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    cursor: default;
+}
+
+.accord-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--utp-red);
+    transition: width 0.5s cubic-bezier(.25,.8,.25,1);
+}
+
+.accord-val {
+    font-size: 11px;
+    font-weight: 700;
+    width: 26px;
+    text-align: right;
+    color: var(--utp-red);
+}
+
+/* ── Reseñas ─────────────────────────────────────────────── */
+.reviews-card {
+    background: var(--utp-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.reviews-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.reviews-head-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--utp-black);
+}
+
+.reviews-head-count {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-tertiary);
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+}
+
+.reviews-body {
+    padding: 0 18px;
+}
+
+/* ── Ítem de reseña ──────────────────────────────────────── */
+.review-item {
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px 0;
+    animation: fadeIn var(--transition-normal);
+}
+
+.review-item:last-child { border: none; }
+
+.rev-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rev-av {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--utp-red-light);
+    color: var(--utp-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border-accent);
+}
+
+.rev-meta {
+    flex: 1;
+}
+
+.rev-user {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--utp-black);
+}
+
+.rev-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+    font-size: 9px;
+    font-weight: 600;
+    background: var(--utp-black);
+    color: var(--utp-white);
+    margin-left: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.rev-date {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    margin-top: 1px;
+}
+
+.rev-score {
+    color: var(--color-star);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.rev-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 8px 0;
+}
+
+.rev-pill {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: var(--radius-full);
+}
+
+.rev-pill-pos {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.rev-pill-neg {
+    background: var(--utp-red-light);
+    color: var(--utp-red-dark);
+    border: 1px solid var(--color-border-accent);
+}
+
+.rev-pill-neu {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.rev-text {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--color-text-primary);
+    margin-bottom: 10px;
+}
+
+.helpful-btn {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    background: var(--color-bg-primary);
+    font-family: var(--font-sans);
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.helpful-btn:hover,
+.helpful-btn.on {
+    border-color: var(--utp-red);
+    color: var(--utp-red);
+    background: var(--utp-red-light);
+}
+
+/* ── Sin reseñas ─────────────────────────────────────────── */
+.no-reviews {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-text-secondary);
+}
+
+.no-reviews-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    opacity: .5;
+}
+
+@media (max-width: 768px) {
+    .prof-page { grid-template-columns: 1fr; }
+    .accord-grid { grid-template-columns: 1fr; }
+}

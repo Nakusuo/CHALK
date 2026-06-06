@@ -1,0 +1,311 @@
+/* ============================================================
+   CHALK · Formulario de reseña (multi-paso)
+   ============================================================ */
+
+/* ── Wrapper del formulario ──────────────────────────────── */
+.form-wrap {
+    max-width: 720px;
+}
+
+/* ── Barra de pasos ──────────────────────────────────────── */
+.step-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 22px;
+}
+
+.step-node {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all var(--transition-normal);
+    color: var(--color-text-muted);
+}
+
+.step-node.done {
+    background: var(--utp-red);
+    border-color: var(--utp-red);
+    color: var(--utp-white);
+}
+
+.step-node.cur {
+    border-color: var(--utp-red);
+    color: var(--utp-red);
+    box-shadow: 0 0 0 3px rgba(200,16,46,.15);
+}
+
+.step-ln {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border);
+    border-radius: 2px;
+    transition: background var(--transition-normal);
+}
+
+.step-ln.done {
+    background: var(--utp-red);
+}
+
+.step-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-top: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ── Secciones del formulario ────────────────────────────── */
+.form-section {
+    display: none;
+}
+
+.form-section.on {
+    display: block;
+    animation: fadeUp var(--transition-normal);
+}
+
+/* ── Tarjeta del formulario ──────────────────────────────── */
+.form-card {
+    background: var(--utp-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 14px;
+}
+
+.form-card-head {
+    padding: 13px 18px;
+    background: var(--utp-black);
+    color: var(--utp-white);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-card-head-icon {
+    font-size: 18px;
+}
+
+.form-card-head-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-card-head-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,.55);
+    margin-left: auto;
+}
+
+.form-card-body {
+    padding: 18px;
+}
+
+/* ── Grid de criterios ───────────────────────────────────── */
+.crit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.crit-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.crit-card:hover {
+    border-color: var(--utp-red);
+    box-shadow: 0 0 0 3px rgba(200,16,46,.07);
+}
+
+.crit-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: var(--utp-black);
+}
+
+.crit-desc {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* ── Estrellas interactivas ──────────────────────────────── */
+.star-row {
+    display: flex;
+    gap: 4px;
+}
+
+.s-star {
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--color-border-strong);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    user-select: none;
+}
+
+.s-star:hover,
+.s-star.on {
+    color: var(--color-star);
+    transform: scale(1.15);
+}
+
+/* ── Nube de etiquetas ───────────────────────────────────── */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.tag-opt {
+    padding: 5px 13px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--color-text-secondary);
+    background: var(--color-bg-primary);
+}
+
+.tag-opt:hover {
+    border-color: var(--utp-red);
+    color: var(--utp-red);
+}
+
+.tag-opt.on {
+    background: var(--utp-red);
+    color: var(--utp-white);
+    border-color: var(--utp-red);
+}
+
+/* ── Contador de caracteres ──────────────────────────────── */
+.char-track {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    text-align: right;
+    margin-top: 4px;
+}
+
+/* ── Vista previa de la reseña ───────────────────────────── */
+.preview-box {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.preview-box-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+
+/* ── Aviso de reputación ─────────────────────────────────── */
+.rep-notice {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    border-radius: var(--radius-md);
+    padding: 11px 13px;
+    font-size: 12px;
+    color: #2e7d32;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 500;
+}
+
+/* ── Navegación del formulario ───────────────────────────── */
+.form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+}
+
+.form-step-info {
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+/* ── Pantalla de éxito ───────────────────────────────────── */
+.success-wrap {
+    text-align: center;
+    padding: 50px 24px;
+    animation: fadeUp var(--transition-normal);
+}
+
+.success-icon {
+    font-size: 48px;
+    margin-bottom: 14px;
+}
+
+.success-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--utp-red);
+}
+
+.success-desc {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+}
+
+/* ── Sidebar en review ───────────────────────────────────── */
+.review-sidebar-prof {
+    text-align: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.review-sidebar-av {
+    width: 70px;
+    height: 70px;
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 10px;
+    border: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+    .crit-grid { grid-template-columns: 1fr; }
+}

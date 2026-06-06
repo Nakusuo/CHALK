@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chalk — Crea tu cuenta con tu código de estudiante UTP.">
+    <title>Registrarse · Chalk UTP</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+
+    <!-- Contenido: Formulario de registro -->
+    <main>
+        <div class="login-wrap">
+            <div class="login-card login-card-wide">
+                <div class="login-form-header">
+                    <div class="login-logo" style="font-size:22px">Ch<span class="logo-accent">a</span>lk</div>
+                    <a class="btn btn-sm" href="index.html" style="text-decoration:none">← Volver</a>
+                </div>
+
+                <div class="reg-name-grid">
+                    <div>
+                        <label class="field-label" for="reg-name">Nombres</label>
+                        <input class="fld" id="reg-name" placeholder="Ana">
+                    </div>
+                    <div>
+                        <label class="field-label" for="reg-last">Apellidos</label>
+                        <input class="fld" id="reg-last" placeholder="García">
+                    </div>
+                </div>
+
+                <div class="field-wrap">
+                    <label class="field-label" for="reg-code">Código de estudiante</label>
+                    <input class="fld" id="reg-code" placeholder="U20231234" oninput="auth.syncEmail()">
+                    <div class="err" id="reg-code-err">Debe empezar con U seguido de números</div>
+                </div>
+
+                <div class="field-wrap">
+                    <label class="field-label" for="reg-email">Correo generado</label>
+                    <input class="fld fld-readonly" id="reg-email" readonly>
+                </div>
+
+                <div class="field-wrap">
+                    <label class="field-label" for="reg-fac">Facultad</label>
+                    <select class="fld" id="reg-fac">
+                        <option value="">Selecciona</option>
+                        <option>Ingeniería y Arquitectura</option>
+                        <option>Negocios</option>
+                        <option>Ciencias de la Salud</option>
+                        <option>Derecho</option>
+                        <option>Comunicaciones</option>
+                    </select>
+                    <div class="err" id="reg-fac-err">Selecciona tu facultad</div>
+                </div>
+
+                <div class="field-wrap">
+                    <label class="field-label" for="reg-pass">Contraseña</label>
+                    <input class="fld" id="reg-pass" type="password" placeholder="Mínimo 8 caracteres">
+                    <div class="err" id="reg-pass-err">Mínimo 8 caracteres</div>
+                </div>
+
+                <button class="btn btn-primary btn-full" onclick="auth.register()">Crear cuenta</button>
+
+                <div class="login-footer">
+                    ¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JS -->
+    <script src="js/storage.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        if (!components.redirectIfAuth()) {
+            components.renderTopbar("guest");
+        }
+    </script>
+
+</body>
+</html>

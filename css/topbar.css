@@ -1,0 +1,224 @@
+/* ============================================================
+   CHALK · Topbar y navegación principal
+   ============================================================ */
+
+/* ── Barra de navegación superior ───────────────────────── */
+.topbar {
+    background: var(--utp-black);
+    border-bottom: 2px solid var(--utp-red);
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: var(--shadow-md);
+}
+
+.topbar-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    gap: 0;
+}
+
+/* ── Logo ────────────────────────────────────────────────── */
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--utp-white);
+    margin-right: 28px;
+    letter-spacing: -0.8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    transition: opacity var(--transition-fast);
+    user-select: none;
+}
+
+.logo:hover {
+    opacity: 0.88;
+}
+
+.logo .logo-accent {
+    color: var(--utp-red);
+}
+
+.logo-badge {
+    font-size: 9px;
+    font-weight: 700;
+    background: var(--utp-red);
+    color: var(--utp-white);
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    align-self: center;
+    margin-top: 2px;
+}
+
+/* ── Links de nav ────────────────────────────────────────── */
+.nav-links {
+    display: flex;
+    gap: 0;
+    flex: 1;
+}
+
+.nav-link {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,.65);
+    padding: 0 12px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.2px;
+}
+
+.nav-link:hover {
+    color: var(--utp-white);
+    border-bottom-color: rgba(255,255,255,.3);
+}
+
+.nav-link.active {
+    color: var(--utp-white);
+    border-bottom-color: var(--utp-red);
+}
+
+/* ── Lado derecho ────────────────────────────────────────── */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+/* ── Botones en topbar ───────────────────────────────────── */
+.nav-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,.25);
+    background: transparent;
+    color: rgba(255,255,255,.85);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all var(--transition-fast);
+}
+
+.nav-btn:hover {
+    background: rgba(255,255,255,.1);
+    border-color: rgba(255,255,255,.4);
+    color: var(--utp-white);
+}
+
+.nav-btn.primary {
+    background: var(--utp-red);
+    color: var(--utp-white);
+    border-color: var(--utp-red);
+}
+
+.nav-btn.primary:hover {
+    background: var(--utp-red-dark);
+    border-color: var(--utp-red-dark);
+}
+
+/* ── Chip de usuario ─────────────────────────────────────── */
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+}
+
+.user-chip:hover {
+    background: rgba(255,255,255,.1);
+}
+
+.user-av {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--utp-red);
+    color: var(--utp-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    border: 2px solid rgba(255,255,255,.2);
+    flex-shrink: 0;
+}
+
+.user-name-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,.85);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Subnav (barra secundaria) ───────────────────────────── */
+.subnav {
+    background: var(--utp-charcoal);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding: 0 16px;
+}
+
+.subnav-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    height: 36px;
+    gap: 0;
+}
+
+.subnav-link {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,.50);
+    padding: 0 11px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.2px;
+}
+
+.subnav-link:hover {
+    color: rgba(255,255,255,.85);
+}
+
+.subnav-link.active {
+    color: var(--utp-white);
+    border-bottom-color: var(--utp-red);
+}
+
+.subnav-right {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-star);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ── Topbar login (antes de autenticarse) ────────────────── */
+.topbar-login .nav-links { display: none; }

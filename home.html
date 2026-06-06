@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chalk — Busca y califica a los mejores docentes de la UTP. Encuentra reseñas reales de estudiantes.">
+    <title>Docentes · Chalk UTP</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+    <!-- Topbar (renderizado por JS) -->
+    <div id="topbar-container"></div>
+
+    <!-- Contenido: Lista de docentes -->
+    <main class="page-wrap">
+        <div class="two-col">
+            <!-- Sidebar -->
+            <div id="home-sidebar"></div>
+
+            <!-- Contenido principal -->
+            <div>
+                <div class="search-hero">
+                    <div class="search-hero-title">🔍 Buscar docentes</div>
+                    <div class="search-row">
+                        <input class="search-input" id="home-search" type="text"
+                               placeholder="Buscar docente, curso o facultad…"
+                               oninput="home.render()">
+                        <button class="search-btn" onclick="home.render()">Buscar</button>
+                    </div>
+                    <div class="filter-row" id="filter-chips"></div>
+                </div>
+                <div class="result-count" id="result-count"></div>
+                <div class="prof-list" id="prof-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JS -->
+    <script src="js/storage.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/home.js"></script>
+    <script>
+        // Guardia de autenticación
+        const user = components.requireAuth();
+        if (user) {
+            components.renderTopbar("home");
+            home.init();
+        }
+    </script>
+
+</body>
+</html>
