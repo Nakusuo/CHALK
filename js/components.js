@@ -45,7 +45,7 @@ const components = (() => {
             <div class="topbar">
                 <div class="topbar-inner">
                     ${_logoHtml("home.html")}
-                    <div class="nav-links">
+                    <div class="nav-links" id="nav-links">
                         <a class="nav-link ${page === "home" ? "active" : ""}" href="home.html" style="text-decoration:none">Docentes</a>
                         <a class="nav-link ${page === "facultades" ? "active" : ""}" href="facultades.html" style="text-decoration:none">Facultades</a>
                         <a class="nav-link ${page === "cursos" ? "active" : ""}" href="cursos.html" style="text-decoration:none">Cursos</a>
@@ -57,9 +57,13 @@ const components = (() => {
                             <span class="user-name-text">${user.name || ""}</span>
                         </a>
                         <button class="nav-btn" onclick="auth.logout()">Salir</button>
+                        <button class="hamburger-btn" id="hamburger-btn" onclick="components.toggleMenu()" aria-label="Menú">
+                            <span></span><span></span><span></span>
+                        </button>
                     </div>
                 </div>
             </div>
+            <div class="nav-drawer-overlay" id="nav-drawer-overlay" onclick="components.toggleMenu()"></div>
             ${page === "home" ? _subnav() : ""}
         `;
     }
@@ -163,8 +167,22 @@ const components = (() => {
         requestAnimationFrame(update);
     }
 
+    /* ── Mobile menu toggle ────────────────────────────────── */
+    function toggleMenu() {
+        const btn = document.getElementById("hamburger-btn");
+        const links = document.getElementById("nav-links");
+        const overlay = document.getElementById("nav-drawer-overlay");
+        if (!btn || !links) return;
+        const isOpen = btn.classList.contains("open");
+        btn.classList.toggle("open", !isOpen);
+        links.classList.toggle("open", !isOpen);
+        if (overlay) overlay.classList.toggle("open", !isOpen);
+        document.body.style.overflow = isOpen ? "" : "hidden";
+    }
+
     return {
         renderTopbar, requireAuth, redirectIfAuth, getUrlParam,
         gauge, sparkline, badgeHtml, difficultyBar, animateNumber,
+        toggleMenu,
     };
 })();

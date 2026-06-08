@@ -742,4 +742,24 @@ textarea.fld {
     .two-col {
         grid-template-columns: 1fr;
     }
+    .page-wrap {
+        padding: var(--space-4) var(--space-3);
+    }
+}
+
+@media (max-width: 480px) {
+    .page-wrap {
+        padding: var(--space-3) var(--space-2);
+    }
+    .btn {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+    .metric-value {
+        font-size: 22px;
+    }
+    .card-head {
+        font-size: 10px;
+        padding: var(--space-2) var(--space-3);
+    }
 }
