@@ -445,9 +445,16 @@ textarea.fld {
 
 /* ── Estrellas ───────────────────────────────────────────── */
 .stars-sm {
-    color: var(--color-star);
-    font-size: 12px;
-    letter-spacing: 0px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.stars-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    line-height: 1;
 }
 
 /* ── Hint box ────────────────────────────────────────────── */

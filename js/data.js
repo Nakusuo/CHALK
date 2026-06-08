@@ -608,10 +608,13 @@ const DB = {
         return this.professors.filter(p => p.fac === facId).length;
     },
 
-    starsHtml(score) {
+    starsHtml(score, size = 14) {
         const full = Math.floor(score);
-        const half = (score - full) >= 0.4 ? 1 : 0;
+        const half = (score - full) >= 0.3 ? 1 : 0;
         const empty = 5 - full - half;
-        return "★".repeat(full) + (half ? "½" : "") + "☆".repeat(empty);
+        const starFull = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="#F5A623" style="vertical-align:middle"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+        const starHalf = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="vertical-align:middle"><defs><linearGradient id="hg"><stop offset="50%" stop-color="#F5A623"/><stop offset="50%" stop-color="transparent"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#hg)" stroke="#F5A623" stroke-width="1"/></svg>`;
+        const starEmpty = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" style="vertical-align:middle"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+        return `<span class="stars-row">${starFull.repeat(full)}${half ? starHalf : ""}${starEmpty.repeat(empty)}</span>`;
     },
 };

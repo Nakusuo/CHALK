@@ -27,50 +27,22 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 3px;
-    margin-right: var(--space-8);
+    margin-right: var(--space-6);
     cursor: pointer;
     transition: opacity var(--transition-fast);
     user-select: none;
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .logo:hover {
     opacity: 0.85;
 }
 
-.logo-icon {
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 4px;
-}
-
-.logo-text {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--utp-white);
-    letter-spacing: -1px;
-    line-height: 1;
-}
-
-.logo-text .logo-accent {
-    color: var(--utp-red);
-}
-
-.logo-badge {
-    font-size: 8px;
-    font-weight: 700;
-    background: var(--gradient-red);
-    color: var(--utp-white);
-    padding: 2px 6px;
-    border-radius: var(--radius-xs);
-    letter-spacing: 0.8px;
-    margin-left: 6px;
-    text-transform: uppercase;
-    align-self: center;
+.logo-img {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ── Links de nav ────────────────────────────────────────── */

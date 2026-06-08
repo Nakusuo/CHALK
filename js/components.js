@@ -5,30 +5,11 @@
 
 const components = (() => {
 
-    /* ── Logo SVG inline ─────────────────────────────────── */
-    function _logoSvg() {
-        return `
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="28" height="28" rx="7" fill="url(#chalk-grad)"/>
-                <path d="M8 20L18 8" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M18 8L20 6" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-                <circle cx="8" cy="20" r="1.5" fill="white" opacity="0.4"/>
-                <defs>
-                    <linearGradient id="chalk-grad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#C8102E"/>
-                        <stop offset="1" stop-color="#9E0B23"/>
-                    </linearGradient>
-                </defs>
-            </svg>
-        `;
-    }
-
+    /* ── Logo con imagen CHALK.png ────────────────────────── */
     function _logoHtml(href) {
         return `
             <a class="logo" href="${href}" style="text-decoration:none">
-                <span class="logo-icon">${_logoSvg()}</span>
-                <span class="logo-text">Ch<span class="logo-accent">a</span>lk</span>
-                <span class="logo-badge">UTP</span>
+                <img class="logo-img" src="CHALK.png" alt="Chalk UTP" />
             </a>
         `;
     }
@@ -71,10 +52,10 @@ const components = (() => {
                         <a class="nav-link ${page === "compare" ? "active" : ""}" href="compare.html" style="text-decoration:none">Comparar</a>
                     </div>
                     <div class="nav-right">
-                        <div class="user-chip">
+                        <a class="user-chip" href="profile.html" style="text-decoration:none">
                             <div class="user-av">${user.initials || "U"}</div>
                             <span class="user-name-text">${user.name || ""}</span>
-                        </div>
+                        </a>
                         <button class="nav-btn" onclick="auth.logout()">Salir</button>
                     </div>
                 </div>

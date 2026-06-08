@@ -422,9 +422,306 @@
     .compare-selectors { grid-template-columns: 1fr; }
     .compare-result { grid-template-columns: 1fr; }
     .compare-criteria-grid { grid-template-columns: 1fr; }
+    .filter-panel-row { flex-direction: column; }
+    .sede-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {
     .fac-grid { grid-template-columns: 1fr; }
     .course-grid { grid-template-columns: 1fr; }
+    .sede-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Filter Panel ────────────────────────────────────────── */
+.filter-panel {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-card);
+}
+
+.filter-panel-row {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-end;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 0;
+}
+
+.filter-group-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-muted);
+    margin-bottom: 6px;
+}
+
+/* ── Filter summary & chips ──────────────────────────────── */
+.filter-summary {
+    margin-bottom: var(--space-4);
+}
+
+.filter-chips-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-2);
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--utp-red-subtle);
+    border: 1px solid var(--color-border-accent);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--utp-red);
+}
+
+.filter-chip-x {
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.6;
+    transition: opacity var(--transition-fast);
+    margin-left: 2px;
+}
+
+.filter-chip-x:hover {
+    opacity: 1;
+}
+
+/* ── Sede grid ───────────────────────────────────────────── */
+.sede-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+}
+
+.sede-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-card);
+}
+
+.sede-card:hover {
+    border-color: var(--color-border-accent);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+}
+
+.sede-card-pin {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.sede-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.sede-card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--utp-white);
+}
+
+.sede-card-region {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+.sede-card-right {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.sede-card-count {
+    font-size: 18px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--utp-red);
+    line-height: 1;
+}
+
+.sede-card-count-label {
+    font-size: 9px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: 600;
+}
+
+/* ── Compare search dropdown ─────────────────────────────── */
+.compare-select-card {
+    position: relative;
+}
+
+.compare-search-input {
+    font-size: 13px !important;
+}
+
+.compare-dropdown {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% - 8px);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-elevated);
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.compare-dd-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.compare-dd-item:last-child {
+    border-bottom: none;
+}
+
+.compare-dd-item:hover {
+    background: var(--color-bg-surface);
+}
+
+.compare-dd-emoji {
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.compare-dd-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.compare-dd-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--utp-white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compare-dd-meta {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compare-dd-score {
+    font-size: 16px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--utp-red);
+    flex-shrink: 0;
+}
+
+.compare-dd-empty {
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+/* ── Selected professor card ─────────────────────────────── */
+.compare-selected-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 12px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-accent);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-3);
+    position: relative;
+}
+
+.compare-selected-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.compare-selected-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--utp-white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compare-selected-dept {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+.compare-selected-right {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.compare-selected-score {
+    font-size: 22px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--utp-red);
+    line-height: 1;
+}
+
+.compare-selected-clear {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg-card);
+    color: var(--color-text-muted);
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.compare-selected-clear:hover {
+    background: var(--color-danger-bg);
+    border-color: var(--color-danger-border);
+    color: var(--color-danger);
 }

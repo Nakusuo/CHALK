@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chalk — Explora docentes por facultad en la UTP.">
+    <meta name="description" content="Chalk — Explora docentes por facultad y sede en la UTP.">
     <title>Facultades · Chalk UTP</title>
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
@@ -16,111 +16,271 @@
     <main class="page-wrap">
         <div class="page-title-row fadein">
             <div>
-                <h1 class="page-title">🎓 Facultades</h1>
-                <p class="page-subtitle">Explora docentes organizados por facultad y carrera</p>
+                <h1 class="page-title">🎓 Facultades y Sedes</h1>
+                <p class="page-subtitle">Explora docentes organizados por facultad, sede y carrera</p>
             </div>
         </div>
-        <div class="fac-grid" id="fac-grid"></div>
-        <div id="fac-detail" style="display:none"></div>
+
+        <!-- Filtros principales -->
+        <div class="filter-panel fadein" id="fac-filters">
+            <div class="filter-panel-row">
+                <div class="filter-group">
+                    <label class="filter-group-label">Facultad</label>
+                    <select class="fld" id="fac-filter-fac" onchange="facPage.render()">
+                        <option value="all">Todas las facultades</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-group-label">Sede</label>
+                    <select class="fld" id="fac-filter-sede" onchange="facPage.render()">
+                        <option value="all">Todas las sedes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-group-label">Ordenar por</label>
+                    <select class="fld" id="fac-filter-sort" onchange="facPage.render()">
+                        <option value="score">Mejor calificación</option>
+                        <option value="reviews">Más reseñas</option>
+                        <option value="difficulty-asc">Menor dificultad</option>
+                        <option value="difficulty-desc">Mayor dificultad</option>
+                        <option value="approval">Mayor aprobación</option>
+                        <option value="name">Nombre A-Z</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="flex:1.5">
+                    <label class="filter-group-label">Buscar docente o curso</label>
+                    <input class="fld" id="fac-filter-search" type="text" placeholder="Ej: Mendoza, Algoritmos…" oninput="facPage.render()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen de filtros activos -->
+        <div class="filter-summary fadein" id="filter-summary"></div>
+
+        <!-- Vista: tarjetas de facultades (overview) -->
+        <div id="fac-overview"></div>
+
+        <!-- Vista: lista filtrada de profes -->
+        <div id="fac-results"></div>
     </main>
+
     <script src="js/storage.js"></script>
     <script src="js/data.js"></script>
     <script src="js/components.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        const user = components.requireAuth();
-        if (user) {
-            components.renderTopbar("facultades");
-            _renderFaculties();
-        }
+        const facPage = (() => {
+            function init() {
+                _populateFilters();
+                render();
+            }
 
-        function _renderFaculties() {
-            const grid = document.getElementById("fac-grid");
-            grid.innerHTML = DB.faculties.map(f => {
-                const profs = DB.professors.filter(p => p.fac === f.id);
-                const count = profs.length;
-                const avg = count > 0 ? (profs.reduce((s, p) => s + DB.getProfScore(p.id), 0) / count).toFixed(1) : "—";
-                const courses = [...new Set(profs.flatMap(p => p.courses))];
-                const sedes = [...new Set(profs.flatMap(p => p.sedes || []))];
-                return `
-                    <div class="fac-card fadein" onclick="_showFacDetail('${f.id}')">
-                        <div class="fac-card-icon">${f.icon}</div>
-                        <div class="fac-card-name">${f.name}</div>
-                        <div class="fac-card-stats">
-                            <div class="fac-stat">
-                                <span class="fac-stat-val">${count}</span>
-                                <span class="fac-stat-label">Docentes</span>
-                            </div>
-                            <div class="fac-stat">
-                                <span class="fac-stat-val" style="color:var(--utp-red)">${avg}</span>
-                                <span class="fac-stat-label">Promedio</span>
-                            </div>
-                            <div class="fac-stat">
-                                <span class="fac-stat-val">${courses.length}</span>
-                                <span class="fac-stat-label">Cursos</span>
-                            </div>
-                        </div>
-                        <div class="fac-card-sedes">
-                            📍 ${sedes.slice(0, 3).map(s => DB.getSedeName(s)).join(", ")}${sedes.length > 3 ? ` +${sedes.length - 3}` : ""}
-                        </div>
+            function _populateFilters() {
+                const facSel = document.getElementById("fac-filter-fac");
+                DB.faculties.forEach(f => {
+                    const opt = document.createElement("option");
+                    opt.value = f.id;
+                    opt.textContent = `${f.icon} ${f.name} (${DB.getFacultyCount(f.id)})`;
+                    facSel.appendChild(opt);
+                });
+
+                const sedeSel = document.getElementById("fac-filter-sede");
+                const limaGroup = document.createElement("optgroup");
+                limaGroup.label = "Lima Metropolitana";
+                const provGroup = document.createElement("optgroup");
+                provGroup.label = "Provincias";
+
+                DB.sedes.forEach(s => {
+                    const opt = document.createElement("option");
+                    opt.value = s.id;
+                    const profCount = DB.getProfsBySede(s.id).length;
+                    opt.textContent = `${s.name} (${profCount} docentes)`;
+                    if (s.region === "Lima") limaGroup.appendChild(opt);
+                    else provGroup.appendChild(opt);
+                });
+                sedeSel.appendChild(limaGroup);
+                sedeSel.appendChild(provGroup);
+            }
+
+            function render() {
+                const facFilter  = document.getElementById("fac-filter-fac").value;
+                const sedeFilter = document.getElementById("fac-filter-sede").value;
+                const sortBy     = document.getElementById("fac-filter-sort").value;
+                const search     = (document.getElementById("fac-filter-search").value || "").toLowerCase().trim();
+
+                const isFiltered = facFilter !== "all" || sedeFilter !== "all" || search.length > 0;
+
+                if (!isFiltered) {
+                    _renderOverview();
+                } else {
+                    _renderFiltered(facFilter, sedeFilter, sortBy, search);
+                }
+            }
+
+            function _renderOverview() {
+                const overview = document.getElementById("fac-overview");
+                const results  = document.getElementById("fac-results");
+                const summary  = document.getElementById("filter-summary");
+                results.innerHTML = "";
+                summary.innerHTML = "";
+
+                overview.innerHTML = `
+                    <div class="section-label" style="margin-top:0">Facultades</div>
+                    <div class="fac-grid" style="margin-bottom:var(--space-6)">
+                        ${DB.faculties.map((f, i) => {
+                            const profs = DB.professors.filter(p => p.fac === f.id);
+                            const count = profs.length;
+                            const avg = count > 0 ? (profs.reduce((s, p) => s + DB.getProfScore(p.id), 0) / count).toFixed(1) : "—";
+                            const courses = [...new Set(profs.flatMap(p => p.courses))];
+                            const sedes = [...new Set(profs.flatMap(p => p.sedes || []))];
+                            return `
+                                <div class="fac-card fadein stagger-${Math.min(i+1,6)}" onclick="document.getElementById('fac-filter-fac').value='${f.id}';facPage.render()">
+                                    <div class="fac-card-icon">${f.icon}</div>
+                                    <div class="fac-card-name">${f.name}</div>
+                                    <div class="fac-card-stats">
+                                        <div class="fac-stat"><span class="fac-stat-val">${count}</span><span class="fac-stat-label">Docentes</span></div>
+                                        <div class="fac-stat"><span class="fac-stat-val" style="color:var(--utp-red)">${avg}</span><span class="fac-stat-label">Promedio</span></div>
+                                        <div class="fac-stat"><span class="fac-stat-val">${courses.length}</span><span class="fac-stat-label">Cursos</span></div>
+                                    </div>
+                                    <div class="fac-card-sedes">📍 ${sedes.slice(0,3).map(s => DB.getSedeName(s)).join(", ")}${sedes.length > 3 ? ` +${sedes.length-3}` : ""}</div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </div>
+
+                    <div class="section-label">Sedes UTP</div>
+                    <div class="sede-grid">
+                        ${DB.sedes.map((s, i) => {
+                            const profs = DB.getProfsBySede(s.id);
+                            return `
+                                <div class="sede-card fadein stagger-${Math.min(i+1,6)}" onclick="document.getElementById('fac-filter-sede').value='${s.id}';facPage.render()">
+                                    <div class="sede-card-pin">📍</div>
+                                    <div class="sede-card-body">
+                                        <div class="sede-card-name">${s.name}</div>
+                                        <div class="sede-card-region">${s.region}</div>
+                                    </div>
+                                    <div class="sede-card-right">
+                                        <div class="sede-card-count">${profs.length}</div>
+                                        <div class="sede-card-count-label">docentes</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")}
                     </div>
                 `;
-            }).join("");
-        }
+            }
 
-        function _showFacDetail(facId) {
-            const fac = DB.faculties.find(f => f.id === facId);
-            const profs = DB.professors.filter(p => p.fac === facId);
-            const courses = [...new Set(profs.flatMap(p => p.courses))];
-            const detail = document.getElementById("fac-detail");
-            const grid = document.getElementById("fac-grid");
+            function _renderFiltered(facFilter, sedeFilter, sortBy, search) {
+                const overview = document.getElementById("fac-overview");
+                const results  = document.getElementById("fac-results");
+                const summary  = document.getElementById("filter-summary");
+                overview.innerHTML = "";
 
-            grid.style.display = "none";
-            detail.style.display = "block";
+                let filtered = DB.professors.filter(p => {
+                    const matchFac  = facFilter === "all" || p.fac === facFilter;
+                    const matchSede = sedeFilter === "all" || (p.sedes && p.sedes.includes(sedeFilter));
+                    const matchQ    = !search ||
+                        p.name.toLowerCase().includes(search) ||
+                        p.dept.toLowerCase().includes(search) ||
+                        p.courses.some(c => c.toLowerCase().includes(search)) ||
+                        p.tags.some(t => t.toLowerCase().includes(search));
+                    return matchFac && matchSede && matchQ;
+                });
 
-            detail.innerHTML = `
-                <div class="fadein">
-                    <button class="btn btn-ghost" onclick="_backToFacs()" style="margin-bottom:var(--space-4)">← Todas las facultades</button>
-                    <div class="prof-header-card" style="margin-bottom:var(--space-5)">
-                        <div class="prof-title">${fac.icon} ${fac.name}</div>
-                        <div class="prof-subtitle">${profs.length} docentes · ${courses.length} cursos</div>
-                        <div class="prof-badges">
-                            ${courses.map(c => `<span class="mini-tag mini-tag-accent">📚 ${c}</span>`).join("")}
-                        </div>
+                filtered.sort((a, b) => {
+                    switch (sortBy) {
+                        case "reviews":        return DB.getProfReviewCount(b.id) - DB.getProfReviewCount(a.id);
+                        case "difficulty-asc":  return (a.difficulty||0) - (b.difficulty||0);
+                        case "difficulty-desc": return (b.difficulty||0) - (a.difficulty||0);
+                        case "approval":        return (b.approvalRate||0) - (a.approvalRate||0);
+                        case "name":            return a.name.localeCompare(b.name);
+                        default:                return DB.getProfScore(b.id) - DB.getProfScore(a.id);
+                    }
+                });
+
+                const chips = [];
+                if (facFilter !== "all") {
+                    const fac = DB.faculties.find(f => f.id === facFilter);
+                    chips.push(`<span class="filter-chip">${fac?.icon || ""} ${fac?.name || facFilter} <span class="filter-chip-x" onclick="document.getElementById('fac-filter-fac').value='all';facPage.render()">✕</span></span>`);
+                }
+                if (sedeFilter !== "all") {
+                    chips.push(`<span class="filter-chip">📍 ${DB.getSedeName(sedeFilter)} <span class="filter-chip-x" onclick="document.getElementById('fac-filter-sede').value='all';facPage.render()">✕</span></span>`);
+                }
+                if (search) {
+                    chips.push(`<span class="filter-chip">🔍 "${search}" <span class="filter-chip-x" onclick="document.getElementById('fac-filter-search').value='';facPage.render()">✕</span></span>`);
+                }
+                summary.innerHTML = chips.length > 0 ? `
+                    <div class="filter-chips-row">
+                        ${chips.join("")}
+                        <button class="btn btn-ghost btn-sm" onclick="facPage.clearFilters()" style="font-size:11px">Limpiar filtros</button>
                     </div>
+                    <div class="result-count">Mostrando <strong>${filtered.length}</strong> docente${filtered.length !== 1 ? "s" : ""}</div>
+                ` : "";
 
-                    <div class="section-label">Docentes de esta facultad</div>
+                if (filtered.length === 0) {
+                    results.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <div class="empty-state-title">Sin resultados</div>
+                            <div class="empty-state-desc">No hay docentes con esos filtros. Prueba cambiar la facultad, sede o búsqueda.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                results.innerHTML = `
                     <div class="prof-list">
-                        ${profs.sort((a, b) => DB.getProfScore(b.id) - DB.getProfScore(a.id)).map((p, i) => {
+                        ${filtered.map((p, i) => {
                             const score = DB.getProfScore(p.id);
                             const badge = DB.getProfBadge(p);
-                            const sedeNames = (p.sedes || []).map(s => DB.getSedeName(s)).join(", ");
+                            const diffColor = DB.getDifficultyColor(p.difficulty);
+                            const sedeNames = (p.sedes||[]).map(s => DB.getSedeName(s)).join(", ");
+                            const reviewCount = DB.getProfReviewCount(p.id);
                             return `
                                 <div class="prow fadein stagger-${Math.min(i+1,6)}" onclick="window.location.href='professor.html?id=${p.id}'">
                                     <div class="prow-av">${p.emoji}</div>
                                     <div class="prow-body">
-                                        <div class="prow-name">${p.name} ${p.verified ? '<span class="prow-verified">✔ Verificado</span>' : ""} ${badge ? components.badgeHtml(badge) : ""}</div>
+                                        <div class="prow-name">${p.name} ${p.verified?'<span class="prow-verified">✔ Verificado</span>':""} ${badge?components.badgeHtml(badge):""}</div>
                                         <div class="prow-dept">${p.dept} · 📍 ${sedeNames}</div>
+                                        <div class="prow-metrics">
+                                            <div class="prow-metric"><span class="prow-metric-val" style="color:${diffColor}">${p.difficulty.toFixed(1)}</span><span class="prow-metric-label">Dificultad</span></div>
+                                            <div class="prow-metric"><span class="prow-metric-val" style="color:var(--color-success)">${p.wouldTakeAgain}%</span><span class="prow-metric-label">Lo tomaría de nuevo</span></div>
+                                            <div class="prow-metric"><span class="prow-metric-val">${p.approvalRate}%</span><span class="prow-metric-label">Aprobación</span></div>
+                                        </div>
                                         <div class="prow-tags">
-                                            ${p.courses.map(c => `<span class="mini-tag mini-tag-accent">📚 ${c}</span>`).join("")}
+                                            ${p.tags.map(t => `<span class="mini-tag">${t}</span>`).join("")}
+                                            ${p.courses.slice(0,2).map(c => `<span class="mini-tag mini-tag-accent">📚 ${c}</span>`).join("")}
                                         </div>
                                     </div>
                                     <div class="prow-right">
                                         <div class="big-score">${score.toFixed(1)}</div>
                                         <div class="big-score-label">/ 5.0</div>
                                         <div class="stars-sm">${DB.starsHtml(score)}</div>
+                                        <div class="review-count">💬 ${reviewCount}</div>
                                     </div>
                                 </div>
                             `;
                         }).join("")}
                     </div>
-                </div>
-            `;
-        }
+                `;
+            }
 
-        function _backToFacs() {
-            document.getElementById("fac-grid").style.display = "";
-            document.getElementById("fac-detail").style.display = "none";
+            function clearFilters() {
+                document.getElementById("fac-filter-fac").value = "all";
+                document.getElementById("fac-filter-sede").value = "all";
+                document.getElementById("fac-filter-search").value = "";
+                document.getElementById("fac-filter-sort").value = "score";
+                render();
+            }
+
+            return { init, render, clearFilters };
+        })();
+
+        // Init AFTER definition
+        const user = components.requireAuth();
+        if (user) {
+            components.renderTopbar("facultades");
+            facPage.init();
         }
     </script>
 </body>
