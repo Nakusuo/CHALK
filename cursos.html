@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chalk — Explora docentes por curso en la UTP.">
+    <title>Cursos · Chalk UTP</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/topbar.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+    <div id="topbar-container"></div>
+    <main class="page-wrap">
+        <div class="page-title-row fadein">
+            <div>
+                <h1 class="page-title">📚 Cursos</h1>
+                <p class="page-subtitle">Encuentra el mejor docente para cada curso</p>
+            </div>
+        </div>
+
+        <!-- Filtro y búsqueda -->
+        <div class="course-filter-row fadein">
+            <input class="course-filter-input" id="course-search" type="text"
+                   placeholder="Buscar curso (ej: Algoritmos, Derecho, Marketing…)"
+                   oninput="_renderCourses()">
+            <select class="fld" id="course-fac-filter" onchange="_renderCourses()" style="max-width:220px;font-size:12px">
+                <option value="all">Todas las facultades</option>
+            </select>
+        </div>
+
+        <!-- Resultado: conteo -->
+        <div class="result-count" id="course-count" style="margin-bottom:var(--space-3)"></div>
+
+        <!-- Grid de cursos -->
+        <div class="course-grid" id="course-grid"></div>
+
+        <!-- Detalle de curso (oculto) -->
+        <div id="course-detail" style="display:none"></div>
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = components.requireAuth();
+        if (user) {
+            components.renderTopbar("cursos");
+            _initFilters();
+            _renderCourses();
+        }
+
+        function _initFilters() {
+            const sel = document.getElementById("course-fac-filter");
+            DB.faculties.forEach(f => {
+                const opt = document.createElement("option");
+                opt.value = f.id;
+                opt.textContent = `${f.icon} ${f.name}`;
+                sel.appendChild(opt);
+            });
+        }
+
+        function _renderCourses() {
+            const query = (document.getElementById("course-search")?.value || "").toLowerCase().trim();
+            const facFilter = document.getElementById("course-fac-filter")?.value || "all";
+            const grid = document.getElementById("course-grid");
+            const countEl = document.getElementById("course-count");
+            const detail = document.getElementById("course-detail");
+
+            // Ocultar detalle si estaba abierto
+            grid.style.display = "";
+            detail.style.display = "none";
+
+            let allCourses = DB.getAllCourses();
+
+            // Filtrar por facultad
+            if (facFilter !== "all") {
+                allCourses = allCourses.filter(c => c.fac === facFilter);
+            }
+
+            // Filtrar por búsqueda
+            if (query) {
+                allCourses = allCourses.filter(c => c.name.toLowerCase().includes(query));
+            }
+
+            // Ordenar por cantidad de profesores (desc)
+            allCourses.sort((a, b) => b.profs.length - a.profs.length);
+
+            countEl.innerHTML = `Mostrando <strong>${allCourses.length}</strong> curso${allCourses.length !== 1 ? "s" : ""}`;
+
+            if (allCourses.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column:1/-1">
+                        <div class="empty-state-icon">📚</div>
+                        <div class="empty-state-title">No se encontraron cursos</div>
+                        <div class="empty-state-desc">Prueba con otro término de búsqueda.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = allCourses.map((c, i) => {
+                const fac = DB.faculties.find(f => f.id === c.fac);
+                return `
+                    <div class="course-card fadein stagger-${Math.min(i + 1, 6)}" onclick="_showCourseDetail('${c.name.replace(/'/g, "\\'")}')">
+                        <div class="course-card-icon">${fac ? fac.icon : "📚"}</div>
+                        <div class="course-card-body">
+                            <div class="course-card-name">${c.name}</div>
+                            <div class="course-card-meta">${fac ? fac.name : ""}</div>
+                        </div>
+                        <div class="course-card-right">
+                            <div class="course-card-count">${c.profs.length}</div>
+                            <div class="course-card-count-label">Docente${c.profs.length !== 1 ? "s" : ""}</div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function _showCourseDetail(courseName) {
+            const profs = DB.professors.filter(p => p.courses.includes(courseName));
+            const grid = document.getElementById("course-grid");
+            const detail = document.getElementById("course-detail");
+            const countEl = document.getElementById("course-count");
+
+            grid.style.display = "none";
+            countEl.innerHTML = "";
+            detail.style.display = "block";
+
+            // Calcular el promedio del curso
+            let avgScore = 0;
+            profs.forEach(p => {
+                avgScore += (p.courseRatings && p.courseRatings[courseName]) || DB.getProfScore(p.id);
+            });
+            avgScore = profs.length > 0 ? (avgScore / profs.length) : 0;
+
+            // Sedes donde se dicta
+            const sedes = [...new Set(profs.flatMap(p => p.sedes || []))];
+
+            detail.innerHTML = `
+                <div class="fadein">
+                    <button class="btn btn-ghost" onclick="_renderCourses()" style="margin-bottom:var(--space-4)">← Todos los cursos</button>
+
+                    <div class="prof-header-card" style="margin-bottom:var(--space-5)">
+                        <div class="prof-title">📚 ${courseName}</div>
+                        <div class="prof-subtitle">${profs.length} docente${profs.length !== 1 ? "s" : ""} · Promedio: ${avgScore.toFixed(1)} / 5.0</div>
+                        <div class="prof-badges" style="margin-top:var(--space-3)">
+                            ${sedes.map(s => `<span class="mini-tag">📍 ${DB.getSedeName(s)}</span>`).join("")}
+                        </div>
+                    </div>
+
+                    <div class="section-label">Docentes que dictan este curso</div>
+                    <div class="prof-list">
+                        ${profs.sort((a, b) => {
+                            const aScore = (a.courseRatings && a.courseRatings[courseName]) || DB.getProfScore(a.id);
+                            const bScore = (b.courseRatings && b.courseRatings[courseName]) || DB.getProfScore(b.id);
+                            return bScore - aScore;
+                        }).map((p, i) => {
+                            const courseScore = (p.courseRatings && p.courseRatings[courseName]) || DB.getProfScore(p.id);
+                            const overallScore = DB.getProfScore(p.id);
+                            const badge = DB.getProfBadge(p);
+                            const diffColor = DB.getDifficultyColor(p.difficulty);
+                            const sedeNames = (p.sedes || []).map(s => DB.getSedeName(s)).join(", ");
+                            return `
+                                <div class="prow fadein stagger-${Math.min(i+1,6)}" onclick="window.location.href='professor.html?id=${p.id}'">
+                                    <div class="prow-av">${p.emoji}</div>
+                                    <div class="prow-body">
+                                        <div class="prow-name">
+                                            ${p.name}
+                                            ${p.verified ? '<span class="prow-verified">✔ Verificado</span>' : ""}
+                                            ${badge ? components.badgeHtml(badge) : ""}
+                                        </div>
+                                        <div class="prow-dept">${p.dept} · 📍 ${sedeNames}</div>
+                                        <div class="prow-metrics">
+                                            <div class="prow-metric">
+                                                <span class="prow-metric-val" style="color:${diffColor}">${p.difficulty.toFixed(1)}</span>
+                                                <span class="prow-metric-label">Dificultad</span>
+                                            </div>
+                                            <div class="prow-metric">
+                                                <span class="prow-metric-val" style="color:var(--color-success)">${p.wouldTakeAgain}%</span>
+                                                <span class="prow-metric-label">Lo tomaría de nuevo</span>
+                                            </div>
+                                            <div class="prow-metric">
+                                                <span class="prow-metric-val">${p.approvalRate}%</span>
+                                                <span class="prow-metric-label">Aprobación</span>
+                                            </div>
+                                        </div>
+                                        <div class="prow-tags">
+                                            ${p.tags.map(t => `<span class="mini-tag">${t}</span>`).join("")}
+                                        </div>
+                                    </div>
+                                    <div class="prow-right">
+                                        <div class="big-score">${courseScore.toFixed(1)}</div>
+                                        <div class="big-score-label">en este curso</div>
+                                        <div class="stars-sm">${DB.starsHtml(courseScore)}</div>
+                                        <div class="review-count" style="font-size:10px;color:var(--color-text-muted);margin-top:4px">General: ${overallScore.toFixed(1)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </div>
+
+                    ${profs.length >= 2 ? `
+                        <div style="text-align:center;margin-top:var(--space-5)">
+                            <a class="btn btn-primary" href="compare.html?c=${encodeURIComponent(courseName)}" style="text-decoration:none">
+                                ⚡ Comparar docentes de ${courseName}
+                            </a>
+                        </div>
+                    ` : ""}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

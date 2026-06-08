@@ -62,6 +62,7 @@ const professor = (() => {
         const diffColor = DB.getDifficultyColor(prof.difficulty);
         const diffLabel = DB.getDifficultyLabel(prof.difficulty);
         const totalGrades = (prof.gradeDistribution || []).reduce((a, b) => a + b, 0);
+        const sedeNames = (prof.sedes || []).map(s => DB.getSedeName(s)).join(", ");
 
         return `
             <!-- Columna lateral -->
@@ -112,6 +113,10 @@ const professor = (() => {
                         <span class="info-row-label">Carga académica</span>
                         <span class="info-row-val">${DB.workloadLabels[prof.workload] || prof.workload}</span>
                     </div>
+                    <div class="info-row">
+                        <span class="info-row-label">Sedes</span>
+                        <span class="info-row-val" style="font-size:11px;text-align:right;max-width:140px">📍 ${sedeNames}</span>
+                    </div>
                 </div>
 
                 <!-- Cursos -->
@@ -134,7 +139,7 @@ const professor = (() => {
                 <!-- Cabecera del docente -->
                 <div class="prof-header-card fadein">
                     <div class="prof-title">${prof.name}</div>
-                    <div class="prof-subtitle">${prof.dept}</div>
+                    <div class="prof-subtitle">${prof.dept} · 📍 ${sedeNames}</div>
                     <div class="prof-badges">
                         ${prof.tags.map(t => `<span class="mini-tag" style="font-size:11px; padding:4px 10px">${t}</span>`).join("")}
                         ${badge ? components.badgeHtml(badge) : ""}
