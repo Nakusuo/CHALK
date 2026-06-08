@@ -1,60 +1,154 @@
 /* ============================================================
-   CHALK · UTP — Variables del sistema de diseño
-   Colores institucionales: Rojo, Negro, Blanco
+   CHALK · UTP — Sistema de diseño premium (Dark Mode)
+   Colores institucionales: Rojo #C8102E, Negro, Blanco
+   Inspirado en Linear, Framer, Notion
    ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
     /* ── Colores primarios UTP ─────────────────────────────── */
-    --utp-red:          #C8102E;   /* Rojo institucional */
-    --utp-red-dark:     #9E0B23;   /* Rojo oscuro / hover */
-    --utp-red-light:    #F5E6E9;   /* Rojo suave / fondos */
-    --utp-red-mid:      #E8C5CC;   /* Borde rojo suave */
-    --utp-black:        #111111;
-    --utp-charcoal:     #1E1E1E;
-    --utp-dark:         #2A2A2A;
-    --utp-gray-700:     #444444;
-    --utp-gray-500:     #717171;
-    --utp-gray-400:     #999999;
-    --utp-gray-200:     #E5E5E5;
-    --utp-gray-100:     #F4F4F4;
+    --utp-red:          #C8102E;
+    --utp-red-dark:     #9E0B23;
+    --utp-red-light:    #F5E6E9;
+    --utp-red-mid:      #E8C5CC;
+    --utp-red-glow:     rgba(200, 16, 46, 0.25);
+    --utp-red-subtle:   rgba(200, 16, 46, 0.08);
+    --utp-red-hover:    #E01636;
+
+    /* ── Escala de grises oscuros ─────────────────────────── */
+    --utp-black:        #0A0A0B;
+    --utp-charcoal:     #111113;
+    --utp-dark:         #161618;
+    --utp-surface-1:    #1A1A1D;
+    --utp-surface-2:    #1F1F23;
+    --utp-surface-3:    #252529;
+    --utp-surface-4:    #2C2C31;
     --utp-white:        #FFFFFF;
 
-    /* ── Semánticos ────────────────────────────────────────── */
-    --color-bg-primary:       var(--utp-white);
-    --color-bg-secondary:     var(--utp-gray-100);
-    --color-bg-tertiary:      #EFEFEF;
-    --color-bg-accent:        var(--utp-red-light);
-    --color-bg-dark:          var(--utp-charcoal);
+    /* ── Grises para texto ───────────────────────────────── */
+    --gray-50:          rgba(255,255,255, 0.04);
+    --gray-100:         rgba(255,255,255, 0.06);
+    --gray-200:         rgba(255,255,255, 0.09);
+    --gray-300:         rgba(255,255,255, 0.14);
+    --gray-400:         rgba(255,255,255, 0.24);
+    --gray-500:         rgba(255,255,255, 0.44);
+    --gray-600:         rgba(255,255,255, 0.56);
+    --gray-700:         rgba(255,255,255, 0.72);
+    --gray-800:         rgba(255,255,255, 0.86);
+    --gray-900:         rgba(255,255,255, 0.95);
 
-    --color-text-primary:     var(--utp-black);
-    --color-text-secondary:   var(--utp-gray-500);
+    /* ── Semánticos de fondo ──────────────────────────────── */
+    --color-bg-primary:       var(--utp-black);
+    --color-bg-secondary:     var(--utp-charcoal);
+    --color-bg-tertiary:      var(--utp-dark);
+    --color-bg-surface:       var(--utp-surface-1);
+    --color-bg-elevated:      var(--utp-surface-2);
+    --color-bg-card:          var(--utp-surface-1);
+    --color-bg-hover:         var(--utp-surface-3);
+    --color-bg-accent:        var(--utp-red-subtle);
+
+    /* ── Semánticos de texto ──────────────────────────────── */
+    --color-text-primary:     var(--gray-900);
+    --color-text-secondary:   var(--gray-600);
+    --color-text-tertiary:    var(--gray-500);
+    --color-text-muted:       var(--gray-400);
     --color-text-accent:      var(--utp-red);
-    --color-text-muted:       var(--utp-gray-400);
-    --color-text-inverse:     var(--utp-white);
+    --color-text-inverse:     var(--utp-black);
 
-    --color-border:           var(--utp-gray-200);
-    --color-border-strong:    #CCCCCC;
-    --color-border-accent:    var(--utp-red-mid);
+    /* ── Bordes ───────────────────────────────────────────── */
+    --color-border:           var(--gray-100);
+    --color-border-strong:    var(--gray-200);
+    --color-border-subtle:    var(--gray-50);
+    --color-border-accent:    rgba(200, 16, 46, 0.3);
+    --color-border-glow:      rgba(200, 16, 46, 0.15);
+
+    /* ── Colores semánticos ───────────────────────────────── */
+    --color-success:          #22C55E;
+    --color-success-bg:       rgba(34, 197, 94, 0.1);
+    --color-success-border:   rgba(34, 197, 94, 0.2);
+    --color-warning:          #F59E0B;
+    --color-warning-bg:       rgba(245, 158, 11, 0.1);
+    --color-warning-border:   rgba(245, 158, 11, 0.2);
+    --color-danger:           #EF4444;
+    --color-danger-bg:        rgba(239, 68, 68, 0.1);
+    --color-danger-border:    rgba(239, 68, 68, 0.2);
+    --color-info:             #3B82F6;
+    --color-info-bg:          rgba(59, 130, 246, 0.1);
+    --color-info-border:      rgba(59, 130, 246, 0.2);
 
     /* ── Estrellas / rating ────────────────────────────────── */
-    --color-star:             #E9A800;
+    --color-star:             #FBBF24;
+    --color-star-empty:       var(--gray-300);
+
+    /* ── Dificultad (gradiente verde→amarillo→rojo) ──────── */
+    --diff-easy:              #22C55E;
+    --diff-medium:            #F59E0B;
+    --diff-hard:              #EF4444;
 
     /* ── Radios ────────────────────────────────────────────── */
-    --radius-sm:  4px;
-    --radius-md:  6px;
-    --radius-lg:  10px;
-    --radius-xl:  14px;
+    --radius-xs:  4px;
+    --radius-sm:  6px;
+    --radius-md:  8px;
+    --radius-lg:  12px;
+    --radius-xl:  16px;
+    --radius-2xl: 20px;
     --radius-full: 9999px;
 
     /* ── Sombras ───────────────────────────────────────────── */
-    --shadow-sm:  0 1px 3px rgba(0,0,0,.08);
-    --shadow-md:  0 4px 12px rgba(0,0,0,.10);
-    --shadow-lg:  0 8px 24px rgba(0,0,0,.12);
+    --shadow-xs:  0 1px 2px rgba(0,0,0,.3);
+    --shadow-sm:  0 2px 4px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+    --shadow-md:  0 4px 12px rgba(0,0,0,.4), 0 2px 4px rgba(0,0,0,.3);
+    --shadow-lg:  0 8px 24px rgba(0,0,0,.5), 0 4px 8px rgba(0,0,0,.3);
+    --shadow-xl:  0 16px 48px rgba(0,0,0,.6), 0 8px 16px rgba(0,0,0,.3);
+    --shadow-glow: 0 0 20px var(--utp-red-glow), 0 0 40px rgba(200,16,46,.08);
+    --shadow-glow-sm: 0 0 10px rgba(200,16,46,.15);
+    --shadow-card: 0 1px 3px rgba(0,0,0,.3), 0 0 0 1px var(--color-border);
+    --shadow-card-hover: 0 4px 16px rgba(0,0,0,.4), 0 0 0 1px var(--color-border-accent);
+
+    /* ── Glassmorphism ─────────────────────────────────────── */
+    --glass-bg:         rgba(17, 17, 19, 0.75);
+    --glass-bg-strong:  rgba(17, 17, 19, 0.90);
+    --glass-blur:       12px;
+    --glass-blur-strong: 20px;
+    --glass-border:     rgba(255,255,255, 0.06);
+
+    /* ── Gradientes ────────────────────────────────────────── */
+    --gradient-red:     linear-gradient(135deg, #C8102E 0%, #9E0B23 100%);
+    --gradient-dark:    linear-gradient(135deg, #1A1A1D 0%, #111113 100%);
+    --gradient-hero:    linear-gradient(135deg, rgba(200,16,46,0.15) 0%, rgba(200,16,46,0.02) 50%, rgba(17,17,19,0) 100%);
+    --gradient-card:    linear-gradient(180deg, var(--utp-surface-2) 0%, var(--utp-surface-1) 100%);
+    --gradient-border:  linear-gradient(135deg, rgba(200,16,46,0.3) 0%, rgba(200,16,46,0.05) 100%);
+    --gradient-text:    linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+    --gradient-subtle:  linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
 
     /* ── Tipografía ────────────────────────────────────────── */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
     /* ── Transiciones ──────────────────────────────────────── */
-    --transition-fast:   0.15s ease;
-    --transition-normal: 0.25s ease;
+    --transition-fast:    0.15s ease;
+    --transition-normal:  0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow:    0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring:  0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-bounce:  0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ── Espaciado ─────────────────────────────────────────── */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* ── Z-index ───────────────────────────────────────────── */
+    --z-dropdown: 100;
+    --z-sticky:   200;
+    --z-overlay:  300;
+    --z-modal:    400;
+    --z-toast:    500;
 }

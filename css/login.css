@@ -1,39 +1,80 @@
 /* ============================================================
-   CHALK · Login y Registro
+   CHALK · Login y Registro — Premium dark mode
    ============================================================ */
 
 /* ── Envoltorio centrado ─────────────────────────────────── */
 .login-wrap {
-    min-height: calc(100vh - 52px);
+    min-height: calc(100vh - 56px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
-    background: linear-gradient(160deg, var(--utp-black) 0%, #2c0a10 60%, var(--utp-black) 100%);
+    padding: var(--space-6) var(--space-4);
+    background: var(--utp-black);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Dot pattern background */
+.login-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+}
+
+/* Gradient glow */
+.login-wrap::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200,16,46,0.12) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 /* ── Tarjeta de formulario ───────────────────────────────── */
 .login-card {
-    background: var(--utp-white);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
-    padding: 32px 36px;
+    padding: 36px 40px;
     width: 100%;
     max-width: 420px;
-    box-shadow: var(--shadow-lg), 0 0 0 1px rgba(200,16,46,.15);
-    animation: fadeUp var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+    animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
 }
 
 .login-card-wide {
     max-width: 480px;
 }
 
+/* ── Franja superior decorativa ──────────────────────────── */
+.login-card::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: var(--gradient-red);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    margin: -36px -40px 32px;
+}
+
 /* ── Logo dentro del login ───────────────────────────────── */
 .login-logo {
-    font-size: 30px;
-    font-weight: 700;
-    letter-spacing: -1px;
-    color: var(--utp-black);
-    margin-bottom: 2px;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--utp-white);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
 
 .login-logo .logo-accent {
@@ -41,46 +82,37 @@
 }
 
 .login-sub {
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-6);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .login-sub::before {
     content: '';
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--utp-red);
-}
-
-/* ── Franja superior decorativa ──────────────────────────── */
-.login-card::before {
-    content: '';
-    display: block;
-    height: 4px;
-    background: linear-gradient(90deg, var(--utp-red), var(--utp-red-dark));
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    margin: -32px -36px 28px;
+    flex-shrink: 0;
 }
 
 /* ── Grid dos columnas en registro ───────────────────────── */
 .reg-name-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
+    margin-bottom: var(--space-4);
 }
 
 /* ── Input generado (solo lectura) ──────────────────────── */
 input.fld-readonly {
-    opacity: 0.65;
+    opacity: 0.5;
     cursor: not-allowed;
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-elevated);
 }
 
 /* ── Cabecera del formulario ─────────────────────────────── */
@@ -88,23 +120,39 @@ input.fld-readonly {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
 }
 
 /* ── Pie del login ───────────────────────────────────────── */
 .login-footer {
-    margin-top: 14px;
+    margin-top: var(--space-4);
     text-align: center;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--color-text-muted);
 }
 
 .login-footer a {
     color: var(--utp-red);
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transition-fast);
 }
 
 .login-footer a:hover {
+    color: var(--utp-red-hover);
     text-decoration: underline;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 28px 24px;
+    }
+    .login-card::before {
+        margin: -28px -24px 24px;
+    }
+    .reg-name-grid {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,6 +1,7 @@
 /* ============================================================
    CHALK · review.js — Formulario de reseña multi-paso
    Lee el ID desde la URL (?id=X) y guarda la reseña en localStorage.
+   Paso adicional para métricas: dificultad, carga, ¿lo tomarías de nuevo?
    ============================================================ */
 
 const review = (() => {
@@ -14,7 +15,7 @@ const review = (() => {
     let step = 0;
 
     /** Total de pasos */
-    const TOTAL_STEPS = 4;
+    const TOTAL_STEPS = 5;
 
     /** Estado del formulario */
     let formState = {
@@ -23,6 +24,9 @@ const review = (() => {
         tagsNeg: [],
         course: "",
         text: "",
+        difficulty: 3,
+        wouldTakeAgain: null,
+        workload: "",
     };
 
     /* ── Inicialización ──────────────────────────────────── */
@@ -49,6 +53,9 @@ const review = (() => {
             tagsNeg: [],
             course: "",
             text: "",
+            difficulty: 3,
+            wouldTakeAgain: null,
+            workload: "",
         };
 
         // Breadcrumb
@@ -75,19 +82,19 @@ const review = (() => {
         el.innerHTML = `
             <div class="review-sidebar-prof">
                 <div class="review-sidebar-av">${prof.emoji}</div>
-                <div style="font-size:14px; font-weight:700; color:var(--utp-black)">${prof.name}</div>
-                <div style="font-size:11px; color:var(--color-text-secondary); margin-top:2px">${prof.dept}</div>
-                <div style="margin-top:8px">
-                    <span style="font-size:22px; font-weight:700; color:var(--utp-red)">${score.toFixed(1)}</span>
-                    <span style="font-size:11px; color:var(--color-text-muted)">/ 5.0</span>
+                <div style="font-size:15px; font-weight:700; color:var(--utp-white)">${prof.name}</div>
+                <div style="font-size:11px; color:var(--color-text-tertiary); margin-top:2px">${prof.dept}</div>
+                <div style="margin-top:10px">
+                    <span style="font-size:24px; font-weight:800; color:var(--utp-red); font-family:var(--font-mono)">${score.toFixed(1)}</span>
+                    <span style="font-size:12px; color:var(--color-text-muted)">/ 5.0</span>
                 </div>
-                <div style="color:var(--color-star); font-size:14px; margin-top:2px; letter-spacing:1px">${stars}</div>
+                <div style="color:var(--color-star); font-size:14px; margin-top:4px; letter-spacing:2px">${stars}</div>
                 <div style="font-size:10px; color:var(--color-text-muted); margin-top:4px">${totalReviews} reseñas</div>
             </div>
-            <div style="padding:12px">
-                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--color-text-secondary); margin-bottom:8px">Cursos</div>
+            <div style="padding:14px">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--color-text-tertiary); margin-bottom:8px">Cursos</div>
                 ${prof.courses.map(c => `
-                    <div style="font-size:11px; padding:4px 0; border-bottom:1px solid var(--color-border); color:var(--color-text-primary)">📚 ${c}</div>
+                    <div style="font-size:12px; padding:6px 0; border-bottom:1px solid var(--color-border-subtle); color:var(--color-text-secondary)">📚 ${c}</div>
                 `).join("")}
             </div>
         `;
@@ -108,7 +115,7 @@ const review = (() => {
                     <div class="form-card-head">
                         <span class="form-card-head-icon">📊</span>
                         <span class="form-card-head-title">Califica los criterios</span>
-                        <span class="form-card-head-desc">Paso 1 de ${TOTAL_STEPS}</span>
+                        <span class="form-card-head-desc">1 / ${TOTAL_STEPS}</span>
                     </div>
                     <div class="form-card-body">
                         <div class="crit-grid">
@@ -131,16 +138,61 @@ const review = (() => {
                 </div>
             </div>
 
-            <!-- Paso 2: Etiquetas -->
+            <!-- Paso 2: Métricas adicionales -->
             <div class="form-section ${step === 1 ? 'on' : ''}" id="form-step-1">
+                <div class="form-card">
+                    <div class="form-card-head">
+                        <span class="form-card-head-icon">🎯</span>
+                        <span class="form-card-head-title">Métricas de experiencia</span>
+                        <span class="form-card-head-desc">2 / ${TOTAL_STEPS}</span>
+                    </div>
+                    <div class="form-card-body">
+                        <!-- Dificultad -->
+                        <div class="section-label" style="margin-top:0">Nivel de dificultad</div>
+                        <div class="diff-slider-wrap">
+                            <input type="range" class="diff-slider" id="diff-slider"
+                                   min="1" max="5" step="0.5" value="3"
+                                   oninput="review._updateDiff(this.value)">
+                            <span class="diff-slider-val" id="diff-val" style="color:var(--color-warning)">3.0</span>
+                        </div>
+                        <div class="diff-slider-labels">
+                            <span>Muy fácil</span>
+                            <span>Moderado</span>
+                            <span>Muy difícil</span>
+                        </div>
+
+                        <!-- ¿Lo tomarías de nuevo? -->
+                        <div class="section-label">¿Lo tomarías de nuevo?</div>
+                        <div class="toggle-group">
+                            <button class="toggle-btn" id="wta-yes" onclick="review._setWta(true)">
+                                👍 Sí, definitivamente
+                            </button>
+                            <button class="toggle-btn" id="wta-no" onclick="review._setWta(false)">
+                                👎 No, probablemente no
+                            </button>
+                        </div>
+
+                        <!-- Carga académica -->
+                        <div class="section-label">Carga académica</div>
+                        <div class="workload-group">
+                            <button class="workload-btn" onclick="review._setWorkload('light', this)">📗 Ligera</button>
+                            <button class="workload-btn" onclick="review._setWorkload('moderate', this)">📘 Moderada</button>
+                            <button class="workload-btn" onclick="review._setWorkload('heavy', this)">📕 Pesada</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 3: Etiquetas -->
+            <div class="form-section ${step === 2 ? 'on' : ''}" id="form-step-2">
                 <div class="form-card">
                     <div class="form-card-head">
                         <span class="form-card-head-icon">🏷️</span>
                         <span class="form-card-head-title">Etiquetas descriptivas</span>
-                        <span class="form-card-head-desc">Paso 2 de ${TOTAL_STEPS}</span>
+                        <span class="form-card-head-desc">3 / ${TOTAL_STEPS}</span>
                     </div>
                     <div class="form-card-body">
-                        <div class="section-label">Aspectos positivos</div>
+                        <div class="section-label" style="margin-top:0">Aspectos positivos</div>
                         <div class="tag-cloud">
                             ${DB.tagCategories.positivos.map(tag => `
                                 <span class="tag-opt" onclick="review._toggleTag(this, 'pos', '${tag}')">${tag}</span>
@@ -164,13 +216,13 @@ const review = (() => {
                 </div>
             </div>
 
-            <!-- Paso 3: Comentario -->
-            <div class="form-section ${step === 2 ? 'on' : ''}" id="form-step-2">
+            <!-- Paso 4: Comentario -->
+            <div class="form-section ${step === 3 ? 'on' : ''}" id="form-step-3">
                 <div class="form-card">
                     <div class="form-card-head">
                         <span class="form-card-head-icon">✍️</span>
                         <span class="form-card-head-title">Tu comentario</span>
-                        <span class="form-card-head-desc">Paso 3 de ${TOTAL_STEPS}</span>
+                        <span class="form-card-head-desc">4 / ${TOTAL_STEPS}</span>
                     </div>
                     <div class="form-card-body">
                         <div class="field-wrap">
@@ -193,13 +245,13 @@ const review = (() => {
                 </div>
             </div>
 
-            <!-- Paso 4: Vista previa -->
-            <div class="form-section ${step === 3 ? 'on' : ''}" id="form-step-3">
+            <!-- Paso 5: Vista previa -->
+            <div class="form-section ${step === 4 ? 'on' : ''}" id="form-step-4">
                 <div class="form-card">
                     <div class="form-card-head">
                         <span class="form-card-head-icon">👁️</span>
                         <span class="form-card-head-title">Vista previa y envío</span>
-                        <span class="form-card-head-desc">Paso 4 de ${TOTAL_STEPS}</span>
+                        <span class="form-card-head-desc">5 / ${TOTAL_STEPS}</span>
                     </div>
                     <div class="form-card-body">
                         <div class="rep-notice">
@@ -228,7 +280,7 @@ const review = (() => {
             <!-- Navegación -->
             <div class="form-nav" id="form-nav">
                 <button class="btn btn-ghost" id="btn-prev" onclick="review._prevStep()" style="visibility:hidden">← Anterior</button>
-                <span class="form-step-info" id="step-info">Paso 1 de ${TOTAL_STEPS}</span>
+                <span class="form-step-info" id="step-info">1 / ${TOTAL_STEPS}</span>
                 <button class="btn btn-primary" id="btn-next" onclick="review._nextStep()">Siguiente →</button>
             </div>
         `;
@@ -260,7 +312,7 @@ const review = (() => {
             }
         }
 
-        if (step === 2) {
+        if (step === 3) {
             formState.text = document.getElementById("review-text")?.value || "";
             formState.course = document.getElementById("review-course")?.value || "";
             if (formState.text.trim().length < 30) {
@@ -269,13 +321,13 @@ const review = (() => {
             }
         }
 
-        if (step === 3) {
+        if (step === 4) {
             _submitReview();
             return;
         }
 
         step++;
-        if (step === 3) _buildPreview();
+        if (step === 4) _buildPreview();
         _updateStepUI();
     }
 
@@ -307,8 +359,8 @@ const review = (() => {
         const stepInfo = document.getElementById("step-info");
 
         if (prevBtn) prevBtn.style.visibility = step > 0 ? "visible" : "hidden";
-        if (stepInfo) stepInfo.textContent = `Paso ${step + 1} de ${TOTAL_STEPS}`;
-        if (nextBtn) nextBtn.textContent = step === 3 ? "Publicar reseña ✓" : "Siguiente →";
+        if (stepInfo) stepInfo.textContent = `${step + 1} / ${TOTAL_STEPS}`;
+        if (nextBtn) nextBtn.textContent = step === 4 ? "Publicar reseña ✓" : "Siguiente →";
     }
 
     /* ── Calificación de criterios ───────────────────────── */
@@ -343,6 +395,30 @@ const review = (() => {
         });
     }
 
+    /* ── Métricas adicionales ────────────────────────────── */
+
+    function _updateDiff(val) {
+        formState.difficulty = parseFloat(val);
+        const el = document.getElementById("diff-val");
+        if (el) {
+            el.textContent = parseFloat(val).toFixed(1);
+            const color = DB.getDifficultyColor(parseFloat(val));
+            el.style.color = color;
+        }
+    }
+
+    function _setWta(value) {
+        formState.wouldTakeAgain = value;
+        document.getElementById("wta-yes").className = `toggle-btn ${value === true ? 'on-yes' : ''}`;
+        document.getElementById("wta-no").className = `toggle-btn ${value === false ? 'on-no' : ''}`;
+    }
+
+    function _setWorkload(value, btn) {
+        formState.workload = value;
+        document.querySelectorAll(".workload-btn").forEach(b => b.classList.remove("on"));
+        btn.classList.add("on");
+    }
+
     /* ── Toggle de etiquetas ─────────────────────────────── */
 
     function _toggleTag(el, type, tag) {
@@ -373,6 +449,7 @@ const review = (() => {
         const avgScore = _avgCriteria();
         const stars = "★".repeat(Math.round(avgScore)) + "☆".repeat(5 - Math.round(avgScore));
         const allTags = [...formState.tagsPos, ...formState.tagsNeg];
+        const diffColor = DB.getDifficultyColor(formState.difficulty);
 
         const now = new Date();
         const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -380,7 +457,7 @@ const review = (() => {
 
         previewEl.innerHTML = `
             <div class="preview-box-label">Así se verá tu reseña</div>
-            <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:10px">
+            <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:12px">
                 <div class="rev-av">${user?.initials || "EU"}</div>
                 <div style="flex:1">
                     <div class="rev-user">
@@ -389,7 +466,16 @@ const review = (() => {
                     </div>
                     <div class="rev-date">${dateStr}</div>
                 </div>
-                <div style="color:var(--color-star); font-size:14px; letter-spacing:1px">${stars}</div>
+                <div style="color:var(--color-star); font-size:14px; letter-spacing:2px">${stars}</div>
+            </div>
+            <div style="display:flex;gap:var(--space-4);margin-bottom:var(--space-3);flex-wrap:wrap">
+                ${formState.wouldTakeAgain !== null ? `
+                    <span style="font-size:11px;color:${formState.wouldTakeAgain ? 'var(--color-success)' : 'var(--color-danger)'}">
+                        ${formState.wouldTakeAgain ? '👍 Lo tomaría de nuevo' : '👎 No lo tomaría de nuevo'}
+                    </span>
+                ` : ""}
+                <span style="font-size:11px;color:${diffColor}">🎯 Dificultad: ${formState.difficulty.toFixed(1)}</span>
+                ${formState.workload ? `<span style="font-size:11px;color:var(--color-text-secondary)">📚 Carga: ${DB.workloadLabels[formState.workload]}</span>` : ""}
             </div>
             ${allTags.length > 0 ? `
                 <div class="rev-pills">
@@ -398,8 +484,8 @@ const review = (() => {
                 </div>
             ` : ""}
             <div class="rev-text" style="margin-top:8px">${formState.text || "Sin comentario."}</div>
-            <div style="font-size:11px; color:var(--color-text-muted); margin-top:6px">
-                Puntuación promedio: <strong style="color:var(--utp-red)">${avgScore.toFixed(1)}</strong> / 5.0
+            <div style="font-size:11px; color:var(--color-text-muted); margin-top:8px">
+                Puntuación promedio: <strong style="color:var(--utp-red);font-family:var(--font-mono)">${avgScore.toFixed(1)}</strong> / 5.0
             </div>
         `;
     }
@@ -433,6 +519,9 @@ const review = (() => {
             text: formState.text,
             helpful: 0,
             course: formState.course || prof.courses[0],
+            difficulty: formState.difficulty,
+            wouldTakeAgain: formState.wouldTakeAgain,
+            workload: formState.workload,
         });
 
         // Mostrar éxito
@@ -471,5 +560,6 @@ const review = (() => {
         _rateCrit, _hoverCrit, _resetCrit,
         _toggleTag, _updateCharCount,
         _nextStep, _prevStep,
+        _updateDiff, _setWta, _setWorkload,
     };
 })();

@@ -1,12 +1,12 @@
 /* ============================================================
-   CHALK · Perfil de docente
+   CHALK · Perfil de docente — Dark premium con métricas
    ============================================================ */
 
 /* ── Layout del perfil ───────────────────────────────────── */
 .prof-page {
     display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 16px;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-5);
     align-items: start;
 }
 
@@ -14,84 +14,96 @@
 .prof-av-big {
     width: 100%;
     aspect-ratio: 1;
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 64px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-3);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+
+.prof-av-big::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: var(--gradient-hero);
+    pointer-events: none;
 }
 
 /* ── Bloque de puntuación ────────────────────────────────── */
 .score-block {
-    background: var(--utp-black);
-    border: 1px solid rgba(255,255,255,.08);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 16px 14px;
+    padding: var(--space-5) var(--space-4);
     text-align: center;
-    margin-bottom: 10px;
-    color: var(--utp-white);
+    margin-bottom: var(--space-3);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-card);
 }
 
 .score-block::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--utp-red), var(--utp-red-dark));
+    height: 2px;
+    background: var(--gradient-red);
 }
 
 .score-giant {
-    font-size: 48px;
-    font-weight: 700;
+    font-size: 52px;
+    font-weight: 800;
     color: var(--utp-white);
     line-height: 1;
-    letter-spacing: -2px;
+    letter-spacing: -3px;
+    font-family: var(--font-mono);
 }
 
 .score-giant span {
     font-size: 20px;
-    font-weight: 400;
-    opacity: .6;
+    font-weight: 500;
+    opacity: .4;
     letter-spacing: 0;
 }
 
 .score-stars {
     color: var(--color-star);
     font-size: 18px;
-    margin: 6px 0 2px;
-    letter-spacing: 1px;
+    margin: 8px 0 4px;
+    letter-spacing: 2px;
 }
 
 .score-sub {
     font-size: 11px;
-    color: rgba(255,255,255,.5);
+    color: var(--color-text-muted);
     font-weight: 500;
 }
 
 /* ── Bloques de información lateral ──────────────────────── */
 .info-block {
-    background: var(--color-bg-primary);
+    background: var(--color-bg-card);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-3);
+    box-shadow: var(--shadow-card);
 }
 
 .info-block-head {
-    padding: 7px 13px;
-    background: var(--color-bg-secondary);
+    padding: 9px 14px;
+    background: var(--gradient-subtle);
     border-bottom: 1px solid var(--color-border);
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.7px;
     color: var(--color-text-secondary);
 }
 
@@ -99,16 +111,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 13px;
-    border-bottom: 1px solid var(--color-border);
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--color-border-subtle);
     font-size: 12px;
 }
 
 .info-row:last-child { border: none; }
 
 .info-row-label {
-    color: var(--color-text-secondary);
-    font-size: 11px;
+    color: var(--color-text-tertiary);
+    font-size: 12px;
 }
 
 .info-row-val {
@@ -120,18 +132,18 @@
 .action-btns {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: var(--space-3);
 }
 
 /* ── Encabezado del docente ──────────────────────────────── */
 .prof-header-card {
-    background: var(--utp-white);
+    background: var(--color-bg-card);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
+    padding: var(--space-5) var(--space-6);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
 }
@@ -140,22 +152,32 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--utp-red), var(--utp-black));
+    height: 3px;
+    background: var(--gradient-red);
+}
+
+.prof-header-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px;
+    height: 100%;
+    background: var(--gradient-hero);
+    pointer-events: none;
 }
 
 .prof-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--utp-black);
-    margin-bottom: 3px;
-    letter-spacing: -0.3px;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--utp-white);
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
 }
 
 .prof-subtitle {
     font-size: 13px;
-    color: var(--color-text-secondary);
-    margin-bottom: 12px;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-3);
     font-weight: 500;
 }
 
@@ -163,35 +185,83 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    align-items: center;
 }
 
-/* ── Grid de criterios (acordes) ─────────────────────────── */
+/* ── Metrics dashboard ──────────────────────────────────── */
+.metrics-dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.prof-metric-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.prof-metric-card:hover {
+    border-color: var(--color-border-accent);
+    box-shadow: var(--shadow-glow-sm);
+    transform: translateY(-2px);
+}
+
+.prof-metric-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.prof-metric-val {
+    font-size: 24px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.prof-metric-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+}
+
+/* ── Grid de criterios ──────────────────────────────────── */
 .accord-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 6px;
 }
 
 .accord-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 0;
+    gap: 10px;
+    padding: 6px 0;
 }
 
 .accord-name {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
-    width: 100px;
+    width: 110px;
     flex-shrink: 0;
     color: var(--color-text-secondary);
 }
 
 .accord-track {
     flex: 1;
-    height: 8px;
-    background: var(--color-bg-secondary);
+    height: 6px;
+    background: var(--gray-100);
     border-radius: var(--radius-full);
     overflow: hidden;
     cursor: default;
@@ -201,58 +271,223 @@
     height: 100%;
     border-radius: var(--radius-full);
     background: var(--utp-red);
-    transition: width 0.5s cubic-bezier(.25,.8,.25,1);
+    transition: width 0.8s cubic-bezier(.25,.8,.25,1);
 }
 
 .accord-val {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    width: 26px;
+    width: 28px;
     text-align: right;
+    color: var(--utp-red);
+    font-family: var(--font-mono);
+}
+
+/* ── Grade distribution bars ─────────────────────────────── */
+.grade-dist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.grade-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.grade-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-star);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.grade-bar-track {
+    flex: 1;
+    height: 10px;
+    background: var(--gray-50);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.grade-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.8s cubic-bezier(.25,.8,.25,1);
+    background: var(--utp-red);
+}
+
+.grade-bar-fill.star-5 { background: #22C55E; }
+.grade-bar-fill.star-4 { background: #86EFAC; }
+.grade-bar-fill.star-3 { background: #FBBF24; }
+.grade-bar-fill.star-2 { background: #F97316; }
+.grade-bar-fill.star-1 { background: #EF4444; }
+
+.grade-count {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    width: 28px;
+    font-family: var(--font-mono);
+}
+
+/* ── Historical chart ────────────────────────────────────── */
+.hist-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 60px;
+    padding-top: 8px;
+}
+
+.hist-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.hist-bar {
+    width: 100%;
+    border-radius: 4px 4px 2px 2px;
+    background: var(--utp-red);
+    transition: height 0.6s cubic-bezier(.25,.8,.25,1);
+    position: relative;
+    min-height: 4px;
+    opacity: 0.6;
+}
+
+.hist-bar-wrap:last-child .hist-bar {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--utp-red-glow);
+}
+
+.hist-bar-val {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+}
+
+.hist-bar-label {
+    font-size: 8px;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+/* ── Course chips ────────────────────────────────────────── */
+.course-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-border-subtle);
+    transition: background var(--transition-fast);
+}
+
+.course-chip:last-child { border: none; }
+
+.course-chip:hover {
+    background: var(--utp-red-subtle);
+}
+
+.course-chip-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.course-chip-score {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-mono);
     color: var(--utp-red);
 }
 
 /* ── Reseñas ─────────────────────────────────────────────── */
 .reviews-card {
-    background: var(--utp-white);
+    background: var(--color-bg-card);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-card);
 }
 
 .reviews-head {
-    padding: 14px 18px;
+    padding: var(--space-4) var(--space-5);
     border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg-secondary);
+    background: var(--gradient-subtle);
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 .reviews-head-title {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
-    color: var(--utp-black);
+    color: var(--utp-white);
 }
 
 .reviews-head-count {
     font-size: 11px;
-    color: var(--color-text-secondary);
-    background: var(--color-bg-tertiary);
-    padding: 3px 9px;
+    color: var(--color-text-tertiary);
+    background: var(--color-bg-elevated);
+    padding: 4px 10px;
     border-radius: var(--radius-full);
     font-weight: 600;
+    font-family: var(--font-mono);
+    border: 1px solid var(--color-border);
 }
 
 .reviews-body {
-    padding: 0 18px;
+    padding: 0 var(--space-5);
+}
+
+/* ── Review filter tabs ──────────────────────────────────── */
+.review-filter-tabs {
+    display: flex;
+    gap: 6px;
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.review-filter-tab {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: transparent;
+    font-family: var(--font-sans);
+}
+
+.review-filter-tab:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-surface);
+}
+
+.review-filter-tab.active {
+    color: var(--utp-red);
+    background: var(--utp-red-subtle);
+    border-color: var(--color-border-accent);
 }
 
 /* ── Ítem de reseña ──────────────────────────────────────── */
 .review-item {
-    border-bottom: 1px solid var(--color-border);
-    padding: 16px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding: var(--space-4) 0;
     animation: fadeIn var(--transition-normal);
 }
 
@@ -261,15 +496,15 @@
 .rev-top {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: var(--space-3);
 }
 
 .rev-av {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--utp-red-light);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--utp-red-subtle);
     color: var(--utp-red);
     display: flex;
     align-items: center;
@@ -285,28 +520,32 @@
 }
 
 .rev-user {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    color: var(--utp-black);
+    color: var(--utp-white);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
 .rev-badge {
     display: inline-block;
-    padding: 1px 6px;
+    padding: 2px 8px;
     border-radius: var(--radius-full);
     font-size: 9px;
-    font-weight: 600;
-    background: var(--utp-black);
-    color: var(--utp-white);
-    margin-left: 5px;
+    font-weight: 700;
+    background: var(--color-bg-elevated);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
 }
 
 .rev-date {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--color-text-muted);
-    margin-top: 1px;
+    margin-top: 2px;
 }
 
 .rev-score {
@@ -325,69 +564,77 @@
 .rev-pill {
     font-size: 10px;
     font-weight: 600;
-    padding: 2px 9px;
+    padding: 3px 10px;
     border-radius: var(--radius-full);
 }
 
 .rev-pill-pos {
-    background: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #c8e6c9;
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    border: 1px solid var(--color-success-border);
 }
 
 .rev-pill-neg {
-    background: var(--utp-red-light);
-    color: var(--utp-red-dark);
-    border: 1px solid var(--color-border-accent);
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger-border);
 }
 
 .rev-pill-neu {
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-elevated);
     color: var(--color-text-secondary);
     border: 1px solid var(--color-border);
 }
 
 .rev-text {
-    font-size: 12px;
-    line-height: 1.7;
-    color: var(--color-text-primary);
-    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-3);
 }
 
 .helpful-btn {
     font-size: 11px;
     font-weight: 500;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-full);
     cursor: pointer;
-    background: var(--color-bg-primary);
+    background: var(--color-bg-surface);
     font-family: var(--font-sans);
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     transition: all var(--transition-fast);
 }
 
 .helpful-btn:hover,
 .helpful-btn.on {
-    border-color: var(--utp-red);
+    border-color: var(--color-border-accent);
     color: var(--utp-red);
-    background: var(--utp-red-light);
+    background: var(--utp-red-subtle);
 }
 
 /* ── Sin reseñas ─────────────────────────────────────────── */
 .no-reviews {
     text-align: center;
-    padding: 40px 20px;
+    padding: var(--space-12) var(--space-6);
     color: var(--color-text-secondary);
 }
 
 .no-reviews-icon {
-    font-size: 32px;
-    margin-bottom: 10px;
-    opacity: .5;
+    font-size: 36px;
+    margin-bottom: var(--space-3);
+    opacity: .4;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .metrics-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
     .prof-page { grid-template-columns: 1fr; }
     .accord-grid { grid-template-columns: 1fr; }
+    .metrics-dashboard { grid-template-columns: 1fr 1fr; }
 }

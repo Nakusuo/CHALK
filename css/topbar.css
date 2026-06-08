@@ -1,62 +1,76 @@
 /* ============================================================
-   CHALK · Topbar y navegación principal
+   CHALK · Topbar — Navegación premium glassmorphism
    ============================================================ */
 
 /* ── Barra de navegación superior ───────────────────────── */
 .topbar {
-    background: var(--utp-black);
-    border-bottom: 2px solid var(--utp-red);
-    padding: 0 16px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--glass-blur-strong));
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong));
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 var(--space-5);
     position: sticky;
     top: 0;
-    z-index: 200;
-    box-shadow: var(--shadow-md);
+    z-index: var(--z-sticky);
 }
 
 .topbar-inner {
-    max-width: 1140px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    height: 52px;
+    height: 56px;
     gap: 0;
 }
 
 /* ── Logo ────────────────────────────────────────────────── */
 .logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--utp-white);
-    margin-right: 28px;
-    letter-spacing: -0.8px;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 1px;
+    gap: 3px;
+    margin-right: var(--space-8);
+    cursor: pointer;
     transition: opacity var(--transition-fast);
     user-select: none;
+    text-decoration: none;
 }
 
 .logo:hover {
-    opacity: 0.88;
+    opacity: 0.85;
 }
 
-.logo .logo-accent {
+.logo-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--utp-white);
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.logo-text .logo-accent {
     color: var(--utp-red);
 }
 
 .logo-badge {
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 700;
-    background: var(--utp-red);
+    background: var(--gradient-red);
     color: var(--utp-white);
-    padding: 1px 5px;
-    border-radius: var(--radius-sm);
-    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+    letter-spacing: 0.8px;
     margin-left: 6px;
     text-transform: uppercase;
     align-self: center;
-    margin-top: 2px;
 }
 
 /* ── Links de nav ────────────────────────────────────────── */
@@ -67,28 +81,40 @@
 }
 
 .nav-link {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    color: rgba(255,255,255,.65);
-    padding: 0 12px;
-    height: 52px;
+    color: var(--gray-500);
+    padding: 0 14px;
+    height: 56px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    border-bottom: 3px solid transparent;
+    border-bottom: 2px solid transparent;
     white-space: nowrap;
     transition: all var(--transition-fast);
-    letter-spacing: 0.2px;
+    letter-spacing: 0.1px;
+    position: relative;
+    text-decoration: none;
 }
 
 .nav-link:hover {
-    color: var(--utp-white);
-    border-bottom-color: rgba(255,255,255,.3);
+    color: var(--gray-800);
 }
 
 .nav-link.active {
     color: var(--utp-white);
     border-bottom-color: var(--utp-red);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: var(--utp-red);
+    box-shadow: 0 0 8px var(--utp-red-glow);
 }
 
 /* ── Lado derecho ────────────────────────────────────────── */
@@ -103,19 +129,23 @@
 .nav-btn {
     font-size: 12px;
     font-weight: 500;
-    padding: 6px 14px;
+    padding: 7px 16px;
     border-radius: var(--radius-md);
-    border: 1px solid rgba(255,255,255,.25);
+    border: 1px solid var(--color-border-strong);
     background: transparent;
-    color: rgba(255,255,255,.85);
+    color: var(--gray-700);
     cursor: pointer;
     font-family: var(--font-sans);
     transition: all var(--transition-fast);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .nav-btn:hover {
-    background: rgba(255,255,255,.1);
-    border-color: rgba(255,255,255,.4);
+    background: var(--gray-100);
+    border-color: var(--gray-300);
     color: var(--utp-white);
 }
 
@@ -123,47 +153,50 @@
     background: var(--utp-red);
     color: var(--utp-white);
     border-color: var(--utp-red);
+    font-weight: 600;
 }
 
 .nav-btn.primary:hover {
-    background: var(--utp-red-dark);
-    border-color: var(--utp-red-dark);
+    background: var(--utp-red-hover);
+    border-color: var(--utp-red-hover);
+    box-shadow: var(--shadow-glow-sm);
 }
 
 /* ── Chip de usuario ─────────────────────────────────────── */
 .user-chip {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 4px 10px;
     border-radius: var(--radius-md);
     transition: background var(--transition-fast);
+    border: 1px solid transparent;
 }
 
 .user-chip:hover {
-    background: rgba(255,255,255,.1);
+    background: var(--gray-100);
+    border-color: var(--color-border);
 }
 
 .user-av {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--utp-red);
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    background: var(--gradient-red);
     color: var(--utp-white);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 11px;
     font-weight: 700;
-    border: 2px solid rgba(255,255,255,.2);
     flex-shrink: 0;
 }
 
 .user-name-text {
     font-size: 12px;
     font-weight: 500;
-    color: rgba(255,255,255,.85);
+    color: var(--gray-700);
     max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -172,37 +205,38 @@
 
 /* ── Subnav (barra secundaria) ───────────────────────────── */
 .subnav {
-    background: var(--utp-charcoal);
-    border-bottom: 1px solid rgba(255,255,255,.07);
-    padding: 0 16px;
+    background: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 var(--space-5);
 }
 
 .subnav-inner {
-    max-width: 1140px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    height: 36px;
+    height: 40px;
     gap: 0;
 }
 
 .subnav-link {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
-    color: rgba(255,255,255,.50);
-    padding: 0 11px;
-    height: 36px;
+    color: var(--gray-400);
+    padding: 0 14px;
+    height: 40px;
     display: flex;
     align-items: center;
+    gap: 6px;
     cursor: pointer;
     white-space: nowrap;
     border-bottom: 2px solid transparent;
     transition: all var(--transition-fast);
-    letter-spacing: 0.2px;
+    letter-spacing: 0.1px;
 }
 
 .subnav-link:hover {
-    color: rgba(255,255,255,.85);
+    color: var(--gray-700);
 }
 
 .subnav-link.active {
@@ -217,8 +251,12 @@
     color: var(--color-star);
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
 }
 
-/* ── Topbar login (antes de autenticarse) ────────────────── */
-.topbar-login .nav-links { display: none; }
+/* ── Responsive topbar ──────────────────────────────────── */
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    .user-name-text { display: none; }
+    .topbar-inner { height: 48px; }
+}

@@ -1,15 +1,19 @@
 /* ============================================================
-   CHALK · professor.js — Perfil de docente (página standalone)
-   Lee el ID desde la URL (?id=X) y renderiza el perfil completo.
+   CHALK · professor.js — Perfil de docente con métricas completas
+   Lee el ID desde la URL (?id=X) y renderiza el perfil completo
+   con gráficos, distribución, evolución y reseñas filtradas.
    ============================================================ */
 
 const professor = (() => {
 
-    /* ── Inicialización (llamada desde la página) ────────── */
+    /** Filtro de reseñas activo */
+    let reviewFilter = "all";
 
-    /**
-     * Lee el parámetro ?id de la URL y renderiza el perfil.
-     */
+    /** ID y datos del docente actual */
+    let currentProf = null;
+
+    /* ── Inicialización ──────────────────────────────────── */
+
     function init() {
         const idParam = components.getUrlParam("id");
         const profId  = parseInt(idParam, 10);
@@ -25,6 +29,8 @@ const professor = (() => {
             return;
         }
 
+        currentProf = prof;
+
         // Breadcrumb
         const bc = document.getElementById("prof-breadcrumb");
         if (bc) bc.textContent = prof.name;
@@ -34,8 +40,13 @@ const professor = (() => {
         if (container) {
             container.innerHTML = _buildProfPage(prof);
 
-            // Animar barras de criterios
-            requestAnimationFrame(() => _animateCriteria(prof));
+            // Animar barras y números
+            requestAnimationFrame(() => {
+                _animateCriteria(prof);
+                _animateGradeDistribution(prof);
+                _animateHistorical(prof);
+                _animateMetrics(prof);
+            });
         }
     }
 
@@ -47,6 +58,10 @@ const professor = (() => {
         const stars    = DB.starsHtml(score);
         const criteria = Object.entries(prof.criteria);
         const totalReviews = DB.getProfReviewCount(prof.id);
+        const badge    = DB.getProfBadge(prof);
+        const diffColor = DB.getDifficultyColor(prof.difficulty);
+        const diffLabel = DB.getDifficultyLabel(prof.difficulty);
+        const totalGrades = (prof.gradeDistribution || []).reduce((a, b) => a + b, 0);
 
         return `
             <!-- Columna lateral -->
@@ -61,10 +76,12 @@ const professor = (() => {
                 </div>
 
                 ${prof.verified ? `
-                    <div style="margin-bottom:10px">
+                    <div style="margin-bottom:var(--space-3)">
                         <span class="verified-badge">✔ Docente verificado</span>
                     </div>
                 ` : ""}
+
+                ${badge ? `<div style="margin-bottom:var(--space-3)">${components.badgeHtml(badge)}</div>` : ""}
 
                 <!-- Botones de acción -->
                 <div class="action-btns">
@@ -85,38 +102,84 @@ const professor = (() => {
                     </div>
                     <div class="info-row">
                         <span class="info-row-label">Facultad</span>
-                        <span class="info-row-val" style="font-size:11px; text-align:right; max-width:130px">${prof.dept.replace("Facultad de ", "")}</span>
+                        <span class="info-row-val" style="font-size:11px; text-align:right; max-width:140px">${prof.dept.replace("Facultad de ", "")}</span>
                     </div>
                     <div class="info-row">
                         <span class="info-row-label">Reseñas</span>
                         <span class="info-row-val">${totalReviews}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-row-label">Carga académica</span>
+                        <span class="info-row-val">${DB.workloadLabels[prof.workload] || prof.workload}</span>
                     </div>
                 </div>
 
                 <!-- Cursos -->
                 <div class="info-block">
                     <div class="info-block-head">Cursos que dicta</div>
-                    ${prof.courses.map(c => `
-                        <div class="info-row">
-                            <span style="font-size:12px">📚 ${c}</span>
-                        </div>
-                    `).join("")}
+                    ${prof.courses.map(c => {
+                        const courseScore = prof.courseRatings?.[c];
+                        return `
+                            <div class="course-chip">
+                                <span class="course-chip-name">📚 ${c}</span>
+                                ${courseScore ? `<span class="course-chip-score">${courseScore.toFixed(1)}</span>` : ""}
+                            </div>
+                        `;
+                    }).join("")}
                 </div>
             </div>
 
             <!-- Columna principal -->
             <div>
                 <!-- Cabecera del docente -->
-                <div class="prof-header-card">
+                <div class="prof-header-card fadein">
                     <div class="prof-title">${prof.name}</div>
                     <div class="prof-subtitle">${prof.dept}</div>
                     <div class="prof-badges">
-                        ${prof.tags.map(t => `<span class="mini-tag" style="font-size:11px; padding:3px 9px">${t}</span>`).join("")}
+                        ${prof.tags.map(t => `<span class="mini-tag" style="font-size:11px; padding:4px 10px">${t}</span>`).join("")}
+                        ${badge ? components.badgeHtml(badge) : ""}
+                    </div>
+                </div>
+
+                <!-- Métricas dashboard -->
+                <div class="metrics-dashboard fadein stagger-1">
+                    <div class="prof-metric-card">
+                        <div class="prof-metric-icon">🔄</div>
+                        <div class="prof-metric-val" id="metric-wta" style="color:var(--color-success)">0%</div>
+                        <div class="prof-metric-label">Lo tomaría de nuevo</div>
+                    </div>
+                    <div class="prof-metric-card">
+                        <div class="prof-metric-icon">🎯</div>
+                        <div class="prof-metric-val" id="metric-diff" style="color:${diffColor}">0.0</div>
+                        <div class="prof-metric-label">Dificultad</div>
+                    </div>
+                    <div class="prof-metric-card">
+                        <div class="prof-metric-icon">📖</div>
+                        <div class="prof-metric-val" id="metric-learn" style="color:var(--color-info)">0%</div>
+                        <div class="prof-metric-label">Aprendizaje</div>
+                    </div>
+                    <div class="prof-metric-card">
+                        <div class="prof-metric-icon">✅</div>
+                        <div class="prof-metric-val" id="metric-approval" style="color:var(--utp-red)">0%</div>
+                        <div class="prof-metric-label">Aprobación</div>
+                    </div>
+                </div>
+
+                <!-- Nivel de dificultad visual -->
+                <div class="card fadein stagger-2" style="margin-bottom:var(--space-4)">
+                    <div class="card-head">🎯 Nivel de dificultad</div>
+                    <div class="card-body">
+                        ${components.difficultyBar(prof.difficulty)}
+                        <div style="margin-top:var(--space-3);display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-muted)">
+                            <span>Muy fácil</span>
+                            <span>Moderado</span>
+                            <span>Muy difícil</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Criterios de evaluación -->
-                <div class="card" style="margin-bottom:14px">
+                <div class="card fadein stagger-3" style="margin-bottom:var(--space-4)">
                     <div class="card-head">📊 Criterios de evaluación</div>
                     <div class="card-body">
                         <div class="accord-grid" id="criteria-grid-${prof.id}">
@@ -133,24 +196,116 @@ const professor = (() => {
                     </div>
                 </div>
 
+                <!-- Distribución de calificaciones -->
+                <div class="card fadein stagger-4" style="margin-bottom:var(--space-4)">
+                    <div class="card-head">📈 Distribución de calificaciones</div>
+                    <div class="card-body">
+                        <div class="grade-dist" id="grade-dist">
+                            ${[5, 4, 3, 2, 1].map((star, i) => {
+                                const count = (prof.gradeDistribution || [])[i] || 0;
+                                return `
+                                    <div class="grade-row">
+                                        <div class="grade-label">${"★".repeat(star)}</div>
+                                        <div class="grade-bar-track">
+                                            <div class="grade-bar-fill star-${star}" id="grade-fill-${star}" style="width:0%"></div>
+                                        </div>
+                                        <div class="grade-count" id="grade-count-${star}">${count}</div>
+                                    </div>
+                                `;
+                            }).join("")}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evolución histórica -->
+                ${prof.historicalRatings && prof.historicalRatings.length > 0 ? `
+                <div class="card fadein stagger-5" style="margin-bottom:var(--space-4)">
+                    <div class="card-head">📅 Evolución histórica del rating</div>
+                    <div class="card-body">
+                        <div class="hist-chart" id="hist-chart">
+                            ${prof.historicalRatings.map((h, i) => `
+                                <div class="hist-bar-wrap">
+                                    <div class="hist-bar-val">${h.rating.toFixed(1)}</div>
+                                    <div class="hist-bar" id="hist-bar-${i}" style="height:0px"></div>
+                                    <div class="hist-bar-label">${h.cycle}</div>
+                                </div>
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+                ` : ""}
+
                 <!-- Reseñas -->
-                <div class="reviews-card">
+                <div class="reviews-card fadein stagger-6">
                     <div class="reviews-head">
                         <span class="reviews-head-title">💬 Reseñas de estudiantes</span>
                         <span class="reviews-head-count">${reviews.length} reseña${reviews.length !== 1 ? "s" : ""}</span>
                     </div>
-                    <div class="reviews-body">
-                        ${reviews.length > 0 ? reviews.map(r => _reviewHtml(r)).join("") : `
-                            <div class="no-reviews">
-                                <div class="no-reviews-icon">💬</div>
-                                <div style="font-size:13px; font-weight:600; margin-bottom:6px">Sin reseñas aún</div>
-                                <div style="font-size:12px">¡Sé el primero en calificar a este docente!</div>
-                            </div>
-                        `}
+                    <div class="review-filter-tabs">
+                        <button class="review-filter-tab active" onclick="professor.filterReviews('all', this)">Todas</button>
+                        <button class="review-filter-tab" onclick="professor.filterReviews('helpful', this)">Más útiles</button>
+                        <button class="review-filter-tab" onclick="professor.filterReviews('recent', this)">Recientes</button>
+                        <button class="review-filter-tab" onclick="professor.filterReviews('positive', this)">Positivas</button>
+                        <button class="review-filter-tab" onclick="professor.filterReviews('critical', this)">Críticas</button>
+                    </div>
+                    <div class="reviews-body" id="reviews-body">
+                        ${_renderReviews(reviews, "all")}
                     </div>
                 </div>
             </div>
         `;
+    }
+
+    /* ── Render reviews with filter ──────────────────────── */
+
+    function _renderReviews(reviews, filter) {
+        let sorted = [...reviews];
+
+        switch (filter) {
+            case "helpful":
+                sorted.sort((a, b) => (b.helpful || 0) - (a.helpful || 0));
+                break;
+            case "recent":
+                sorted.sort((a, b) => {
+                    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                    const getMonthIdx = (dateStr) => {
+                        const parts = dateStr.split(" ");
+                        return months.indexOf(parts[0]) + parseInt(parts[1] || "2025") * 12;
+                    };
+                    return getMonthIdx(b.date) - getMonthIdx(a.date);
+                });
+                break;
+            case "positive":
+                sorted = sorted.filter(r => r.score >= 4);
+                break;
+            case "critical":
+                sorted = sorted.filter(r => r.score <= 3);
+                break;
+        }
+
+        if (sorted.length === 0) {
+            return `
+                <div class="no-reviews">
+                    <div class="no-reviews-icon">💬</div>
+                    <div style="font-size:13px; font-weight:600; margin-bottom:6px; color:var(--color-text-primary)">Sin reseñas en esta categoría</div>
+                    <div style="font-size:12px; color:var(--color-text-tertiary)">Prueba con otro filtro o sé el primero en contribuir.</div>
+                </div>
+            `;
+        }
+
+        return sorted.map(r => _reviewHtml(r)).join("");
+    }
+
+    function filterReviews(filter, btn) {
+        reviewFilter = filter;
+        document.querySelectorAll(".review-filter-tab").forEach(t => t.classList.remove("active"));
+        btn.classList.add("active");
+
+        const reviews = DB.getReviewsForProf(currentProf.id);
+        const body = document.getElementById("reviews-body");
+        if (body) {
+            body.innerHTML = _renderReviews(reviews, filter);
+        }
     }
 
     /* ── Animar barras de criterios ──────────────────────── */
@@ -162,6 +317,67 @@ const professor = (() => {
             if (fill) fill.style.width = `${(val / 5) * 100}%`;
             if (valEl) valEl.textContent = val.toFixed(1);
         });
+    }
+
+    /* ── Animar distribución de calificaciones ───────────── */
+
+    function _animateGradeDistribution(prof) {
+        const dist = prof.gradeDistribution || [];
+        const maxCount = Math.max(...dist, 1);
+
+        [5, 4, 3, 2, 1].forEach((star, i) => {
+            const count = dist[i] || 0;
+            const fill = document.getElementById(`grade-fill-${star}`);
+            if (fill) {
+                setTimeout(() => {
+                    fill.style.width = `${(count / maxCount) * 100}%`;
+                }, i * 100);
+            }
+        });
+    }
+
+    /* ── Animar barras históricas ────────────────────────── */
+
+    function _animateHistorical(prof) {
+        const ratings = prof.historicalRatings || [];
+        if (ratings.length === 0) return;
+
+        const minR = Math.min(...ratings.map(r => r.rating)) - 0.5;
+        const maxR = Math.max(...ratings.map(r => r.rating));
+        const range = maxR - minR || 1;
+
+        ratings.forEach((h, i) => {
+            const bar = document.getElementById(`hist-bar-${i}`);
+            if (bar) {
+                setTimeout(() => {
+                    const pct = ((h.rating - minR) / range);
+                    bar.style.height = `${Math.max(8, pct * 48)}px`;
+                }, i * 120);
+            }
+        });
+    }
+
+    /* ── Animar métricas numéricas ───────────────────────── */
+
+    function _animateMetrics(prof) {
+        setTimeout(() => {
+            components.animateNumber(
+                document.getElementById("metric-wta"),
+                prof.wouldTakeAgain || 0, 1000, "%", 0
+            );
+            components.animateNumber(
+                document.getElementById("metric-diff"),
+                prof.difficulty || 0, 800, "", 1
+            );
+            components.animateNumber(
+                document.getElementById("metric-learn"),
+                prof.learningScore || 0, 1000, "%", 0
+            );
+            components.animateNumber(
+                document.getElementById("metric-approval"),
+                prof.approvalRate || 0, 1000, "%", 0
+            );
+        }, 300);
     }
 
     /* ── HTML de reseña ───────────────────────────────────── */
@@ -179,6 +395,11 @@ const professor = (() => {
                         <div class="rev-user">
                             ${r.user}
                             <span class="rev-badge">${r.course}</span>
+                            ${r.wouldTakeAgain !== undefined ? `
+                                <span style="font-size:10px;color:${r.wouldTakeAgain ? 'var(--color-success)' : 'var(--color-danger)'}">
+                                    ${r.wouldTakeAgain ? '👍 Lo tomaría de nuevo' : '👎 No lo tomaría de nuevo'}
+                                </span>
+                            ` : ""}
                         </div>
                         <div class="rev-date">${r.date}</div>
                     </div>
@@ -211,5 +432,5 @@ const professor = (() => {
 
     /* ── API pública ─────────────────────────────────────── */
 
-    return { init, toggleHelpful };
+    return { init, toggleHelpful, filterReviews };
 })();
