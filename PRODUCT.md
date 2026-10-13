@@ -26,7 +26,7 @@ Hecho por y para alumnos de la UTP: docentes y cursos reales de Lima Norte, sin 
 
 ## Brand Commitments
 - Nombre: CHALK. Idioma: español peruano, tuteo, tono cercano de compañero.
-- Paleta UTP: rojo #C8102E, blanco y negro.
+- Paleta UTP (de los tableros del usuario): Cherry #810100, Maroon #630000, Dark Ruby #70000E, Cotton #EDEBDD, Cultured Pearl #F5F4F2, Cool Gray #DCD7D4, Creme #C3B79D, Noir #1B1717, Meteorite #2C2929.
 - Espacio para una ilustración propia (arte que el usuario aportará); no inventar ilustraciones de personas reales.
 
 ## Evidence on Hand
