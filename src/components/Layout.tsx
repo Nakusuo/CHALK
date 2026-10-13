@@ -19,7 +19,7 @@ const COURSES = allCourses();
 export function Logo({ to = "/docentes", compact }: { to?: string; compact?: boolean }) {
   return (
     <Link to={to} className="flex items-center gap-2.5 rounded-lg" aria-label="CHALK, ir al inicio">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand text-[15px] font-extrabold text-white">C</span>
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#70000E] text-[15px] font-extrabold text-white">C</span>
       <span className={cx("text-[17px] font-extrabold tracking-tight", compact && "lg:hidden xl:inline")}>CHALK</span>
     </Link>
   );

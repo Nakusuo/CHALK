@@ -4,33 +4,33 @@
 
 @layer base {
   :root {
-    --bg: 244 243 251;
+    --bg: 245 244 242;
     --surface: 255 255 255;
-    --muted: 239 237 250;
-    --line: 227 224 243;
-    --fg: 24 22 43;
-    --sub: 94 90 122;
-    --accent: 108 92 231;
-    --accent-ink: 84 68 208;
-    --accent-soft: 236 233 253;
-    --halo: 216 208 255;
-    --shadow: 0 1px 2px rgb(76 62 160 / 0.05), 0 10px 28px -12px rgb(76 62 160 / 0.18);
-    --shadow-lift: 0 2px 4px rgb(76 62 160 / 0.06), 0 18px 40px -14px rgb(76 62 160 / 0.28);
+    --muted: 237 235 221;
+    --line: 220 215 212;
+    --fg: 27 23 23;
+    --sub: 94 88 86;
+    --accent: 129 1 0;
+    --accent-ink: 129 1 0;
+    --accent-hover: 99 0 0;
+    --accent-soft: 243 230 228;
+    --shadow: 0 1px 2px rgb(27 23 23 / 0.05), 0 10px 28px -12px rgb(27 23 23 / 0.14);
+    --shadow-lift: 0 2px 4px rgb(27 23 23 / 0.06), 0 18px 40px -14px rgb(27 23 23 / 0.24);
     color-scheme: light;
   }
   .dark {
-    --bg: 16 14 29;
-    --surface: 27 24 45;
-    --muted: 37 34 59;
-    --line: 49 45 76;
-    --fg: 238 236 250;
-    --sub: 168 163 198;
-    --accent: 146 132 255;
-    --accent-ink: 176 165 255;
-    --accent-soft: 44 38 84;
-    --halo: 60 46 130;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 30px -12px rgb(0 0 0 / 0.6);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 20px 44px -14px rgb(0 0 0 / 0.75);
+    --bg: 14 12 12;
+    --surface: 27 23 23;
+    --muted: 44 41 41;
+    --line: 58 53 53;
+    --fg: 237 235 221;
+    --sub: 169 161 158;
+    --accent: 193 39 45;
+    --accent-ink: 255 138 128;
+    --accent-hover: 163 31 36;
+    --accent-soft: 60 22 22;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -12px rgb(0 0 0 / 0.7);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 20px 44px -14px rgb(0 0 0 / 0.85);
     color-scheme: dark;
   }
   html {
@@ -38,8 +38,6 @@
   }
   body {
     @apply bg-bg font-sans text-fg antialiased;
-    background-image: radial-gradient(60rem 36rem at 100% -10%, rgb(var(--halo) / 0.55), transparent 70%);
-    background-attachment: fixed;
     caret-color: rgb(var(--accent));
     font-feature-settings: "ss01";
   }
@@ -116,16 +114,16 @@
       disabled:opacity-50 disabled:pointer-events-none;
   }
   .btn-primary {
-    @apply btn bg-accent text-white hover:bg-accent-ink dark:text-[#120f24] dark:hover:bg-accent-ink;
+    @apply btn bg-accent text-white hover:bg-[rgb(var(--accent-hover))];
   }
   .btn-brand {
-    @apply btn bg-brand text-white hover:bg-brand-700;
+    @apply btn bg-accent text-white hover:bg-[rgb(var(--accent-hover))];
   }
   .btn-ghost {
     @apply btn text-fg hover:bg-muted;
   }
   .btn-outline {
-    @apply btn bg-muted text-fg hover:bg-accent-soft hover:text-accent-ink;
+    @apply btn bg-muted text-fg hover:bg-line;
   }
   .input {
     @apply h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-fg outline-none transition

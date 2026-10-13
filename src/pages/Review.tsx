@@ -182,7 +182,7 @@ export default function ReviewPage() {
                 <span
                   className={cx(
                     "num grid h-5 w-5 place-items-center rounded-full text-[10px] font-bold",
-                    i < step ? "bg-emerald-600 text-white" : i === step ? "bg-accent text-white dark:text-[#120f24]" : "bg-muted",
+                    i < step ? "bg-emerald-600 text-white" : i === step ? "bg-accent text-white" : "bg-muted",
                   )}
                 >
                   {i < step ? <Check size={12} /> : i + 1}

@@ -34,7 +34,7 @@ export function Toaster() {
             {i.message}
             {action && (
               <button
-                className="font-semibold text-[#C9C1FF] hover:underline dark:text-[#4B3BC4]"
+                className="font-semibold text-[#F3B3AC] hover:underline dark:text-[#810100]"
                 onClick={() => {
                   action.onClick();
                   dismiss(i.id);

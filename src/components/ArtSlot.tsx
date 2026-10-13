@@ -11,7 +11,7 @@ export default function ArtSlot({ className, alt = "" }: { className?: string; a
     return (
       <div
         className={cx(
-          "grid place-items-center rounded-card border-2 border-dashed border-accent/35 bg-accent-soft/50 p-6 text-center",
+          "grid place-items-center rounded-card border-2 border-dashed border-line bg-muted p-6 text-center",
           className,
         )}
       >
