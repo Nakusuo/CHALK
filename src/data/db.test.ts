@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { allCourses, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profMetrics, profStats } from "./db";
-import type { Review } from "./types";
+import { allCourses, courseScore, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profMetrics, profStats } from "./db";
+import type { CriteriaKey, Review } from "./types";
 
 // Fixture con nota semilla: los docentes reales arrancan sin reseñas.
 const p1 = { ...getProfessor(1)!, score: 4.7, reviews: 134 };
@@ -37,15 +37,18 @@ describe("profStats", () => {
 
 describe("profBadge", () => {
   it("top si score ≥ 4.7 y ≥ 90 % lo volvería a llevar", () => {
-    expect(profBadge(p1, 4.8, 95)?.type).toBe("top");
+    expect(profBadge(p1, 4.8, 95, 10)?.type).toBe("top");
   });
   it("docente solo con reseñas de usuario puede tener insignia", () => {
-    const rs = [{ ...review(5), wouldTakeAgain: true }];
+    const rs = [1, 2, 3].map(() => ({ ...review(5), wouldTakeAgain: true }));
     const m = profMetrics(getProfessor(1)!, rs);
-    expect(profBadge(getProfessor(1)!, m.score, m.wouldTakeAgain)?.type).toBe("top");
+    expect(profBadge(getProfessor(1)!, m.score, m.wouldTakeAgain, m.count)?.type).toBe("top");
+  });
+  it("sin insignia top/recomendado con menos de 3 reseñas", () => {
+    expect(profBadge(getProfessor(1)!, 5, 100, 2)).toBeNull();
   });
   it("null si no cumple nada", () => {
-    expect(profBadge({ ...p1, historicalRatings: [] }, 3, 50)).toBeNull();
+    expect(profBadge({ ...p1, historicalRatings: [] }, 3, 50, 10)).toBeNull();
   });
 });
 
@@ -66,11 +69,11 @@ it("allCourses no repite cursos y está ordenado", () => {
 describe("profMetrics", () => {
   const seedP = { ...p1, difficulty: 3, wouldTakeAgain: 80 };
   it("sin reseñas: no calificado y valores nulos", () => {
-    expect(profMetrics(getProfessor(1)!, [])).toEqual({ score: 0, count: 0, difficulty: null, wouldTakeAgain: null, rated: false });
+    expect(profMetrics(getProfessor(1)!, [])).toEqual({ score: 0, count: 0, difficulty: null, wouldTakeAgain: null, rated: false, criteria: null, distribution: [0, 0, 0, 0, 0] });
   });
   it("dos reseñas del usuario: promedios", () => {
     const rs = [{ ...review(5), difficulty: 2, wouldTakeAgain: true }, { ...review(3), difficulty: 4, wouldTakeAgain: null }];
-    expect(profMetrics(getProfessor(1)!, rs)).toEqual({ score: 4, count: 2, difficulty: 3, wouldTakeAgain: 100, rated: true });
+    expect(profMetrics(getProfessor(1)!, rs)).toMatchObject({ score: 4, count: 2, difficulty: 3, wouldTakeAgain: 100, rated: true });
   });
   it("wouldTakeAgain es el % de true entre no nulos", () => {
     const rs = [{ ...review(4), wouldTakeAgain: true }, { ...review(4), wouldTakeAgain: false }];
@@ -90,6 +93,43 @@ describe("profMetrics", () => {
     expect(m.wouldTakeAgain).toBeNull();
   });
   it("semilla sin reseñas propias devuelve la semilla", () => {
-    expect(profMetrics(seedP, [])).toEqual({ score: 4.7, count: 134, difficulty: 3, wouldTakeAgain: 80, rated: true });
+    expect(profMetrics(seedP, [])).toMatchObject({ score: 4.7, count: 134, difficulty: 3, wouldTakeAgain: 80, rated: true });
+  });
+});
+
+const crit = (v: number): Record<CriteriaKey, number> => ({ ensenanza: v, claridad: v, puntualidad: v, trato: v, practicas: v, accesibilidad: v });
+
+describe("criterios y distribución", () => {
+  it("criteria promedia por clave solo reseñas con criterios > 0", () => {
+    const rs = [
+      { ...review(4), criteria: { ...crit(4), trato: 0 } },
+      { ...review(2), criteria: crit(2) },
+      review(5), // sin criterios: se ignora
+    ];
+    const c = profMetrics(getProfessor(1)!, rs).criteria!;
+    expect(c.ensenanza).toBe(3);
+    expect(c.trato).toBe(2);
+  });
+  it("criteria es null sin reseñas con criterios", () => {
+    expect(profMetrics(getProfessor(1)!, [review(4)]).criteria).toBeNull();
+  });
+  it("distribution cuenta por estrellas (índice 0 = 5★)", () => {
+    const rs = [review(5), review(5), review(4), review(1)];
+    expect(profMetrics(getProfessor(1)!, rs).distribution).toEqual([2, 1, 0, 0, 1]);
+  });
+});
+
+describe("courseScore", () => {
+  const pr = getProfessor(1)!;
+  const course = pr.courses[0];
+  it("promedia reseñas del usuario de ese docente y curso", () => {
+    const rs = [{ ...review(5), course }, { ...review(3), course }, { ...review(1), course: "Otro" }, { ...review(1), course, profId: 2 }];
+    expect(courseScore(pr, course, rs)).toBe(4);
+  });
+  it("sin datos devuelve null", () => {
+    expect(courseScore(pr, course, [])).toBeNull();
+  });
+  it("prefiere courseRatings de la semilla", () => {
+    expect(courseScore({ ...pr, courseRatings: { [course]: 4.4 } }, course, [{ ...review(1), course }])).toBe(4.4);
   });
 });

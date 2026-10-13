@@ -37,7 +37,7 @@ export default function ProfessorCard({ p, rank }: { p: Professor; rank?: number
               {rank !== undefined && <span className="font-mono text-xs text-sub">#{rank}</span>}
               <h3 className="font-semibold group-hover:text-brand">{p.name}</h3>
               {p.verified && <BadgeCheck size={16} className="text-sky-500" aria-label="Verificado" />}
-              {rated && <BadgeTag badge={profBadge(p, score, wouldTakeAgain)} />}
+              {rated && <BadgeTag badge={profBadge(p, score, wouldTakeAgain, count)} />}
             </div>
             <div className="mt-0.5 truncate text-sm text-sub">{p.dept}</div>
           </div>

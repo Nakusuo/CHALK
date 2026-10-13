@@ -53,4 +53,14 @@ describe("store", () => {
     store.updateReview(r.id, { text: "después" });
     expect(store.get().reviews[0]).toMatchObject({ id: r.id, text: "después", score: 4 });
   });
+
+  it("updateReview conserva id y helpful y no duplica", () => {
+    const r = store.addReview({
+      profId: 1, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
+      text: "antes", helpful: 7, course: "X", difficulty: 3, wouldTakeAgain: true, authorCode: "U1",
+    });
+    store.updateReview(r.id, { text: "después" });
+    expect(store.get().reviews).toHaveLength(1);
+    expect(store.get().reviews[0]).toMatchObject({ id: r.id, helpful: 7, authorCode: "U1" });
+  });
 });

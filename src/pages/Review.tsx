@@ -87,7 +87,11 @@ export default function ReviewPage() {
     const { id: _omit, ...data } = draft;
     void _omit;
     if (editing) {
-      store.updateReview(editing.id, { ...data, date: editing.date });
+      // Conserva autor y votos útiles de la reseña original.
+      const { helpful: keepHelpful, authorCode: keepAuthor, ...rest } = data;
+      void keepHelpful;
+      void keepAuthor;
+      store.updateReview(editing.id, { ...rest, date: editing.date });
       toast("Reseña actualizada");
       nav(`/docentes/${p!.id}`);
       return;

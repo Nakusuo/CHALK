@@ -1,7 +1,7 @@
 import { BookOpen, GitCompare, Search } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { cx, Empty, PageHeader } from "../components/ui";
-import { allCourses, faculties, getFaculty, getProfessor, profMetrics } from "../data/db";
+import { allCourses, courseScore, faculties, getFaculty, getProfessor } from "../data/db";
 import { useStore } from "../lib/store";
 
 const COURSES = allCourses();
@@ -40,11 +40,7 @@ export default function Courses() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {list.map((c) => {
-            const rating = (p: NonNullable<ReturnType<typeof getProfessor>>) => {
-              if (p.courseRatings[c.name] !== undefined) return p.courseRatings[c.name];
-              const m = profMetrics(p, reviews);
-              return m.rated ? m.score : null;
-            };
+            const rating = (p: NonNullable<ReturnType<typeof getProfessor>>) => courseScore(p, c.name, reviews);
             const profs = c.profs.map((id) => getProfessor(id)!);
             return (
               <div key={c.name} className="card p-5">

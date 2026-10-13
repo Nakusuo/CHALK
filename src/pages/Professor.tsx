@@ -34,16 +34,16 @@ export default function ProfessorPage() {
   const [course, setCourse] = useState("all");
 
   if (!p) return <NotFound />;
-  const { score, count, difficulty, wouldTakeAgain, rated } = profMetrics(p, userReviews);
+  const { score, count, difficulty, wouldTakeAgain, rated, criteria, distribution } = profMetrics(p, userReviews);
 
   let reviews = allReviews(userReviews).filter((r) => r.profId === p.id && (course === "all" || r.course === course));
   if (filter === "positive") reviews = reviews.filter((r) => r.score >= 4);
   if (filter === "critical") reviews = reviews.filter((r) => r.score <= 3);
   reviews.sort((a, b) => (filter === "helpful" ? b.helpful - a.helpful : dateRank(b) - dateRank(a)));
 
-  const dist = p.gradeDistribution;
+  const dist = distribution;
   const distMax = Math.max(1, ...dist);
-  // Aprobación, aprendizaje, criterios, distribución y evolución solo existen en la semilla.
+  // Aprobación, aprendizaje y evolución solo existen en la semilla; criterios y distribución salen de las reseñas.
   const hasSeed = p.reviews > 0;
   const courseRatings = Object.entries(p.courseRatings);
   const hist = p.historicalRatings;
@@ -61,7 +61,7 @@ export default function ProfessorPage() {
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-2xl font-bold tracking-tight">{p.name}</h1>
               {p.verified && <BadgeCheck size={20} className="text-sky-500" aria-label="Verificado" />}
-              {rated && <BadgeTag badge={profBadge(p, score, wouldTakeAgain)} />}
+              {rated && <BadgeTag badge={profBadge(p, score, wouldTakeAgain, count)} />}
             </div>
             <div className="mt-1 text-sub">
               {p.dept} · {getFaculty(p.fac)?.name}
@@ -170,12 +170,13 @@ export default function ProfessorPage() {
           )}
         </section>
 
-        {hasSeed && (
+        {(criteria !== null || rated || hasSeed) && (
           <aside className="space-y-6">
+            {criteria !== null && (
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Criterios</h2>
               <div className="space-y-3">
-                {(Object.entries(p.criteria) as [CriteriaKey, number][]).map(([k, v]) => (
+                {(Object.entries(criteria) as [CriteriaKey, number][]).map(([k, v]) => (
                   <div key={k}>
                     <div className="mb-1 flex justify-between text-sm">
                       <span className="text-sub">{criteriaLabels[k]}</span>
@@ -186,7 +187,9 @@ export default function ProfessorPage() {
                 ))}
               </div>
             </section>
+            )}
 
+            {rated && (
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Distribución de notas</h2>
               <div className="space-y-2">
@@ -201,7 +204,9 @@ export default function ProfessorPage() {
                 ))}
               </div>
             </section>
+            )}
 
+            {hasSeed && (
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Evolución por ciclo</h2>
               <div className="flex h-28 items-end gap-2">
@@ -217,6 +222,7 @@ export default function ProfessorPage() {
                 ))}
               </div>
             </section>
+            )}
 
             {courseRatings.length > 0 && (
               <section className="card p-5">

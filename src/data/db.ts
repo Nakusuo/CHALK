@@ -37,20 +37,40 @@ export interface ProfMetrics {
   difficulty: number | null;
   wouldTakeAgain: number | null;
   rated: boolean;
+  /** Promedio por criterio de las reseñas del usuario que lo incluyen; null si ninguna. */
+  criteria: Record<CriteriaKey, number> | null;
+  /** Reseñas del usuario por estrellas: índice 0 = 5★ … índice 4 = 1★. */
+  distribution: number[];
 }
+
+const CRITERIA_KEYS = Object.keys(criteriaLabels) as CriteriaKey[];
 
 /** Mezcla la nota semilla (ponderada por p.reviews) con las reseñas del usuario. Sin datos → null. */
 export function profMetrics(p: Professor, userReviews: Review[]): ProfMetrics {
   const mine = userReviews.filter((r) => r.profId === p.id);
   const count = p.reviews + mine.length;
-  if (count === 0) return { score: 0, count: 0, difficulty: null, wouldTakeAgain: null, rated: false };
+  const distribution = [0, 0, 0, 0, 0];
+  for (const r of mine) {
+    const star = Math.min(5, Math.max(1, Math.round(r.score)));
+    distribution[5 - star]++;
+  }
+  const withCriteria = mine.filter((r) => r.criteria);
+  const criteria = withCriteria.length
+    ? (Object.fromEntries(
+        CRITERIA_KEYS.map((k) => {
+          const vals = withCriteria.map((r) => r.criteria![k]).filter((v) => v > 0);
+          return [k, vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0];
+        }),
+      ) as Record<CriteriaKey, number>)
+    : null;
+  if (count === 0) return { score: 0, count: 0, difficulty: null, wouldTakeAgain: null, rated: false, criteria: null, distribution };
   const sum = (f: (r: Review) => number) => mine.reduce((s, r) => s + f(r), 0);
   const score = (p.score * p.reviews + sum((r) => r.score)) / count;
   const difficulty = (p.difficulty * p.reviews + sum((r) => r.difficulty)) / count;
   const votes = mine.filter((r) => r.wouldTakeAgain !== null);
   const yes = (p.wouldTakeAgain / 100) * p.reviews + votes.filter((r) => r.wouldTakeAgain).length;
   const total = p.reviews + votes.length;
-  return { score, count, difficulty, wouldTakeAgain: total ? (yes / total) * 100 : null, rated: true };
+  return { score, count, difficulty, wouldTakeAgain: total ? (yes / total) * 100 : null, rated: true, criteria, distribution };
 }
 
 export function profStats(p: Professor, userReviews: Review[]) {
@@ -60,12 +80,20 @@ export function profStats(p: Professor, userReviews: Review[]) {
 
 export type Badge = { type: "top" | "trending" | "recommended"; label: string };
 
-export function profBadge(p: Professor, score: number, wouldTakeAgain: number | null): Badge | null {
+/** Promedio del curso: nota semilla si existe; si no, reseñas del usuario para ese docente y curso. */
+export function courseScore(p: Professor, course: string, userReviews: Review[]): number | null {
+  if (p.courseRatings[course] !== undefined) return p.courseRatings[course];
+  const mine = userReviews.filter((r) => r.profId === p.id && r.course === course);
+  return mine.length ? mine.reduce((s, r) => s + r.score, 0) / mine.length : null;
+}
+
+export function profBadge(p: Professor, score: number, wouldTakeAgain: number | null, count: number): Badge | null {
   const wta = wouldTakeAgain ?? 0;
-  if (score >= 4.7 && wta >= 90) return { type: "top", label: "Top" };
+  const enough = count >= 3;
+  if (enough && score >= 4.7 && wta >= 90) return { type: "top", label: "Top" };
   const h = p.historicalRatings;
   if (h.length >= 2 && h[h.length - 1].rating - h[h.length - 2].rating >= 0.2) return { type: "trending", label: "En alza" };
-  if (wta >= 90) return { type: "recommended", label: "Recomendado" };
+  if (enough && wta >= 90) return { type: "recommended", label: "Recomendado" };
   return null;
 }
 

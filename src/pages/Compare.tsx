@@ -54,7 +54,7 @@ export default function Compare() {
   const swap = () => setParams({ ...(b && { a: String(b.id) }), ...(a && { b: String(a.id) }) }, { replace: true });
 
   type Row = { label: string; get: (p: Professor) => number | null; fmt: (n: number) => string; lowerBetter?: boolean };
-  // Aprobación, aprendizaje y criterios solo existen en la semilla: sin ella no hay nada que comparar.
+  // Aprobación y aprendizaje solo existen en la semilla: sin ella no hay nada que comparar.
   const hasSeed = !!a && !!b && (a.reviews > 0 || b.reviews > 0);
   const rows: Row[] =
     a && b
@@ -67,9 +67,11 @@ export default function Compare() {
             ? [
                 { label: "Aprobación", get: (p: Professor) => (p.reviews ? p.approvalRate : null), fmt: (n: number) => `${n}%` },
                 { label: "Aprendizaje", get: (p: Professor) => (p.reviews ? p.learningScore : null), fmt: (n: number) => `${n}%` },
-                ...(Object.keys(criteriaLabels) as CriteriaKey[]).map((k) => ({ label: criteriaLabels[k], get: (p: Professor) => (p.reviews ? p.criteria[k] : null), fmt: (n: number) => n.toFixed(1) })),
               ]
             : []),
+          ...(Object.keys(criteriaLabels) as CriteriaKey[])
+            .map((k) => ({ label: criteriaLabels[k], get: (p: Professor) => profMetrics(p, reviews).criteria?.[k] ?? null, fmt: (n: number) => n.toFixed(1) }))
+            .filter((row) => row.get(a) !== null || row.get(b) !== null),
         ]
       : [];
 
