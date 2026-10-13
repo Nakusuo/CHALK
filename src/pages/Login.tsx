@@ -24,16 +24,23 @@ export default function Login() {
     <AuthShell title="Inicia sesión" subtitle="Entra con tu correo de la UTP.">
       <form onSubmit={submit} className="space-y-4" noValidate>
         <Field label="Correo institucional" error={tried && emailErr}>
-          <input className="input" type="email" autoComplete="email" placeholder="U20240001@utp.edu.pe" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            className="input"
+            type="email"
+            autoComplete="email"
+            placeholder="U20240001@utp.edu.pe"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </Field>
         <Field label="Contraseña" error={tried && passErr}>
           <input className="input" type="password" autoComplete="current-password" value={pass} onChange={(e) => setPass(e.target.value)} />
         </Field>
-        <button className="btn-primary h-11 w-full">Entrar</button>
+        <button className="btn-primary h-12 w-full text-[15px]">Entrar</button>
       </form>
       <p className="mt-6 text-center text-sm text-sub">
         ¿Primera vez?{" "}
-        <Link to="/registro" className="font-semibold text-brand hover:underline">
+        <Link to="/registro" className="link">
           Crea tu cuenta
         </Link>
       </p>

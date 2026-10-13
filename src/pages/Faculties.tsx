@@ -1,7 +1,16 @@
-import { MapPin } from "lucide-react";
+import { BookOpen, Briefcase, Cpu, HeartPulse, type LucideIcon, MapPin, Palette, Scale } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { cx, PageHeader } from "../components/ui";
+import { cx, PageHeader, tint } from "../components/ui";
+
+const ICONS: Record<string, LucideIcon> = {
+  ing: Cpu,
+  neg: Briefcase,
+  derecho: Scale,
+  comunicaciones: Palette,
+  salud: HeartPulse,
+  general: BookOpen,
+};
 import { careersBySede, faculties, professors, profMetrics, sedes } from "../data/db";
 import { useStore } from "../lib/store";
 
@@ -14,9 +23,14 @@ export default function Faculties() {
     <>
       <PageHeader title="Facultades y sedes" subtitle="Explora docentes por facultad y por campus." />
 
-      <div className="mb-6 flex gap-1 no-scrollbar overflow-x-auto pb-1">
+      <div className="seg no-scrollbar mb-6 overflow-x-auto">
         {[{ id: "all", name: "Todas las sedes" }, ...sedes].map((s) => (
-          <button key={s.id} className={cx("chip shrink-0", sede === s.id && "chip-on")} onClick={() => setSede(s.id)}>
+          <button
+            key={s.id}
+            aria-pressed={sede === s.id}
+            className={cx("seg-item inline-flex items-center gap-1", sede === s.id && "seg-on")}
+            onClick={() => setSede(s.id)}
+          >
             {s.id !== "all" && <MapPin size={12} />} {s.name}
           </button>
         ))}
@@ -28,23 +42,26 @@ export default function Faculties() {
           if (!list.length) return null;
           const rated = list.map((p) => profMetrics(p, reviews)).filter((m) => m.rated);
           const avg = rated.length ? rated.reduce((s, m) => s + m.score, 0) / rated.length : null;
+          const Icon = ICONS[f.id] ?? BookOpen;
           const courses = new Set(list.flatMap((p) => p.courses)).size;
           return (
-            <Link key={f.id} to={`/docentes?fac=${f.id}${sede !== "all" ? `&sede=${sede}` : ""}`} className={"card p-5 transition hover:-translate-y-0.5 hover:border-fg/20"}>
-              <div className="text-2xl">{f.icon}</div>
-              <h2 className="mt-3 font-semibold">{f.name}</h2>
-              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-4 text-center">
+            <Link key={f.id} to={`/docentes?fac=${f.id}${sede !== "all" ? `&sede=${sede}` : ""}`} className="card lift p-6">
+              <span className={cx("grid h-11 w-11 place-items-center rounded-xl", tint(f.id).bg)}>
+                <Icon size={20} aria-hidden />
+              </span>
+              <h2 className="mt-4 text-[17px] font-semibold">{f.name}</h2>
+              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-4">
                 <div>
-                  <div className="font-mono text-lg font-bold">{list.length}</div>
-                  <div className="text-[11px] text-sub">docentes</div>
+                  <div className="num text-2xl font-bold tracking-tight">{list.length}</div>
+                  <div className="text-xs text-sub">docentes</div>
                 </div>
                 <div>
-                  <div className="font-mono text-lg font-bold">{avg !== null ? avg.toFixed(1) : "—"}</div>
-                  <div className="text-[11px] text-sub">promedio</div>
+                  <div className="num text-2xl font-bold tracking-tight">{avg !== null ? avg.toFixed(1) : "—"}</div>
+                  <div className="text-xs text-sub">promedio</div>
                 </div>
                 <div>
-                  <div className="font-mono text-lg font-bold">{courses}</div>
-                  <div className="text-[11px] text-sub">cursos</div>
+                  <div className="num text-2xl font-bold tracking-tight">{courses}</div>
+                  <div className="text-xs text-sub">cursos</div>
                 </div>
               </div>
             </Link>
@@ -53,11 +70,11 @@ export default function Faculties() {
       </div>
 
       {sede !== "all" && (
-        <section className="card mt-8 p-6">
+        <section className="card mt-6 p-6">
           <h2 className="font-semibold">Carreras en {sedes.find((s) => s.id === sede)?.name}</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {careersBySede[sede]?.map((c) => (
-              <span key={c} className="rounded-lg bg-muted px-2.5 py-1 text-xs">
+              <span key={c} className="rounded-full bg-muted px-3 py-1 text-xs">
                 {c}
               </span>
             ))}

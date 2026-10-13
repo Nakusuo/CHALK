@@ -1,30 +1,30 @@
 import { ArrowLeftRight, GitCompare, Trophy, X } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { Avatar, cx, Empty, PageHeader, Stars } from "../components/ui";
+import { Link, useSearchParams } from "react-router-dom";
+import { cx, Empty, Monogram, PageHeader, plural, Stars } from "../components/ui";
 import { criteriaLabels, getProfessor, professors, profMetrics, workloadLabels } from "../data/db";
 import type { CriteriaKey, Professor } from "../data/types";
 import { useStore } from "../lib/store";
 
-function Picker({ value, other, onChange, label }: { value?: Professor; other?: Professor; onChange: (id: string) => void; label: string }) {
+function Picker({
+  value,
+  other,
+  onChange,
+  label,
+}: {
+  value?: Professor;
+  other?: Professor;
+  onChange: (id: string) => void;
+  label: string;
+}) {
   return (
-    <div className="card p-4">
-      <div className="eyebrow mb-2">{label}</div>
-      {value ? (
-        <div className="flex items-center gap-3">
-          <Avatar size={44}>{value.emoji}</Avatar>
-          <div className="min-w-0 flex-1">
-            <Link to={`/docentes/${value.id}`} className="block truncate font-semibold hover:text-brand">
-              {value.name}
-            </Link>
-            <div className="truncate text-xs text-sub">{value.dept}</div>
-          </div>
-          <button className="btn-ghost h-8 w-8 px-0" aria-label="Quitar" onClick={() => onChange("")}>
-            <X size={16} />
-          </button>
-        </div>
-      ) : (
-        <select className="input" value="" onChange={(e) => onChange(e.target.value)} aria-label={label}>
+    <div className="card flex flex-col items-center p-5 text-center sm:p-6">
+      <div className="flex w-full items-center gap-2">
+        <select
+          className="input h-10 min-w-0 flex-1 rounded-full text-sm font-semibold"
+          value={value?.id ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label={label}
+        >
           <option value="">Elegir docente…</option>
           {professors
             .filter((p) => p.id !== other?.id)
@@ -34,7 +34,46 @@ function Picker({ value, other, onChange, label }: { value?: Professor; other?: 
               </option>
             ))}
         </select>
+        {value && (
+          <button className="btn-ghost h-9 w-9 shrink-0 px-0 text-sub" aria-label="Quitar" onClick={() => onChange("")}>
+            <X size={16} />
+          </button>
+        )}
+      </div>
+      {value ? (
+        <>
+          <Monogram name={value.name} tone={value.dept} size={84} className="mt-6" />
+          <Link to={`/docentes/${value.id}`} className="mt-4 text-lg font-semibold leading-snug hover:text-accent-ink">
+            {value.name}
+          </Link>
+          <div className="mt-0.5 text-sm text-sub">{value.dept}</div>
+        </>
+      ) : (
+        <>
+          <span
+            className="mt-6 grid h-[84px] w-[84px] place-items-center rounded-full border-2 border-dashed border-line text-sub"
+            aria-hidden
+          >
+            <GitCompare size={24} />
+          </span>
+          <div className="mt-4 text-sm text-sub">{label}</div>
+        </>
       )}
+    </div>
+  );
+}
+
+function Value({ v, win }: { v: string; win: boolean }) {
+  return (
+    <div className={cx("rounded-xl px-2 py-3 text-center", win && "bg-accent-soft")}>
+      <div
+        className={cx(
+          "num text-[28px] font-bold leading-none tracking-tight sm:text-4xl",
+          win ? "text-accent-ink" : v === "—" ? "text-sub" : "text-fg",
+        )}
+      >
+        {v}
+      </div>
     </div>
   );
 }
@@ -59,7 +98,14 @@ export default function Compare() {
   const rows: Row[] =
     a && b
       ? [
-          { label: "Calificación", get: (p) => { const m = profMetrics(p, reviews); return m.rated ? m.score : null; }, fmt: (n) => n.toFixed(1) },
+          {
+            label: "Calificación",
+            get: (p) => {
+              const m = profMetrics(p, reviews);
+              return m.rated ? m.score : null;
+            },
+            fmt: (n) => n.toFixed(1),
+          },
           { label: "Reseñas", get: (p) => profMetrics(p, reviews).count, fmt: String },
           { label: "Lo volvería a llevar", get: (p) => profMetrics(p, reviews).wouldTakeAgain, fmt: (n) => `${Math.round(n)}%` },
           { label: "Dificultad", get: (p) => profMetrics(p, reviews).difficulty, fmt: (n) => n.toFixed(1), lowerBetter: true },
@@ -70,7 +116,11 @@ export default function Compare() {
               ]
             : []),
           ...(Object.keys(criteriaLabels) as CriteriaKey[])
-            .map((k) => ({ label: criteriaLabels[k], get: (p: Professor) => profMetrics(p, reviews).criteria?.[k] ?? null, fmt: (n: number) => n.toFixed(1) }))
+            .map((k) => ({
+              label: criteriaLabels[k],
+              get: (p: Professor) => profMetrics(p, reviews).criteria?.[k] ?? null,
+              fmt: (n: number) => n.toFixed(1),
+            }))
             .filter((row) => row.get(a) !== null || row.get(b) !== null),
         ]
       : [];
@@ -90,59 +140,86 @@ export default function Compare() {
     { a: 0, b: 0 },
   );
 
+  const criteriaNames = Object.values(criteriaLabels);
+  const groups = [
+    { title: "Vista rápida", rows: rows.filter((r) => !criteriaNames.includes(r.label)) },
+    { title: "Criterios", rows: rows.filter((r) => criteriaNames.includes(r.label)) },
+  ].filter((g) => g.rows.length);
+
   return (
     <>
       <PageHeader title="Comparar docentes" subtitle="Ponlos lado a lado antes de elegir horario." />
-      <div className="grid items-center gap-3 md:grid-cols-[1fr_auto_1fr]">
+      <div className="relative grid gap-3 sm:grid-cols-2 sm:gap-5">
         <Picker label="Docente A" value={a} other={b} onChange={(v) => set("a", v)} />
-        <button className="btn-outline mx-auto h-10 w-10 px-0" aria-label="Intercambiar" onClick={swap} disabled={!a && !b}>
+        <button
+          className="btn mx-auto h-10 w-10 sm:absolute sm:left-1/2 sm:top-[108px] sm:z-10 sm:-translate-x-1/2 bg-surface px-0 text-sub shadow-card hover:text-accent-ink"
+          aria-label="Intercambiar"
+          onClick={swap}
+          disabled={!a && !b}
+        >
           <ArrowLeftRight size={16} />
         </button>
         <Picker label="Docente B" value={b} other={a} onChange={(v) => set("b", v)} />
       </div>
 
       {a && b ? (
-        <section className="card mt-6 overflow-hidden">
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-line bg-muted/50 p-5 text-center">
-            <div className={cx("font-semibold", wins.a > wins.b && "text-brand")}>
-              {wins.a > wins.b && <Trophy size={16} className="mr-1 inline" />}
-              {wins.a} criterios
-            </div>
-            <span className="text-xs text-sub">vs</span>
-            <div className={cx("font-semibold", wins.b > wins.a && "text-brand")}>
-              {wins.b > wins.a && <Trophy size={16} className="mr-1 inline" />}
-              {wins.b} criterios
-            </div>
+        <section className="card mt-5 p-5 sm:p-8">
+          <div className="grid grid-cols-2 gap-5 text-center">
+            {(["a", "b"] as const).map((k) => {
+              const lead = k === "a" ? wins.a > wins.b : wins.b > wins.a;
+              return (
+                <div key={k} className={cx("text-sm font-semibold", lead ? "text-accent-ink" : "text-sub")}>
+                  {lead && <Trophy size={16} className="mr-1 inline" aria-hidden />}
+                  <span className="num">{plural(k === "a" ? wins.a : wins.b, "criterio", "criterios")}</span>
+                </div>
+              );
+            })}
           </div>
-          {rows.map((r) => {
-            const [va, vb] = [r.get(a), r.get(b)];
-            const better = winner(r, a, b);
-            return (
-              <div key={r.label} className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-line px-5 py-3 text-sm last:border-0">
-                <div className={cx("text-right font-mono", better === "a" ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-sub")}>{va === null ? "—" : r.fmt(va)}</div>
-                <div className="w-32 text-center text-xs text-sub sm:w-44">{r.label}</div>
-                <div className={cx("font-mono", better === "b" ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-sub")}>{vb === null ? "—" : r.fmt(vb)}</div>
-              </div>
-            );
-          })}
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 py-3 text-sm">
-            <div className="text-right">{workloadLabels[a.workload]}</div>
-            <div className="w-32 text-center text-xs text-sub sm:w-44">Carga</div>
-            <div>{workloadLabels[b.workload]}</div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 border-t border-line p-5">
+
+          {groups.map((g) => (
+            <div key={g.title} className="mt-8">
+              <h2 className="mb-2 border-b border-line pb-3 text-xl font-bold tracking-tight">{g.title}</h2>
+              {g.rows.map((r) => {
+                const [va, vb] = [r.get(a), r.get(b)];
+                const better = winner(r, a, b);
+                return (
+                  <div key={r.label} className="border-b border-line py-4 last:border-0">
+                    <div className="grid grid-cols-2 gap-5">
+                      <Value v={va === null ? "—" : r.fmt(va)} win={better === "a"} />
+                      <Value v={vb === null ? "—" : r.fmt(vb)} win={better === "b"} />
+                    </div>
+                    <div className="mt-1.5 text-center text-xs text-sub">
+                      {r.label}
+                      {r.lowerBetter && " · menos es mejor"}
+                    </div>
+                  </div>
+                );
+              })}
+              {g.title === "Vista rápida" && (
+                <div className="py-4">
+                  <div className="grid grid-cols-2 gap-5 text-center text-lg font-semibold">
+                    <div>{workloadLabels[a.workload]}</div>
+                    <div>{workloadLabels[b.workload]}</div>
+                  </div>
+                  <div className="mt-1.5 text-center text-xs text-sub">Carga</div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          <div className="mt-4 grid grid-cols-2 gap-5 border-t border-line pt-5">
             {[a, b].map((p) => {
               const m = profMetrics(p, reviews);
               return (
-                <div key={p.id} className={cx("flex items-center gap-2 text-xs text-sub", p === a && "justify-end")}>
-                  {m.rated ? <Stars value={m.score} size={12} /> : "Sin reseñas aún"}
+                <div key={p.id} className="flex justify-center text-xs text-sub">
+                  {m.rated ? <Stars value={m.score} size={14} /> : "Sin reseñas aún"}
                 </div>
               );
             })}
           </div>
         </section>
       ) : (
-        <div className="mt-6">
+        <div className="mt-5">
           <Empty icon={<GitCompare />} title="Elige dos docentes">
             También puedes llegar aquí desde el perfil de un docente o desde un curso.
           </Empty>
