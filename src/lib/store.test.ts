@@ -44,4 +44,13 @@ describe("store", () => {
     store.restoreReview(r);
     expect(store.get().reviews.map((x) => x.id)).toEqual([r.id]);
   });
+
+  it("updateReview modifica solo la reseña indicada", () => {
+    const r = store.addReview({
+      profId: 1, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
+      text: "antes", helpful: 0, course: "X", difficulty: 3, wouldTakeAgain: true,
+    });
+    store.updateReview(r.id, { text: "después" });
+    expect(store.get().reviews[0]).toMatchObject({ id: r.id, text: "después", score: 4 });
+  });
 });

@@ -1,7 +1,8 @@
 import { ArrowLeft, Check, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReviewItem from "../components/ReviewItem";
+import { toast } from "../components/Toast";
 import { Avatar, cx, Stars } from "../components/ui";
 import { criteriaHints, criteriaLabels, difficultyLabel, getProfessor, MONTHS, profMetrics, tagCategories, workloadLabels } from "../data/db";
 import type { CriteriaKey, Review, Workload } from "../data/types";
@@ -32,15 +33,21 @@ export default function ReviewPage() {
   const user = useStore((s) => s.user)!;
   const userReviews = useStore((s) => s.reviews);
   const nav = useNavigate();
+  const [params] = useSearchParams();
+  const editing = userReviews.find((r) => r.id === params.get("edit") && r.profId === p?.id);
 
   const [step, setStep] = useState(0);
-  const [criteria, setCriteria] = useState<Record<CriteriaKey, number>>(() => Object.fromEntries(KEYS.map((k) => [k, 0])) as Record<CriteriaKey, number>);
-  const [difficulty, setDifficulty] = useState(3);
-  const [wta, setWta] = useState<boolean | null>(null);
-  const [workload, setWorkload] = useState<Workload | "">("");
-  const [tags, setTags] = useState<{ t: string; type: string }[]>([]);
-  const [course, setCourse] = useState(p?.courses[0] ?? "");
-  const [text, setText] = useState("");
+  const [criteria, setCriteria] = useState<Record<CriteriaKey, number>>(
+    () => editing?.criteria ?? (Object.fromEntries(KEYS.map((k) => [k, editing?.score ?? 0])) as Record<CriteriaKey, number>),
+  );
+  const [difficulty, setDifficulty] = useState(editing?.difficulty ?? 3);
+  const [wta, setWta] = useState<boolean | null>(editing?.wouldTakeAgain ?? null);
+  const [workload, setWorkload] = useState<Workload | "">(editing?.workload ?? "");
+  const [tags, setTags] = useState<{ t: string; type: string }[]>(() =>
+    editing ? editing.tags.map((t, i) => ({ t, type: editing.tagType[i] ?? "neu" })) : [],
+  );
+  const [course, setCourse] = useState(editing?.course ?? p?.courses[0] ?? "");
+  const [text, setText] = useState(editing?.text ?? "");
   const [done, setDone] = useState(false);
 
   if (!p) return <NotFound />;
@@ -69,6 +76,7 @@ export default function ReviewPage() {
     wouldTakeAgain: wta,
     workload,
     authorCode: user.code,
+    criteria,
   };
 
   function toggleTag(t: string, type: string) {
@@ -78,6 +86,12 @@ export default function ReviewPage() {
   function submit() {
     const { id: _omit, ...data } = draft;
     void _omit;
+    if (editing) {
+      store.updateReview(editing.id, { ...data, date: editing.date });
+      toast("Reseña actualizada");
+      nav(`/docentes/${p!.id}`);
+      return;
+    }
     store.addReview(data);
     setDone(true);
   }
@@ -139,6 +153,7 @@ export default function ReviewPage() {
             <div className="eyebrow">
               Paso {step + 1} de {STEPS.length}
             </div>
+            {editing && <span className="eyebrow ml-2 text-brand">Editar reseña</span>}
             <h1 className="mt-1 text-xl font-bold">{["Califica los criterios", "¿Cómo fue la experiencia?", "Descríbelo en pocas palabras", "Cuéntanos más", "Revisa y publica"][step]}</h1>
             <div className="mt-4 h-1 overflow-hidden rounded-full bg-muted">
               <div className="h-full bg-brand transition-all" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
@@ -269,7 +284,7 @@ export default function ReviewPage() {
                 </button>
               ) : (
                 <button className="btn-primary" onClick={submit}>
-                  Publicar reseña
+                  {editing ? "Guardar cambios" : "Publicar reseña"}
                 </button>
               )}
             </div>

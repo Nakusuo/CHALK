@@ -1,4 +1,5 @@
-import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { Pencil, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { Review } from "../data/types";
 import { store, useStore } from "../lib/store";
 import { toast } from "./Toast";
@@ -41,6 +42,11 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
         )}
         {!readOnly && (
           <div className="ml-auto flex items-center gap-1">
+            {mine && (
+              <Link to={`/docentes/${r.profId}/resena?edit=${r.id}`} className="btn-ghost h-8 px-2 text-xs text-sub">
+                <Pencil size={14} /> Editar
+              </Link>
+            )}
             {mine && (
               <button
                 className="btn-ghost h-8 px-2 text-xs text-sub"
