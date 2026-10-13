@@ -18,6 +18,7 @@ import {
   profBadge,
   professors,
   profMetrics,
+  profWorkload,
   workloadLabels,
 } from "../data/db";
 import type { CriteriaKey } from "../data/types";
@@ -52,6 +53,7 @@ export default function ProfessorPage() {
   const hasSeed = p.reviews > 0;
   const hist = p.historicalRatings;
 
+  const workload = profWorkload(p, userReviews);
   const others = professors.filter((o) => o.id !== p.id && o.courses.some((c) => p.courses.includes(c)));
   const peak = Math.max(...dist);
 
@@ -124,7 +126,7 @@ export default function ProfessorPage() {
           value={difficulty !== null ? difficulty.toFixed(1) : "—"}
           hint={
             difficulty !== null
-              ? `${difficultyLabel(difficulty)}${hasSeed ? ` · carga ${workloadLabels[p.workload].toLowerCase()}` : ""}`
+              ? `${difficultyLabel(difficulty)}${workload ? ` · carga ${workloadLabels[workload].toLowerCase()}` : ""}`
               : "Sin reseñas aún"
           }
         >

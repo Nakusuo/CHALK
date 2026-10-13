@@ -1,7 +1,7 @@
 import { ArrowLeftRight, GitCompare, Trophy, X } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { cx, Empty, Monogram, PageHeader, plural, Stars } from "../components/ui";
-import { criteriaLabels, getProfessor, professors, profMetrics, workloadLabels } from "../data/db";
+import { criteriaLabels, getProfessor, professors, profMetrics, profWorkload, workloadLabels } from "../data/db";
 import type { CriteriaKey, Professor } from "../data/types";
 import { useStore } from "../lib/store";
 
@@ -140,6 +140,10 @@ export default function Compare() {
     { a: 0, b: 0 },
   );
 
+  const wl = (p: Professor) => {
+    const w = profWorkload(p, reviews);
+    return w ? workloadLabels[w] : "—";
+  };
   const criteriaNames = Object.values(criteriaLabels);
   const groups = [
     { title: "Vista rápida", rows: rows.filter((r) => !criteriaNames.includes(r.label)) },
@@ -198,8 +202,8 @@ export default function Compare() {
               {g.title === "Vista rápida" && (
                 <div className="py-4">
                   <div className="grid grid-cols-2 gap-5 text-center text-lg font-semibold">
-                    <div>{workloadLabels[a.workload]}</div>
-                    <div>{workloadLabels[b.workload]}</div>
+                    <div className={cx(!profWorkload(a, reviews) && "text-sub")}>{wl(a)}</div>
+                    <div className={cx(!profWorkload(b, reviews) && "text-sub")}>{wl(b)}</div>
                   </div>
                   <div className="mt-1.5 text-center text-xs text-sub">Carga</div>
                 </div>
