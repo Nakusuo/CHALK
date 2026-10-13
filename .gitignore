@@ -15,4 +15,6 @@ desktop.ini
 
 # Node (por si se usa en el futuro)
 node_modules/
-package-lock.json
+node_modules
+dist
+*.tsbuildinfo
