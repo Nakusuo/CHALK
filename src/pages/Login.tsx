@@ -36,7 +36,7 @@ export default function Login() {
         <Field label="Contraseña" error={tried && passErr}>
           <input className="input" type="password" autoComplete="current-password" value={pass} onChange={(e) => setPass(e.target.value)} />
         </Field>
-        <button className="btn-primary h-11 w-full">Entrar</button>
+        <button className="btn-primary h-12 w-full text-[15px]">Entrar</button>
       </form>
       <p className="mt-6 text-center text-sm text-sub">
         ¿Primera vez?{" "}

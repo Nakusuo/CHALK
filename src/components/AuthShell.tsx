@@ -40,10 +40,11 @@ export default function AuthShell({ title, subtitle, children }: { title: string
           </div>
           <ThemeToggle />
         </div>
-        <div className="card mx-auto my-auto w-full max-w-md p-6 sm:p-8">
-          <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-          <p className="mt-1 text-sm text-sub">{subtitle}</p>
-          <div className="mt-7">{children}</div>
+        <div className="card mx-auto my-auto w-full max-w-[30rem] p-7 sm:p-10">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+          <p className="mt-2 text-[15px] text-sub">{subtitle}</p>
+          <div className="mt-8 [&_.input]:h-12">{children}</div>
+          <p className="mt-8 border-t border-line pt-5 text-xs text-sub">Tus reseñas se guardan en este navegador.</p>
         </div>
       </section>
     </div>

@@ -150,7 +150,7 @@ export default function Layout() {
   }, [open]);
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[84px_minmax(0,1fr)] xl:grid-cols-[248px_minmax(0,1fr)]">
+    <div className="mx-auto min-h-screen max-w-[1440px] lg:grid lg:grid-cols-[84px_minmax(0,1fr)] xl:grid-cols-[248px_minmax(0,1fr)]">
       {/* Barra lateral: riel de íconos en 1024–1279, completa desde 1280 */}
       <aside className="sticky top-0 hidden h-screen flex-col gap-8 px-4 py-6 lg:flex xl:px-5">
         <div className="lg:mx-auto xl:mx-0 xl:px-1">
@@ -200,7 +200,7 @@ export default function Layout() {
           </div>
         )}
 
-        <div className="mx-auto grid w-full max-w-[1240px] gap-6 px-4 pb-16 pt-4 sm:px-6 lg:pt-8 xl:grid-cols-[minmax(0,1fr)_320px] xl:has-[>aside:empty]:grid-cols-1">
+        <div className="mx-auto grid w-full max-w-[1192px] gap-6 px-4 pb-16 pt-4 sm:px-6 lg:pt-8 xl:grid-cols-[minmax(0,1fr)_320px] xl:has-[>aside:empty]:grid-cols-1">
           <main className="min-w-0">
             <AsideContext.Provider value={slot}>
               <Suspense fallback={<div className="py-24 text-center text-sm text-sub">Cargando…</div>}>

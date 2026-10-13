@@ -269,7 +269,7 @@ export default function ProfessorPage() {
         )}
         {others.length > 0 && (
           <section className="card p-5">
-            <h2 className="mb-3 font-semibold">También dictan sus cursos</h2>
+            <h2 className="mb-3 font-semibold">También dictan estos cursos</h2>
             <ul className="space-y-1">
               {others.slice(0, 6).map((o) => {
                 const m = profMetrics(o, userReviews);
@@ -287,11 +287,17 @@ export default function ProfessorPage() {
                 );
               })}
             </ul>
-            <Link to={`/comparar?a=${p.id}&b=${others[0].id}`} className="link mt-3 inline-flex items-center gap-1.5 text-sm">
-              <GitCompare size={14} aria-hidden /> Comparar con {others[0].name.split(" ")[0]}
-            </Link>
           </section>
         )}
+        <Link to={`/comparar?a=${p.id}`} className="card lift flex items-center gap-4 p-5">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent-ink">
+            <GitCompare size={20} aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">Compáralo con otro docente</span>
+            <span className="block text-sm text-sub">Ponlos lado a lado antes de matricularte</span>
+          </span>
+        </Link>
       </Aside>
     </>
   );

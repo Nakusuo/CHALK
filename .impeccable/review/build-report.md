@@ -28,3 +28,10 @@
 2. Compare: bajo 640px los selectores se apilan en una sola columna (select a lo ancho con la X al lado, monograma y nombre debajo, Intercambiar entre ambos). Desde 640px vuelve a ser lado a lado. El encabezado de victorias usa `plural` ("1 criterio" / "N criterios").
 3. Home: las métricas son una fila de 3 columnas compacta en móvil (`Stat compact`: número 2xl, sin subtítulo ni barra bajo 640px).
 4. Sidebar: el contador de un curso solo se muestra si es mayor que 1.
+
+## Ronda de correcciones 2 (revisión final)
+1. Shell: el grupo de tres columnas va centrado como un solo marco (`max-w-[1440px] mx-auto`), con la lavanda alrededor; la barra lateral sigue sticky dentro del marco.
+2. Acceso: la tarjeta del formulario es más ancha (30rem) y sigue centrada en vertical. El título sube a 3xl/4xl, los inputs y el botón miden h-12, y hay una nota corta al pie ("Tus reseñas se guardan en este navegador").
+3. Docente: la columna derecha muestra "Cursos que dicta", luego "También dictan estos cursos" (si alguien comparte curso) y siempre la tarjeta "Compáralo con otro docente" → `/comparar?a=id`.
+4. Interacción insignia: `.lift` sube 2px con una sombra más fuerte en hover y en `:focus-visible`/`:has(:focus-visible)`, con anillo violeta al enfocar con teclado. Dura 180ms con ease-out exponencial y se desactiva con prefers-reduced-motion. La tarjeta de docente es enfocable mediante el enlace estirado del nombre, que cubre toda la tarjeta.
+Contrato: los contadores de cursos siguen ocultos cuando valen 1 (enmendado por el controlador).
