@@ -4,7 +4,7 @@ import { getSedeName, profBadge, profMetrics } from "../data/db";
 import type { Professor } from "../data/types";
 import { store, useStore } from "../lib/store";
 import { toast } from "./Toast";
-import { Avatar, BadgeTag, cx, Difficulty, ScorePill, Stars } from "./ui";
+import { Avatar, BadgeTag, cx, Difficulty, plural, ScorePill, Stars } from "./ui";
 
 export function FavoriteButton({ id, className }: { id: number; className?: string }) {
   const fav = useStore((s) => s.favorites.includes(id));
@@ -47,7 +47,7 @@ export default function ProfessorCard({ p, rank }: { p: Professor; rank?: number
           <span className="inline-flex items-center gap-1.5">
             {rated ? (
               <>
-                <Stars value={score} size={12} /> {count} reseñas
+                <Stars value={score} size={12} /> {plural(count, "reseña", "reseñas")}
               </>
             ) : (
               "Sin reseñas aún"

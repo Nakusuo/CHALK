@@ -75,8 +75,8 @@ export default function Home() {
             <input className="input h-12 pl-10" placeholder="Busca por nombre, curso o departamento" value={q} onChange={(e) => set("q", e.target.value)} />
           </div>
 
-          <div className="mt-4 flex gap-1 overflow-x-auto pb-1">
-            {[{ id: "all", name: "Todas" }, ...faculties].map((f) => (
+          <div className="mt-4 flex gap-1 no-scrollbar overflow-x-auto pb-1">
+            {[{ id: "all", name: "Todas" }, ...faculties.filter((f) => professors.some((p) => p.fac === f.id))].map((f) => (
               <button key={f.id} className={cx("chip shrink-0", fac === f.id && "chip-on")} onClick={() => set("fac", f.id)}>
                 {f.name}
               </button>

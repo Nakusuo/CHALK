@@ -30,6 +30,13 @@
 }
 
 @layer components {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .card {
     @apply rounded-2xl border border-line bg-surface shadow-card;
   }

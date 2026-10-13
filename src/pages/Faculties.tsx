@@ -14,7 +14,7 @@ export default function Faculties() {
     <>
       <PageHeader title="Facultades y sedes" subtitle="Explora docentes por facultad y por campus." />
 
-      <div className="mb-6 flex gap-1 overflow-x-auto pb-1">
+      <div className="mb-6 flex gap-1 no-scrollbar overflow-x-auto pb-1">
         {[{ id: "all", name: "Todas las sedes" }, ...sedes].map((s) => (
           <button key={s.id} className={cx("chip shrink-0", sede === s.id && "chip-on")} onClick={() => setSede(s.id)}>
             {s.id !== "all" && <MapPin size={12} />} {s.name}

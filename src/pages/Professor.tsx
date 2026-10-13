@@ -3,9 +3,10 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/ProfessorCard";
 import ReviewItem from "../components/ReviewItem";
-import { Avatar, BadgeTag, cx, Difficulty, Empty, Meter, ScorePill, Stars, Tag } from "../components/ui";
+import { Avatar, BadgeTag, cx, Difficulty, Empty, Meter, plural, ScorePill, Stars, Tag } from "../components/ui";
 import {
   allReviews,
+  courseScore,
   criteriaLabels,
   dateRank,
   getFaculty,
@@ -45,7 +46,6 @@ export default function ProfessorPage() {
   const distMax = Math.max(1, ...dist);
   // Aprobación, aprendizaje y evolución solo existen en la semilla; criterios y distribución salen de las reseñas.
   const hasSeed = p.reviews > 0;
-  const courseRatings = Object.entries(p.courseRatings);
   const hist = p.historicalRatings;
 
   return (
@@ -84,7 +84,7 @@ export default function ProfessorPage() {
               {rated ? (
                 <>
                   <Stars value={score} />
-                  <div className="mt-1 text-xs text-sub">{count} reseñas</div>
+                  <div className="mt-1 text-xs text-sub">{plural(count, "reseña", "reseñas")}</div>
                 </>
               ) : (
                 <div className="text-xs text-sub">Sin reseñas aún</div>
@@ -163,16 +163,42 @@ export default function ProfessorPage() {
             reviews.map((r) => <ReviewItem key={r.id} r={r} />)
           ) : (
             <div className="mt-4">
-              <Empty icon={<MessageSquareText />} title="Sin reseñas en esta vista">
-                Prueba otro filtro o sé el primero en contar tu experiencia.
-              </Empty>
+              {count === 0 ? (
+                <Empty icon={<MessageSquareText />} title="Aún no hay reseñas">
+                  <Link to={`/docentes/${p.id}/resena`} className="btn-primary mt-2">
+                    <PenLine size={16} /> Escribe la primera reseña
+                  </Link>
+                </Empty>
+              ) : (
+                <Empty icon={<MessageSquareText />} title="Sin reseñas en esta vista">
+                  Prueba otro filtro o sé el primero en contar tu experiencia.
+                </Empty>
+              )}
             </div>
           )}
         </section>
 
-        {(criteria !== null || rated || hasSeed) && (
-          <aside className="space-y-6">
-            {criteria !== null && (
+        <aside className="space-y-6">
+          {p.courses.length > 0 && (
+            <section className="card p-5">
+              <h2 className="mb-3 font-semibold">Cursos que dicta</h2>
+              {p.courses.map((c) => {
+                const v = courseScore(p, c, userReviews);
+                return (
+                  <Link
+                    key={c}
+                    to={`/cursos?q=${encodeURIComponent(c)}`}
+                    className="flex justify-between border-b border-line py-2 text-sm last:border-0 hover:text-brand"
+                  >
+                    <span>{c}</span>
+                    <b className="font-mono">{v === null ? "—" : v.toFixed(1)}</b>
+                  </Link>
+                );
+              })}
+            </section>
+          )}
+
+          {criteria !== null && (
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Criterios</h2>
               <div className="space-y-3">
@@ -187,9 +213,9 @@ export default function ProfessorPage() {
                 ))}
               </div>
             </section>
-            )}
+          )}
 
-            {rated && (
+          {rated && (
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Distribución de notas</h2>
               <div className="space-y-2">
@@ -204,9 +230,9 @@ export default function ProfessorPage() {
                 ))}
               </div>
             </section>
-            )}
+          )}
 
-            {hasSeed && (
+          {hasSeed && (
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Evolución por ciclo</h2>
               <div className="flex h-28 items-end gap-2">
@@ -222,25 +248,8 @@ export default function ProfessorPage() {
                 ))}
               </div>
             </section>
-            )}
-
-            {courseRatings.length > 0 && (
-              <section className="card p-5">
-                <h2 className="mb-3 font-semibold">Por curso</h2>
-                {courseRatings.map(([c, v]) => (
-                  <Link
-                    key={c}
-                    to={`/cursos?q=${encodeURIComponent(c)}`}
-                    className="flex justify-between border-b border-line py-2 text-sm last:border-0 hover:text-brand"
-                  >
-                    <span>{c}</span>
-                    <b className="font-mono">{v.toFixed(1)}</b>
-                  </Link>
-                ))}
-              </section>
-            )}
-          </aside>
-        )}
+          )}
+        </aside>
       </div>
     </>
   );
