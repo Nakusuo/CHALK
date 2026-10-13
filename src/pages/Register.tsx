@@ -76,7 +76,7 @@ export default function Register() {
       </form>
       <p className="mt-6 text-center text-sm text-sub">
         ¿Ya tienes cuenta?{" "}
-        <Link to="/" className="font-semibold text-brand hover:underline">
+        <Link to="/" className="link">
           Inicia sesión
         </Link>
       </p>
