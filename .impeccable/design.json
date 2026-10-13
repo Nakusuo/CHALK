@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-13T00:00:00Z",
+  "generatedAt": "2026-10-13T12:00:00Z",
   "title": "Design System: CHALK",
   "extensions": {
     "colorMeta": {
@@ -66,34 +66,63 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Saludo de la portada de docentes."
+        "purpose": "Titular de cartel del hero Cereza: clamp(2.75rem,6vw,5.5rem), 800, −0.03em."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Nombre del docente en la cabecera Noir y títulos de página: clamp(2.25rem,5vw,4.5rem)."
       },
       "metric": {
         "displayName": "Métrica",
-        "purpose": "Cifras grandes tabulares de las tarjetas de métrica."
+        "purpose": "Cifras de marcador, tabulares y en 800: clamp(2.5rem,5vw,4.5rem)."
       },
       "title": {
         "displayName": "Título",
-        "purpose": "Nombre de docente y de facultad en tarjeta."
+        "purpose": "Nombre de docente en la fila de lista, 800."
       }
     },
     "shadows": [
       {
         "name": "card",
-        "value": "0 1px 2px rgb(76 62 160 / 0.05), 0 10px 28px -12px rgb(76 62 160 / 0.18)",
-        "purpose": "Tarjetas en reposo."
+        "value": "0 1px 2px rgb(27 23 23 / 0.08)",
+        "purpose": "Mínima; las superficies se separan con borde y filetes."
       },
       {
         "name": "lift",
-        "value": "0 2px 4px rgb(76 62 160 / 0.06), 0 18px 40px -14px rgb(76 62 160 / 0.28)",
-        "purpose": "Hover y foco de tarjetas, cajón móvil."
+        "value": "0 10px 24px -12px rgb(27 23 23 / 0.3)",
+        "purpose": "Cajón móvil."
       }
     ],
     "motion": [
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Elevación de tarjetas, 180ms."
+        "purpose": "Única curva del sistema."
+      },
+      {
+        "name": "stagger",
+        "value": "rise 560ms, +60ms por hijo (máx. 300ms)",
+        "purpose": "Entrada del contenido una vez por ruta."
+      },
+      {
+        "name": "grow",
+        "value": "scaleX/scaleY desde 0, 900ms, 150ms de retardo",
+        "purpose": "Barras de métrica, criterios y distribución."
+      },
+      {
+        "name": "count-up",
+        "value": "900ms, ease-out exponencial, IntersectionObserver",
+        "purpose": "Cifras de Stat la primera vez que entran en pantalla."
+      },
+      {
+        "name": "rule-slide",
+        "value": "filete cereza 3px scaleX 0→1, 320ms",
+        "purpose": "Hover y foco de filas y tarjetas."
+      },
+      {
+        "name": "reduced",
+        "value": "prefers-reduced-motion: sin animación, valores finales",
+        "purpose": "Accesibilidad."
       }
     ],
     "breakpoints": [
@@ -105,7 +134,13 @@
         "name": "xl",
         "value": "1280px"
       }
-    ]
+    ],
+    "radii": {
+      "card": "8px",
+      "control": "6px",
+      "segment-option": "4px",
+      "chip": "9999px"
+    }
   },
   "components": [
     {
@@ -114,7 +149,7 @@
       "refersTo": "button-primary",
       "description": "Acción principal de interacción.",
       "html": "<button class=\"ds-btn-primary\">Entrar</button>",
-      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 16px;border:0;border-radius:12px;background:#810100;color:#fff;font:600 14px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-primary:hover{background:#630000}.ds-btn-primary:focus-visible{outline:2px solid #810100;outline-offset:2px}"
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 16px;border:0;border-radius:6px;background:#810100;color:#fff;font:600 14px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-primary:hover{background:#630000}.ds-btn-primary:focus-visible{outline:2px solid #810100;outline-offset:2px}"
     },
     {
       "name": "Botón de reseña",
@@ -122,7 +157,7 @@
       "refersTo": "button-brand",
       "description": "CTA rojo cereza para escribir una reseña.",
       "html": "<button class=\"ds-btn-brand\">Escribir reseña</button>",
-      "css": ".ds-btn-brand{height:32px;padding:0 12px;border:0;border-radius:8px;background:#810100;color:#fff;font:600 12px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-brand:hover{background:#630000}.ds-btn-brand:focus-visible{outline:2px solid #810100;outline-offset:2px}"
+      "css": ".ds-btn-brand{height:32px;padding:0 12px;border:0;border-radius:6px;background:#810100;color:#fff;font:600 12px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-brand:hover{background:#630000}.ds-btn-brand:focus-visible{outline:2px solid #810100;outline-offset:2px}"
     },
     {
       "name": "Campo de texto",
@@ -130,7 +165,7 @@
       "refersTo": "input",
       "description": "Input estándar con halo cereza al enfocar.",
       "html": "<input class=\"ds-input\" placeholder=\"U20240001\">",
-      "css": ".ds-input{height:44px;width:100%;box-sizing:border-box;padding:0 14px;border:1px solid #DCD7D4;border-radius:12px;background:#fff;color:#1B1717;font:14px Geist,system-ui,sans-serif;outline:none;transition:.15s}.ds-input::placeholder{color:#5E5856}.ds-input:focus{border-color:#810100;box-shadow:0 0 0 4px rgba(129,1,0,.15)}"
+      "css": ".ds-input{height:44px;width:100%;box-sizing:border-box;padding:0 14px;border:1px solid #DCD7D4;border-radius:6px;background:#fff;color:#1B1717;font:14px Geist,system-ui,sans-serif;outline:none;transition:.15s}.ds-input::placeholder{color:#5E5856}.ds-input:focus{border-color:#810100;box-shadow:0 0 0 4px rgba(129,1,0,.15)}"
     },
     {
       "name": "Chip",
@@ -146,7 +181,7 @@
       "refersTo": "nav-item-active",
       "description": "Ítem de la sidebar; activo en cereza suave.",
       "html": "<a class=\"ds-nav ds-nav-on\" href=\"#\">Docentes</a>",
-      "css": ".ds-nav{display:flex;align-items:center;height:40px;padding:0 12px;border-radius:12px;color:#5E5856;font:500 14px Geist,system-ui,sans-serif;text-decoration:none;transition:background .15s}.ds-nav:hover{background:#EDEBDD;color:#1B1717}.ds-nav-on,.ds-nav-on:hover{background:#F3E6E4;color:#630000}"
+      "css": ".ds-nav{display:flex;align-items:center;height:40px;padding:0 12px;border-radius:6px;color:#5E5856;font:500 14px Geist,system-ui,sans-serif;text-decoration:none;transition:background .15s}.ds-nav:hover{background:#EDEBDD;color:#1B1717}.ds-nav-on,.ds-nav-on:hover{background:#F3E6E4;color:#630000}"
     },
     {
       "name": "Tarjeta de métrica",
@@ -154,18 +189,18 @@
       "refersTo": "card",
       "description": "Superficie blanca que se eleva 2px en hover y foco.",
       "html": "<article class=\"ds-card\"><b class=\"ds-num\">4.6</b><span>12 reseñas</span></article>",
-      "css": ".ds-card{display:flex;align-items:baseline;gap:8px;padding:24px;border-radius:16px;background:#fff;color:#1B1717;font:14px Geist,system-ui,sans-serif;box-shadow:0 1px 2px rgba(76,62,160,.05),0 10px 28px -12px rgba(76,62,160,.18);transition:transform .18s cubic-bezier(.16,1,.3,1),box-shadow .18s cubic-bezier(.16,1,.3,1)}.ds-card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(76,62,160,.06),0 18px 40px -14px rgba(76,62,160,.28)}.ds-num{font-size:36px;line-height:1;font-weight:700;letter-spacing:-.025em;font-variant-numeric:tabular-nums}"
+      "css": ".ds-card{display:flex;align-items:baseline;gap:8px;padding:24px;border-radius:8px;background:#fff;color:#1B1717;font:14px Geist,system-ui,sans-serif;box-shadow:0 1px 2px rgba(76,62,160,.05),0 10px 28px -12px rgba(76,62,160,.18);transition:transform .18s cubic-bezier(.16,1,.3,1),box-shadow .18s cubic-bezier(.16,1,.3,1)}.ds-card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(76,62,160,.06),0 18px 40px -14px rgba(76,62,160,.28)}.ds-num{font-size:36px;line-height:1;font-weight:700;letter-spacing:-.025em;font-variant-numeric:tabular-nums}"
     }
   ],
   "narrative": {
-    "northStar": "El campus en blanco, negro y cereza",
-    "overview": "Una app de campus tranquila: fondo blanco perla, tarjetas blancas que flotan sobre una sombra neutra difusa, y números grandes que se leen de un vistazo. Cada docente es una tarjeta de métrica, no una fila de resultados. Toda la interacción es rojo cereza; el negro noir es el segundo color fuerte.",
+    "northStar": "El marcador del campus",
+    "overview": "Un cartel editorial en blanco perla, negro noir y rojo cereza. Hay bloques sólidos (sidebar Noir, hero Cereza, cabecera Noir del docente, panel Cereza de acceso), tipografía de cartel y cifras de marcador. Los filetes Noir de 3px estructuran la página en lugar de sombras difusas, y un solo sistema de movimiento: entrada escalonada, barras que crecen y cifras que cuentan.",
     "keyCharacteristics": [
-      "Fondo blanco perla (#F5F4F2) liso, sin halo.",
-      "Superficies blancas de 16px de radio con sombra difusa neutra.",
-      "Una sola familia tipográfica (Geist); la jerarquía sale de tamaño, peso y números tabulares.",
-      "Tema oscuro completo por variables (clase dark), mismo reparto de roles.",
-      "Foco y hover elevan la tarjeta 2px en vez de cambiar su color."
+      "Bloques sólidos Noir y Cereza con texto Cotton; el resto en silencio.",
+      "Radios de 8px en tarjetas y 6px en controles.",
+      "Filete Noir de 3px sobre métricas y encabezados de sección.",
+      "Display de cartel con clamp(), 800, −0.03em, cifras tabulares.",
+      "Un solo sistema de movimiento; desactivado con prefers-reduced-motion."
     ],
     "rules": [
       {
@@ -194,29 +229,38 @@
         "section": "typography"
       },
       {
-        "name": "The Focused Card Lifts Rule",
-        "body": "Una tarjeta interactiva sube 2px y pasa a la sombra Lift en hover y foco; con foco añade anillo de 2px cereza. Con prefers-reduced-motion no hay desplazamiento.",
+        "name": "The Poster Scale Rule",
+        "body": "El display escala con clamp(); el tracking nunca baja de −0.03em.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rule System Rule",
+        "body": "Métricas, encabezados de sección y listas llevan filete Noir de 3px; las filas, un filete inferior de 1px; Comparar, filetes Noir de 2px.",
         "section": "elevation"
       },
       {
-        "name": "The Diffuse Neutral Shadow Rule",
-        "body": "Las sombras son anchas, de offset vertical y en noir a baja opacidad. Nunca desplazamientos duros.",
+        "name": "The Cherry Rule Slide Rule",
+        "body": "Al pasar o enfocar una fila o tarjeta, entra un filete cereza de 3px por arriba; con teclado, contorno cereza de 2px (Cotton sobre bloques).",
         "section": "elevation"
+      },
+      {
+        "name": "The One Motion System Rule",
+        "body": "Solo stagger por ruta, barras que crecen y CountUp; nada se anima por su cuenta.",
+        "section": "motion"
       }
     ],
     "dos": [
-      "Do usar variables RGB (bg-bg, bg-surface, text-sub, bg-accent-soft) para todo color de superficie y texto.",
-      "Do poner num en cada cifra y dejar las métricas como lo más grande de su tarjeta.",
-      "Do elevar tarjetas interactivas con lift y mantener el foco visible con el anillo cereza de 2px.",
-      "Do mostrar \"Sin reseñas aún\" y \"—\" cuando no hay datos reales.",
-      "Do mantener objetivos táctiles de al menos 36px."
+      "Do usar bloques sólidos solo en sidebar, hero, cabecera de docente y panel de acceso.",
+      "Do poner num y display en cada cifra.",
+      "Do separar con filetes en vez de sombras.",
+      "Do respetar prefers-reduced-motion.",
+      "Do mostrar \"Sin reseñas aún\" y \"—\" sin datos reales."
     ],
     "donts": [
-      "Don't usar rojo cereza para decorar, ni volver a la lavanda o al violeta.",
-      "Don't usar #000 ni #FFF como fondo de página, ni bordes de 1px como separación de tarjetas.",
-      "Don't dar sombras duras ni desplazadas; todas son difusas y neutras.",
-      "Don't volver a una lista plana de docentes con filas y chips como contenido principal.",
-      "Don't añadir una segunda familia tipográfica ni cifras proporcionales en métricas.",
+      "Don't volver a sombras difusas ni a radios de 16px.",
+      "Don't usar texto con degradado, vidrio, emoji ni eyebrows.",
+      "Don't añadir colores fuera de la paleta UTP ni otra familia.",
+      "Don't animar elementos fuera del sistema de movimiento.",
       "Don't rodear una tarjeta con otra tarjeta."
     ]
   }

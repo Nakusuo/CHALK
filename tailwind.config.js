@@ -21,7 +21,7 @@ export default {
         fg: "rgb(var(--fg) / <alpha-value>)",
         sub: "rgb(var(--sub) / <alpha-value>)",
       },
-      borderRadius: { card: "16px" },
+      borderRadius: { card: "8px", control: "6px" },
       boxShadow: {
         card: "var(--shadow)",
         lift: "var(--shadow-lift)",

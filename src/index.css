@@ -14,8 +14,8 @@
     --accent-ink: 129 1 0;
     --accent-hover: 99 0 0;
     --accent-soft: 243 230 228;
-    --shadow: 0 1px 2px rgb(27 23 23 / 0.05), 0 10px 28px -12px rgb(27 23 23 / 0.14);
-    --shadow-lift: 0 2px 4px rgb(27 23 23 / 0.06), 0 18px 40px -14px rgb(27 23 23 / 0.24);
+    --shadow: 0 1px 2px rgb(27 23 23 / 0.08);
+    --shadow-lift: 0 10px 24px -12px rgb(27 23 23 / 0.3);
     color-scheme: light;
   }
   .dark {
@@ -29,8 +29,8 @@
     --accent-ink: 255 138 128;
     --accent-hover: 163 31 36;
     --accent-soft: 60 22 22;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -12px rgb(0 0 0 / 0.7);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 20px 44px -14px rgb(0 0 0 / 0.85);
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+    --shadow-lift: 0 12px 28px -12px rgb(0 0 0 / 0.8);
     color-scheme: dark;
   }
   html {
@@ -82,23 +82,100 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Superficie: borde de 1px, radio 8px, sin sombra difusa. */
   .card {
-    @apply rounded-card bg-surface shadow-card;
+    @apply rounded-card border border-line bg-surface;
+  }
+  /* Regla editorial: filete Noir de 3px arriba de métricas y encabezados de sección. */
+  .rule {
+    border-top: 3px solid rgb(var(--fg));
+  }
+  .display {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
   }
   .lift {
+    position: relative;
     transition:
       transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-      box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lift::before,
+  .row::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: -1px;
+    height: 3px;
+    background: rgb(var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
   }
   .lift:hover,
   .lift:focus-visible,
   .lift:has(:focus-visible) {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lift);
+    border-color: rgb(var(--fg) / 0.35);
+  }
+  .lift:hover::before,
+  .lift:focus-visible::before,
+  .lift:has(:focus-visible)::before,
+  .row:hover::before,
+  .row:has(:focus-visible)::before {
+    transform: scaleX(1);
   }
   .lift:focus-visible,
-  .lift:has(:focus-visible) {
-    box-shadow: var(--shadow-lift), 0 0 0 2px rgb(var(--accent));
+  .lift:has(:focus-visible),
+  .row:has(:focus-visible) {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
+  /* Fila de lista con filete inferior; al pasar o enfocar entra un filete cereza arriba. */
+  .row {
+    position: relative;
+    border-bottom: 1px solid rgb(var(--line));
+  }
+
+  /* Movimiento: un solo sistema. Entrada escalonada por ruta, barras que crecen, cifras que cuentan. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes grow-y {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  .stagger > *,
+  .stagger-aside > * {
+    animation: rise 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .stagger > *:nth-child(2) { animation-delay: 60ms; }
+  .stagger > *:nth-child(3) { animation-delay: 120ms; }
+  .stagger > *:nth-child(4) { animation-delay: 180ms; }
+  .stagger > *:nth-child(5) { animation-delay: 240ms; }
+  .stagger > *:nth-child(n + 6) { animation-delay: 300ms; }
+  .stagger-aside > * { animation-delay: 200ms; }
+  .grow-x {
+    transform-origin: left;
+    animation: grow-x 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 150ms;
+  }
+  .grow-y {
+    transform-origin: bottom;
+    animation: grow-y 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 150ms;
   }
   @media (prefers-reduced-motion: reduce) {
     .lift,
@@ -108,9 +185,44 @@
       transition: none;
       transform: none;
     }
+    .lift::before,
+    .row::before {
+      transition: none;
+    }
+    .stagger > *,
+    .stagger-aside > *,
+    .grow-x,
+    .grow-y {
+      animation: none;
+    }
+  }
+
+  /* Bloque sólido Noir (sidebar, cabecera de docente). */
+  .block-noir {
+    background: #1b1717;
+    color: #edebdd;
+  }
+  .dark .block-noir {
+    background: #2c2929;
+  }
+  /* Bloque sólido Cereza (hero, panel de acceso). */
+  .block-cherry {
+    background: #810100;
+    color: #edebdd;
+  }
+  .dark .block-cherry {
+    background: #c1272d;
+    color: #ffffff;
+  }
+  .block-noir :focus-visible,
+  .block-cherry :focus-visible {
+    outline-color: #edebdd;
+  }
+  .btn-on-block {
+    @apply btn border border-[#EDEBDD]/45 text-[#EDEBDD] hover:bg-white/10;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 h-10 text-sm font-semibold transition-colors
+    @apply inline-flex items-center justify-center gap-2 rounded-control px-4 h-10 text-sm font-semibold transition-colors
       disabled:opacity-50 disabled:pointer-events-none;
   }
   .btn-primary {
@@ -123,10 +235,10 @@
     @apply btn text-fg hover:bg-muted;
   }
   .btn-outline {
-    @apply btn bg-muted text-fg hover:bg-line;
+    @apply btn border border-fg/80 text-fg hover:bg-fg hover:text-bg;
   }
   .input {
-    @apply h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-fg outline-none transition
+    @apply h-11 w-full rounded-control border border-line bg-surface px-3.5 text-sm text-fg outline-none transition
       placeholder:text-sub focus:border-accent focus:ring-4 focus:ring-accent/15;
   }
   .label {
@@ -139,13 +251,13 @@
     @apply bg-accent-soft text-accent-ink hover:text-accent-ink;
   }
   .seg {
-    @apply flex gap-1 rounded-xl bg-muted p-1;
+    @apply flex gap-1 rounded-control border border-line bg-surface p-1;
   }
   .seg-item {
-    @apply shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold text-sub transition-colors hover:text-fg;
+    @apply shrink-0 rounded-[4px] px-3 py-1.5 text-xs font-semibold text-sub transition-colors hover:text-fg;
   }
   .seg-on {
-    @apply bg-surface text-fg shadow-card;
+    @apply bg-fg text-bg hover:text-bg;
   }
   .link {
     @apply font-semibold text-accent-ink hover:underline;

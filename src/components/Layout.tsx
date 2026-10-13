@@ -18,18 +18,18 @@ const COURSES = allCourses();
 
 export function Logo({ to = "/docentes", compact }: { to?: string; compact?: boolean }) {
   return (
-    <Link to={to} className="flex items-center gap-2.5 rounded-lg" aria-label="CHALK, ir al inicio">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#70000E] text-[15px] font-extrabold text-white">C</span>
+    <Link to={to} className="flex items-center gap-2.5 rounded-control" aria-label="CHALK, ir al inicio">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-[#70000E] text-[15px] font-extrabold text-white">C</span>
       <span className={cx("text-[17px] font-extrabold tracking-tight", compact && "lg:hidden xl:inline")}>CHALK</span>
     </Link>
   );
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ onBlock }: { onBlock?: boolean }) {
   const [theme, set] = useState(getTheme);
   return (
     <button
-      className="btn-ghost h-9 w-9 shrink-0 px-0 text-sub hover:text-fg"
+      className={cx("btn-ghost h-9 w-9 shrink-0 px-0", onBlock ? "text-[#EDEBDD]/75 hover:bg-white/10 hover:text-[#EDEBDD]" : "text-sub hover:text-fg")}
       aria-label={theme === "dark" ? "Usar tema claro" : "Usar tema oscuro"}
       onClick={() => {
         const next = theme === "dark" ? "light" : "dark";
@@ -63,9 +63,9 @@ function NavItems({ rail }: { rail?: boolean }) {
             title={rail ? label : undefined}
             className={({ isActive }) =>
               cx(
-                "flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
+                "flex h-10 items-center gap-3 rounded-control px-3 text-sm font-medium transition-colors",
                 rail && "lg:justify-center lg:px-0 xl:justify-start xl:px-3",
-                isActive ? "bg-accent-soft text-accent-ink" : "text-sub hover:bg-muted hover:text-fg",
+                isActive ? "bg-[#810100] font-semibold text-[#EDEBDD] dark:bg-[#C1272D] dark:text-white" : "text-[#EDEBDD]/75 hover:bg-white/10 hover:text-[#EDEBDD]",
               )
             }
           >
@@ -82,18 +82,18 @@ function CourseList() {
   const { title, items } = useSidebarCourses();
   return (
     <div>
-      <h2 className="mb-2 px-3 text-xs font-semibold text-sub">{title}</h2>
+      <h2 className="mb-2 px-3 text-xs font-semibold text-[#EDEBDD]/65">{title}</h2>
       <ul className="space-y-0.5">
         {items.map((c) => (
           <li key={c.name}>
             <Link
               to={`/cursos?q=${encodeURIComponent(c.name)}`}
-              className="flex h-9 items-center gap-3 rounded-xl px-3 text-sm text-fg/85 transition-colors hover:bg-muted hover:text-fg"
+              className="flex h-9 items-center gap-3 rounded-control px-3 text-sm text-[#EDEBDD]/85 transition-colors hover:bg-white/10 hover:text-[#EDEBDD]"
             >
-              <span className={cx("h-2 w-2 shrink-0 rounded-full", tint(c.name).dot)} aria-hidden />
+              <span className={cx("h-2 w-2 shrink-0 rounded-full ring-1 ring-[#EDEBDD]/40", tint(c.name).dot)} aria-hidden />
               <span className="min-w-0 flex-1 truncate">{c.name}</span>
               {c.profs.length > 1 && (
-                <span className="num text-xs text-sub" aria-label={`${c.profs.length} docentes`}>
+                <span className="num text-xs text-[#EDEBDD]/65" aria-label={`${c.profs.length} docentes`}>
                   {c.profs.length}
                 </span>
               )}
@@ -111,17 +111,17 @@ function UserChip({ rail }: { rail?: boolean }) {
     <div className={cx("flex items-center gap-1", rail && "lg:flex-col xl:flex-row")}>
       <Link
         to="/perfil"
-        className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl p-1.5 transition-colors hover:bg-muted"
+        className="flex min-w-0 flex-1 items-center gap-2.5 rounded-control p-1.5 transition-colors hover:bg-white/10"
         title={rail ? user.name : undefined}
       >
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent-soft text-xs font-bold text-accent-ink">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#EDEBDD] text-xs font-bold text-[#1B1717]">
           {user.initials}
         </span>
         <span className={cx("min-w-0 flex-1 truncate text-sm font-medium", rail && "lg:hidden xl:block")}>{user.name}</span>
       </Link>
-      <ThemeToggle />
+      <ThemeToggle onBlock />
       <button
-        className="btn-ghost h-9 w-9 shrink-0 px-0 text-sub hover:text-fg"
+        className="btn-ghost h-9 w-9 shrink-0 px-0 text-[#EDEBDD]/75 hover:bg-white/10 hover:text-[#EDEBDD]"
         aria-label="Cerrar sesión"
         title="Salir"
         onClick={store.logout}
@@ -152,7 +152,7 @@ export default function Layout() {
   return (
     <div className="mx-auto min-h-screen max-w-[1440px] lg:grid lg:grid-cols-[84px_minmax(0,1fr)] xl:grid-cols-[248px_minmax(0,1fr)]">
       {/* Barra lateral: riel de íconos en 1024–1279, completa desde 1280 */}
-      <aside className="sticky top-0 hidden h-screen flex-col gap-8 px-4 py-6 lg:flex xl:px-5">
+      <aside className="block-noir sticky top-0 hidden h-screen flex-col gap-8 px-4 py-6 lg:flex xl:px-5">
         <div className="lg:mx-auto xl:mx-0 xl:px-1">
           <Logo compact />
         </div>
@@ -183,11 +183,11 @@ export default function Layout() {
             <button className="absolute inset-0 bg-fg/30" aria-label="Cerrar menú" onClick={() => setOpen(false)} />
             <nav
               aria-label="Principal"
-              className="absolute inset-y-0 left-0 flex w-[min(300px,85vw)] flex-col gap-8 overflow-y-auto bg-surface px-4 py-6 shadow-lift"
+              className="block-noir absolute inset-y-0 left-0 flex w-[min(300px,85vw)] flex-col gap-8 overflow-y-auto px-4 py-6 shadow-lift"
             >
               <div className="flex items-center justify-between px-1">
                 <Logo />
-                <button className="btn-ghost h-9 w-9 px-0" aria-label="Cerrar menú" onClick={() => setOpen(false)}>
+                <button className="btn-ghost h-9 w-9 px-0 text-[#EDEBDD] hover:bg-white/10" aria-label="Cerrar menú" onClick={() => setOpen(false)}>
                   <X size={18} />
                 </button>
               </div>
@@ -204,11 +204,13 @@ export default function Layout() {
           <main className="min-w-0">
             <AsideContext.Provider value={slot}>
               <Suspense fallback={<div className="py-24 text-center text-sm text-sub">Cargando…</div>}>
-                <Outlet />
+                <div key={pathname} className="stagger">
+                  <Outlet />
+                </div>
               </Suspense>
             </AsideContext.Provider>
           </main>
-          <aside ref={setSlot} aria-label="Contexto" className="min-w-0 space-y-5 empty:hidden" />
+          <aside ref={setSlot} aria-label="Contexto" className="stagger-aside min-w-0 space-y-5 empty:hidden" />
         </div>
         <footer className="px-4 pb-8 text-center text-xs text-sub">
           CHALK · Comunidad docente UTP · Reseñas guardadas en tu navegador

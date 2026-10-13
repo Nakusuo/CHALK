@@ -1,6 +1,6 @@
 ---
 name: CHALK
-description: Campus app tranquilo en blanco perla, negro y rojo cereza UTP para que alumnos de la UTP Lima Norte elijan docente con métricas de reseñas reales.
+description: Cartel editorial en blanco perla, negro noir y rojo cereza UTP para que alumnos de la UTP Lima Norte elijan docente con métricas de reseñas reales.
 colors:
   cultured-pearl: "#F5F4F2"
   card-white: "#FFFFFF"
@@ -22,27 +22,34 @@ colors:
 typography:
   display:
     fontFamily: "Geist, system-ui, sans-serif"
-    fontSize: "34px"
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "-0.02em"
+    fontSize: "clamp(2.75rem, 6vw, 5.5rem)"
+    fontWeight: 800
+    lineHeight: 0.95
+    letterSpacing: "-0.03em"
   headline:
     fontFamily: "Geist, system-ui, sans-serif"
-    fontSize: "28px"
-    fontWeight: 700
-    lineHeight: 1.25
-    letterSpacing: "-0.02em"
+    fontSize: "clamp(2.25rem, 5vw, 4.5rem)"
+    fontWeight: 800
+    lineHeight: 0.95
+    letterSpacing: "-0.03em"
   metric:
     fontFamily: "Geist, system-ui, sans-serif"
-    fontSize: "36px"
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "-0.025em"
+    fontSize: "clamp(2.5rem, 5vw, 4.5rem)"
+    fontWeight: 800
+    lineHeight: 0.95
+    letterSpacing: "-0.03em"
+  section:
+    fontFamily: "Geist, system-ui, sans-serif"
+    fontSize: "20-24px"
+    fontWeight: 800
+    lineHeight: 1.2
+    letterSpacing: "-0.02em"
   title:
     fontFamily: "Geist, system-ui, sans-serif"
-    fontSize: "17px"
-    fontWeight: 600
-    lineHeight: 1.4
+    fontSize: "clamp(1.25rem, 2.4vw, 1.75rem)"
+    fontWeight: 800
+    lineHeight: 1.2
+    letterSpacing: "-0.03em"
   body:
     fontFamily: "Geist, system-ui, sans-serif"
     fontSize: "14px"
@@ -55,9 +62,8 @@ typography:
     lineHeight: 1.4
 rounded:
   chip: "9999px"
-  control: "12px"
-  card: "16px"
-  search: "16px"
+  control: "6px"
+  card: "8px"
 spacing:
   xs: "4px"
   sm: "8px"
@@ -69,8 +75,17 @@ spacing:
 components:
   card:
     backgroundColor: "{colors.card-white}"
+    borderColor: "{colors.cool-gray}"
     rounded: "{rounded.card}"
     padding: "24px"
+  rule:
+    borderTop: "3px solid {colors.noir-black}"
+  block-noir:
+    backgroundColor: "{colors.noir-black}"
+    textColor: "{colors.cotton}"
+  block-cherry:
+    backgroundColor: "{colors.cherry-red}"
+    textColor: "{colors.cotton}"
   button-primary:
     backgroundColor: "{colors.cherry-red}"
     textColor: "{colors.card-white}"
@@ -79,15 +94,8 @@ components:
     padding: "0 16px"
   button-primary-hover:
     backgroundColor: "{colors.maroon}"
-  button-brand:
-    backgroundColor: "{colors.cherry-red}"
-    textColor: "{colors.card-white}"
-    rounded: "{rounded.control}"
-    height: "40px"
-  button-brand-hover:
-    backgroundColor: "{colors.maroon}"
   button-outline:
-    backgroundColor: "{colors.cotton}"
+    borderColor: "{colors.noir-black}"
     textColor: "{colors.noir-black}"
     rounded: "{rounded.control}"
     height: "40px"
@@ -97,17 +105,12 @@ components:
     rounded: "{rounded.control}"
     height: "44px"
     padding: "0 14px"
-  chip:
-    backgroundColor: "{colors.cotton}"
-    textColor: "{colors.warm-gray}"
-    rounded: "{rounded.chip}"
-    height: "32px"
-  chip-on:
-    backgroundColor: "{colors.cherry-soft}"
-    textColor: "{colors.maroon}"
+  segment-on:
+    backgroundColor: "{colors.noir-black}"
+    textColor: "{colors.cultured-pearl}"
   nav-item-active:
-    backgroundColor: "{colors.cherry-soft}"
-    textColor: "{colors.maroon}"
+    backgroundColor: "{colors.cherry-red}"
+    textColor: "{colors.cotton}"
     rounded: "{rounded.control}"
     height: "40px"
 ---
@@ -116,20 +119,18 @@ components:
 
 ## Overview
 
-**Creative North Star: "El campus en blanco, negro y cereza"**
+**Creative North Star: "El marcador del campus"**
 
-Una app de campus tranquila: fondo blanco perla, tarjetas blancas que flotan sobre una sombra neutra difusa, y números grandes que se leen de un vistazo. Cada docente es una tarjeta de métrica (nota, dificultad, "lo volvería a llevar"), no una fila de resultados. Toda la interacción es rojo cereza; el negro noir es el segundo color fuerte. Densidad media, mucho aire, ningún borde duro.
+Un cartel editorial en blanco perla, negro noir y rojo cereza. Hay bloques sólidos de color (sidebar Noir, hero Cereza, cabecera Noir del docente, panel Cereza de acceso), tipografía de cartel y cifras gruesas de marcador de estadio. La estructura la dan filetes Noir de 3px, no sombras difusas. Los docentes se leen como filas de una lista con filete y un nombre grande, cada una con su nota en cifra gigante a la derecha. Hay un solo sistema de movimiento: entrada escalonada por ruta, barras que crecen y cifras que cuentan.
 
-El shell son tres columnas: navegación a la izquierda, contenido al centro, contexto a la derecha. El contexto (ilustración y "Mejor calificados") lo monta cada página en un portal; si la página no aporta contexto, la columna desaparece y el contenido ocupa el ancho completo. En móvil todo colapsa a una barra superior con cajón.
-
-Rechazos confirmados por la build: la lista plana con chips como pantalla de resultados, el negro puro y el blanco puro como fondo, las sombras duras.
+El shell son tres columnas dentro de un marco centrado de 1440px: navegación, contenido y contexto. El contexto lo monta cada página en un portal; si una página no lo aporta, el contenido ocupa todo el ancho. En móvil todo colapsa a una barra superior con cajón, y los bloques sólidos van a sangre.
 
 **Key Characteristics:**
-- Fondo blanco perla liso, sin halo.
-- Superficies blancas de 16px de radio con sombra difusa neutra.
-- Una sola familia tipográfica (Geist); la jerarquía sale de tamaño, peso y números tabulares.
-- Tema oscuro completo por variables (clase `dark`), mismo reparto de roles.
-- Foco y hover elevan la tarjeta 2px en vez de cambiar su color.
+- Bloques sólidos Noir y Cereza con texto Cotton; el resto es silencioso (blanco perla, bordes Cool Gray).
+- Radios cortos: 8px en tarjetas, 6px en controles.
+- Filete Noir de 3px sobre cada métrica y cada encabezado de sección.
+- Display de cartel con clamp(), peso 800, tracking −0.03em y cifras tabulares.
+- Un solo sistema de movimiento, desactivado con `prefers-reduced-motion`.
 
 ## Colors
 
@@ -164,91 +165,85 @@ Paleta UTP: rojo cereza, blanco y negro sobre neutros cálidos. Un solo acento (
 **Body Font:** Geist
 **Label/Mono Font:** Geist; el único mono es `code` en el marco vacío de la ilustración.
 
-**Character:** Geist sola, sin pareja: neutra y técnica, con el `ss01` activo. El carácter viene de los números grandes y tabulares y del tracking ajustado en titulares.
+**Character:** Geist sola, a escala de cartel. Los titulares y las cifras usan la clase `display` (800, tracking −0.03em, line-height 0.95). El cuerpo se queda en 14–15px para que siga siendo legible.
 
 ### Hierarchy
-- **Display** (700, 30–34px, 1.2): saludo "Hola, {nombre}" en la portada de docentes.
-- **Headline** (700, 28px, 1.25): nombre del docente en su perfil.
-- **Metric** (700, 28px móvil / 36px desde `sm`, line-height 1, tabulares): cifras de las tres métricas grandes.
-- **Section** (700, 20px): encabezados de grupo con filete inferior (cursos).
-- **Title** (600, 17px): nombre de docente en tarjeta y de facultad.
-- **Body** (400–500, 14px): texto corrido, ítems de menú (500), cursos del sidebar.
-- **Label** (600, 12px): etiquetas de campo, títulos de lista del sidebar, chips (500).
+- **Display** (800, `clamp(2.75rem, 6vw, 5.5rem)`): "¿Con quién llevas el curso?" en el hero de docentes, con "Hola, {nombre}." como línea real encima.
+- **Headline** (800, `clamp(2.25rem, 5vw, 4.5rem)`): nombre del docente en su cabecera Noir; título de página (`PageHeader`) a `clamp(2.25rem, 5vw, 4rem)`; titular del panel de acceso.
+- **Metric** (800, `clamp(2.5rem, 5vw, 4.5rem)`; `clamp(1.75rem, 7vw, 4.5rem)` en la fila compacta de 3 en móvil): cifras de `Stat`, Comparar y la nota del docente.
+- **Section** (800, 20–24px): encabezados de sección bajo filete.
+- **Title** (800, `clamp(1.25rem, 2.4vw, 1.75rem)`): nombre del docente en la fila de lista.
+- **Body** (400–500, 14px) y **Label** (600, 12px).
 
 ### Named Rules
-**The Tabular Numbers Rule.** Toda cifra (notas, contadores, porcentajes, años) lleva la clase `num` (tabular-nums). Las cifras son lo más grande de cada tarjeta.
-**The One Family Rule.** Una familia, jerarquía por peso y tamaño. Los titulares usan `text-wrap: balance` y tracking −0.02em.
+**The Tabular Numbers Rule.** Toda cifra lleva `num` (tabular-nums) y las métricas usan `display`.
+**The Poster Scale Rule.** El display escala con clamp(); nunca hay tracking por debajo de −0.03em.
 
 ## Layout
 
-Shell de tres columnas dentro de un marco centrado de 1440px máximo. Desde 1280px: sidebar fija de 248px, contenido y columna de contexto de 320px (contenido y contexto comparten un contenedor de 1192px máximo, gap 24px). Entre 1024 y 1279px: la sidebar se reduce a un riel de 84px con solo íconos (etiquetas con `sr-only`, `title` como ayuda) y la lista de cursos se oculta; el contexto cae debajo del contenido. Bajo 1024px: barra superior sticky de 64px con logo, tema y menú; el menú es un cajón izquierdo (hasta 300px, 85vw) con velo `fg/30`, cierre con Escape y al navegar.
-
-Padding de página 16px (24px desde `sm`), 32px arriba en escritorio, 64px abajo. Ritmo base de 4: separaciones de 4, 8, 12, 16, 20, 24. Dentro de tarjeta, 20px (24px desde `sm`). La sidebar lista cursos con punto de color; el contador solo aparece cuando el curso tiene más de un docente. Sin reseñas se escribe "Sin reseñas aún" y "—", nunca un cero inventado.
+El marco mide 1440px como máximo y va centrado. Desde 1280px: sidebar Noir de 248px, contenido y contexto de 320px (máximo 1192px, gap 24px). Entre 1024 y 1279px: riel Noir de 84px con solo íconos, y el contexto cae debajo. Bajo 1024px: barra superior y cajón Noir. El hero Cereza y la cabecera Noir sangran al borde (`-mx-4`/`-mx-6`), y desde `lg` recuperan el radio de 8px. Las métricas van en filas sin tarjeta, separadas por gaps de 24–32px. Sin reseñas se escribe "Sin reseñas aún" y "—".
 
 ## Elevation & Depth
 
-Híbrido suave: las superficies blancas se separan del fondo por tono y por una sombra difusa neutra; no hay bordes en las tarjetas. La profundidad responde al estado, no al reposo.
-
-### Shadow Vocabulary
-- **Card** (`0 1px 2px rgb(76 62 160 / .05), 0 10px 28px -12px rgb(76 62 160 / .18)`): tarjetas, buscador, segmento activo.
-- **Lift** (`0 2px 4px rgb(76 62 160 / .06), 0 18px 40px -14px rgb(76 62 160 / .28)`): hover y foco de tarjetas `lift`, y el cajón móvil. En oscuro ambas pasan a negro puro con más opacidad.
+Plano y editorial. Las superficies se separan con un borde de 1px Cool Gray, filetes Noir de 3px y bloques sólidos, no con sombras. Solo quedan sombras mínimas: Card (`0 1px 2px` noir 8%) y Lift (`0 10px 24px -12px` noir 30%), para el cajón móvil.
 
 ### Named Rules
-**The Focused Card Lifts Rule.** Una tarjeta interactiva sube 2px y pasa a la sombra Lift en hover, en `:focus-visible` y cuando un hijo tiene foco (`:has(:focus-visible)`); con foco añade un anillo de 2px rojo cereza. Con `prefers-reduced-motion` no hay transición ni desplazamiento. Transición: 180ms, `cubic-bezier(0.16, 1, 0.3, 1)`.
-**The Diffuse Neutral Shadow Rule.** Las sombras son anchas, de offset vertical y en noir a baja opacidad. Nunca desplazamientos duros.
+**The Rule System Rule.** Las métricas (`Stat`), los encabezados de sección y la parte superior de las listas llevan `rule`: filete Noir de 3px. Las filas de lista se separan con un filete inferior de 1px. En Comparar, cada fila lleva un filete Noir de 2px.
+**The Cherry Rule Slide Rule.** Al pasar o enfocar una fila (`.row`) o una tarjeta (`.lift`), un filete cereza de 3px entra de izquierda a derecha por arriba (320ms). La tarjeta además sube 2px. Con foco de teclado aparece un contorno cereza de 2px; dentro de un bloque sólido, el contorno es Cotton.
+
+## Motion
+
+Un solo sistema, con ease-out exponencial (`cubic-bezier(0.16, 1, 0.3, 1)`):
+- **Entrada por ruta** (`.stagger`): los hijos del contenido suben 14px y aparecen en 560ms, escalonados 60ms (máx. 300ms). El contenedor se monta con `key` de ruta, así que la animación corre una vez por navegación. La columna de contexto entra a 200ms.
+- **Barras** (`.grow-x`, `.grow-y`): crecen desde 0 en 900ms.
+- **Cifras** (`CountUp`): cuentan desde 0 en 900ms la primera vez que entran en pantalla (IntersectionObserver). El valor real está siempre en `aria-label`.
+- **Reducido:** con `prefers-reduced-motion`, o sin IntersectionObserver, todo se muestra en su estado final y sin transiciones.
 
 ## Shapes
 
-Formas suaves y consistentes: tarjetas 16px (token `card`), controles y botones 12px (`rounded-xl`), buscador grande 16px, ítems de menú 12px, chips y avatares totalmente redondos. El cuadro del logo es de 12px. El marco vacío de la ilustración usa borde discontinuo Cool Gray sobre Cotton. Sin esquinas rectas ni cortes angulares.
+Tarjetas 8px (`rounded-card`), controles 6px (`rounded-control`), opciones de segmento 4px. Chips de filtro y avatares son redondos; los chips de curso son de 6px. La barra de distribución va redondeada solo arriba (4px).
 
 ## Components
 
 ### Buttons
-- **Shape:** 12px, alto 40px, texto 14px semibold, padding horizontal 16px.
-- **Primary:** rojo cereza con texto blanco; hover granate.
-- **Brand (reseñar):** mismo rojo cereza que el primario, con texto blanco y hover granate. Dentro de la tarjeta de docente baja a 32px de alto, radio 8px.
-- **Outline:** relleno Cotton con texto noir; hover Cool Gray.
-- **Ghost:** transparente; hover Cotton. Los botones de ícono son de 36px cuadrados.
-- **Disabled:** 50% de opacidad, sin eventos.
+- **Primary/Brand:** rojo cereza, texto blanco, hover granate. 40px de alto, 6px de radio.
+- **Outline:** borde Noir 80% y texto Noir; hover se invierte (relleno Noir, texto Pearl).
+- **On block** (`btn-on-block`): borde Cotton 45% y texto Cotton sobre bloques sólidos; hover blanco al 10%.
+- **Ghost:** transparente; hover Cotton.
 
-### Chips
-- **Style:** píldora de 32px, fondo Cotton, texto gris cálido 12px medio.
-- **State:** activo en cereza suave con texto cereza. Los chips de curso dentro de tarjeta son píldoras estáticas de 12px.
+### Bloques sólidos
+- **Sidebar Noir** (#1B1717; #2C2929 en oscuro): ítems Cotton al 75%; el activo es relleno Cereza (#C1272D en oscuro) con texto Cotton/blanco. Los puntos de curso llevan un anillo Cotton al 40%.
+- **Hero Cereza** (#810100; #C1272D con texto blanco en oscuro): saludo, display y buscador blanco dentro.
+- **Cabecera de docente Noir:** nombre a escala headline en Cotton y un cuadro Cotton de la nota con la cifra en cereza. Debajo: "Escribir reseña" en cereza, y Comparar y Guardar como botones `on block`.
+- **Panel de acceso Cereza:** logo, ranura de ilustración (máx. 30vh), titular display, tres puntos y una nota al pie.
 
-### Cards / Containers
-- **Corner Style:** 16px. **Background:** blanco tarjeta. **Shadow:** Card en reposo, Lift en estado. **Border:** ninguno. **Padding:** 20/24px.
-- **Tarjeta de docente:** nombre en 17px semibold con el enlace extendido a toda la tarjeta, rango y verificado, departamento, cursos como chips, y una fila de métricas (nota con estrella ámbar, barra de dificultad, "% lo volvería a llevar") con el botón rojo a la derecha.
+### Listas y tarjetas
+- **Fila de docente** (`.row`): monograma, nombre grande, departamento y sede, cursos como chips de 6px, una cifra de nota gigante a la derecha, y una fila con reseñas, dificultad, "% lo volvería a llevar" y "Reseñar".
+- **Tarjeta** (`.card`): borde de 1px Cool Gray, 8px de radio, sin sombra. Se usa en la columna de contexto, en formularios, en Facultades y Cursos, y en las reseñas.
+- **Segmento:** contenedor blanco con borde; la opción activa va en relleno Noir con texto Pearl.
 
-### Inputs / Fields
-- **Style:** 44px de alto, 12px de radio, borde Cool Gray, fondo blanco, texto 14px.
-- **Focus:** borde cereza y halo de 4px cereza al 15%. Placeholder en gris cálido.
-- **Buscador:** 56px de alto, 16px de radio, borde transparente y sombra Card, ícono a la izquierda.
-
-### Navigation
-- Ítems de 40px, ícono de 18px + etiqueta 14px medio. Reposo gris cálido; hover Cotton; activo cereza suave con texto cereza. Docentes está activo en sus subrutas; el resto requiere coincidencia exacta.
-- Pie de la sidebar: avatar de iniciales en círculo cereza suave, tema y salir. En el riel se apila en vertical.
-- **Segmento:** contenedor Cotton con opciones de 12px semibold; la activa es blanca con sombra Card.
+### Comparar (marcador)
+Cada lado lleva un selector y un monograma. Debajo, los grupos "Vista rápida" y "Criterios" con filete de 3px, y filas con filete Noir de 2px y cifras de `clamp(2.25rem, 6vw, 4.5rem)`. El ganador va en un bloque Cereza con la cifra en blanco.
 
 ### Ranura de ilustración (signature)
-Columna de contexto con la ilustración propia en `public/arte/hero.png`; si falta, muestra un marco discontinuo con la ruta esperada. No se inventan ilustraciones de personas.
+Muestra `public/arte/hero.png`; si falta, un marco discontinuo Cool Gray sobre Cotton con la ruta esperada. No se inventan ilustraciones de personas.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** usar variables RGB (`bg-bg`, `bg-surface`, `text-sub`, `bg-accent-soft`) para todo color de superficie y texto, de modo que el tema oscuro funcione sin ramas.
-- **Do** poner `num` en cada cifra y dejar las métricas como lo más grande de su tarjeta.
-- **Do** elevar tarjetas interactivas con `lift` y mantener el foco visible con el anillo cereza de 2px.
+- **Do** usar los bloques sólidos solo donde están definidos (sidebar, hero, cabecera de docente, panel de acceso) y dejar el resto silencioso.
+- **Do** poner `num` en cada cifra y `display` en métricas y titulares.
+- **Do** separar con filetes (`rule`, `.row`) en vez de sombras.
+- **Do** respetar `prefers-reduced-motion` en cada animación nueva.
 - **Do** mostrar "Sin reseñas aún" y "—" cuando no hay datos reales.
-- **Do** mantener objetivos táctiles de al menos 36px (40–44px en controles principales).
 
 ### Don't:
-- **Don't** usar rojo cereza para decorar, ni volver a la lavanda o al violeta.
-- **Don't** usar #000 ni #FFF como fondo de página, ni bordes de 1px como separación de tarjetas.
-- **Don't** dar sombras duras ni desplazadas; todas son difusas y neutras.
-- **Don't** volver a una lista plana de docentes con filas y chips como contenido principal.
-- **Don't** añadir una segunda familia tipográfica ni cifras proporcionales en métricas.
-- **Don't** rodear una tarjeta con otra tarjeta; la columna de contexto apila tarjetas, no las anida.
+- **Don't** volver a sombras difusas, radios de 16px o tarjetas que flotan.
+- **Don't** usar texto con degradado, vidrio, emoji ni etiquetas eyebrow sobre titulares.
+- **Don't** añadir colores fuera de la paleta UTP ni otra familia tipográfica.
+- **Don't** animar cada elemento por su cuenta; todo pasa por stagger, grow o CountUp.
+- **Don't** rodear una tarjeta con otra tarjeta.
 
 ## Not canonized
 
-La build usa `text-[11px]` en el historial del perfil y varios `text-[15px]`/`text-[17px]` sueltos; son valores puntuales, no escala. El texto de 11px queda bajo el piso de legibilidad y se registra como defecto de la build, no como regla. El contrato pedía tarjetas de 20px; la build usa 16px y ese valor manda. La paleta lavanda/violeta original se sustituyó por la paleta UTP del usuario.
+Hay valores puntuales (`text-[11px]` en el historial, `text-[15px]`), y los badges usan `rounded-md`. La barra de progreso del asistente de reseña conserva su transición de ancho propia.

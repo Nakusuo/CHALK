@@ -130,3 +130,22 @@ export function dateRank(r: Review) {
 
 export const isValidEmail = (e: string) => /^U\d+@utp\.edu\.pe$/i.test(e.trim());
 export const isValidCode = (c: string) => /^U\d{6,}$/i.test(c.trim());
+
+const WORKLOAD_ORDER: Workload[] = ["light", "moderate", "heavy"];
+
+/** Carga del docente: la más frecuente en las reseñas del usuario (empate → la más pesada).
+ *  Sin reseñas con carga, usa la semilla solo si el docente tiene reseñas semilla; si no, null. */
+export function profWorkload(p: Professor, userReviews: Review[]): Workload | null {
+  const counts = new Map<Workload, number>();
+  for (const r of userReviews) if (r.profId === p.id && r.workload) counts.set(r.workload, (counts.get(r.workload) ?? 0) + 1);
+  if (counts.size) {
+    let best: Workload = "light";
+    let max = -1;
+    for (const w of WORKLOAD_ORDER) {
+      const n = counts.get(w) ?? 0;
+      if (n >= max && n > 0) [best, max] = [w, n];
+    }
+    return best;
+  }
+  return p.reviews > 0 ? p.workload : null;
+}

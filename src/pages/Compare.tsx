@@ -1,7 +1,7 @@
 import { ArrowLeftRight, GitCompare, Trophy, X } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { cx, Empty, Monogram, PageHeader, plural, Stars } from "../components/ui";
-import { criteriaLabels, getProfessor, professors, profMetrics, workloadLabels } from "../data/db";
+import { criteriaLabels, getProfessor, professors, profMetrics, profWorkload, workloadLabels } from "../data/db";
 import type { CriteriaKey, Professor } from "../data/types";
 import { useStore } from "../lib/store";
 
@@ -65,11 +65,11 @@ function Picker({
 
 function Value({ v, win }: { v: string; win: boolean }) {
   return (
-    <div className={cx("rounded-xl px-2 py-3 text-center", win && "bg-accent-soft")}>
+    <div className={cx("rounded-control px-2 py-4 text-center", win && "bg-accent")}>
       <div
         className={cx(
-          "num text-[28px] font-bold leading-none tracking-tight sm:text-4xl",
-          win ? "text-accent-ink" : v === "—" ? "text-sub" : "text-fg",
+          "num display text-[clamp(2.25rem,6vw,4.5rem)]",
+          win ? "text-white" : v === "—" ? "text-sub" : "text-fg",
         )}
       >
         {v}
@@ -140,6 +140,10 @@ export default function Compare() {
     { a: 0, b: 0 },
   );
 
+  const wl = (p: Professor) => {
+    const w = profWorkload(p, reviews);
+    return w ? workloadLabels[w] : "—";
+  };
   const criteriaNames = Object.values(criteriaLabels);
   const groups = [
     { title: "Vista rápida", rows: rows.filter((r) => !criteriaNames.includes(r.label)) },
@@ -163,14 +167,14 @@ export default function Compare() {
       </div>
 
       {a && b ? (
-        <section className="card mt-5 p-5 sm:p-8">
+        <section className="mt-8">
           <div className="grid grid-cols-2 gap-5 text-center">
             {(["a", "b"] as const).map((k) => {
               const lead = k === "a" ? wins.a > wins.b : wins.b > wins.a;
               return (
                 <div key={k} className={cx("text-sm font-semibold", lead ? "text-accent-ink" : "text-sub")}>
                   {lead && <Trophy size={16} className="mr-1 inline" aria-hidden />}
-                  <span className="num">{plural(k === "a" ? wins.a : wins.b, "criterio", "criterios")}</span>
+                  <span className="num text-base font-extrabold">{plural(k === "a" ? wins.a : wins.b, "criterio", "criterios")}</span>
                 </div>
               );
             })}
@@ -178,17 +182,17 @@ export default function Compare() {
 
           {groups.map((g) => (
             <div key={g.title} className="mt-8">
-              <h2 className="mb-2 border-b border-line pb-3 text-xl font-bold tracking-tight">{g.title}</h2>
+              <h2 className="rule pb-3 pt-3 text-2xl font-extrabold tracking-tight">{g.title}</h2>
               {g.rows.map((r) => {
                 const [va, vb] = [r.get(a), r.get(b)];
                 const better = winner(r, a, b);
                 return (
-                  <div key={r.label} className="border-b border-line py-4 last:border-0">
+                  <div key={r.label} className="border-t-2 border-fg/85 py-4">
                     <div className="grid grid-cols-2 gap-5">
                       <Value v={va === null ? "—" : r.fmt(va)} win={better === "a"} />
                       <Value v={vb === null ? "—" : r.fmt(vb)} win={better === "b"} />
                     </div>
-                    <div className="mt-1.5 text-center text-xs text-sub">
+                    <div className="mt-2 text-center text-sm font-semibold text-sub">
                       {r.label}
                       {r.lowerBetter && " · menos es mejor"}
                     </div>
@@ -198,8 +202,8 @@ export default function Compare() {
               {g.title === "Vista rápida" && (
                 <div className="py-4">
                   <div className="grid grid-cols-2 gap-5 text-center text-lg font-semibold">
-                    <div>{workloadLabels[a.workload]}</div>
-                    <div>{workloadLabels[b.workload]}</div>
+                    <div className={cx(!profWorkload(a, reviews) && "text-sub")}>{wl(a)}</div>
+                    <div className={cx(!profWorkload(b, reviews) && "text-sub")}>{wl(b)}</div>
                   </div>
                   <div className="mt-1.5 text-center text-xs text-sub">Carga</div>
                 </div>
@@ -207,7 +211,7 @@ export default function Compare() {
             </div>
           ))}
 
-          <div className="mt-4 grid grid-cols-2 gap-5 border-t border-line pt-5">
+          <div className="mt-4 grid grid-cols-2 gap-5 border-t-[3px] border-fg pt-5">
             {[a, b].map((p) => {
               const m = profMetrics(p, reviews);
               return (
