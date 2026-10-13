@@ -24,12 +24,12 @@ beforeEach(() => {
 
 it("en modo edición precarga el texto y muestra 'Guardar cambios' al final", () => {
   const r = store.addReview({
-    profId: 1, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
-    text: "Texto original suficientemente largo", helpful: 0, course: getProfessor(1)!.courses[0],
+    profId: 26, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
+    text: "Texto original suficientemente largo", helpful: 0, course: getProfessor(26)!.courses[0],
     difficulty: 3, wouldTakeAgain: true, workload: "light",
   });
   render(
-    <MemoryRouter initialEntries={[`/docentes/1/resena?edit=${r.id}`]}>
+    <MemoryRouter initialEntries={[`/docentes/26/resena?edit=${r.id}`]}>
       <Routes>
         <Route path="/docentes/:id/resena" element={<ReviewPage />} />
       </Routes>
@@ -42,11 +42,11 @@ it("en modo edición precarga el texto y muestra 'Guardar cambios' al final", ()
 it("al editar conserva helpful, id y no duplica", async () => {
   const user = userEvent.setup();
   const r = store.addReview({
-    profId: 1, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
-    text: "Texto original suficientemente largo", helpful: 5, course: getProfessor(1)!.courses[0],
+    profId: 26, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
+    text: "Texto original suficientemente largo", helpful: 5, course: getProfessor(26)!.courses[0],
     difficulty: 3, wouldTakeAgain: true, workload: "light", authorCode: "ORIG",
   });
-  renderAt(`/docentes/1/resena?edit=${r.id}`);
+  renderAt(`/docentes/26/resena?edit=${r.id}`);
   for (let i = 0; i < 4; i++) await user.click(screen.getByRole("button", { name: "Continuar" }));
   await user.click(screen.getByRole("button", { name: "Guardar cambios" }));
   expect(store.get().reviews).toHaveLength(1);
@@ -55,7 +55,7 @@ it("al editar conserva helpful, id y no duplica", async () => {
 
 it("publica una reseña nueva y la guarda una sola vez", async () => {
   const user = userEvent.setup();
-  renderAt("/docentes/1/resena");
+  renderAt("/docentes/26/resena");
   for (const k of ["Enseñanza", "Claridad", "Puntualidad", "Trato", "Prácticas", "Accesibilidad"]) {
     await user.click(within(screen.getByRole("radiogroup", { name: k })).getByRole("radio", { name: "4 estrellas" }));
   }
@@ -69,6 +69,6 @@ it("publica una reseña nueva y la guarda una sola vez", async () => {
   await user.click(screen.getByRole("button", { name: "Publicar reseña" }));
   const rs = store.get().reviews;
   expect(rs).toHaveLength(1);
-  expect(rs[0]).toMatchObject({ profId: 1, text: "Excelente docente, explica con mucha claridad.", score: 4, helpful: 0, authorCode: "U1" });
+  expect(rs[0]).toMatchObject({ profId: 26, text: "Excelente docente, explica con mucha claridad.", score: 4, helpful: 0, authorCode: "U1" });
   expect(rs[0].criteria?.claridad).toBe(4);
 });
