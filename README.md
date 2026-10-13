@@ -8,30 +8,30 @@ CHALK es una comunidad docente para estudiantes de la UTP: un sitio donde puedes
 
 Lo hice como proyecto de la universidad mientras estudio Ingeniería de Software. La versión 2 está reescrita en React + TypeScript, con un diseño nuevo, modo claro/oscuro y sin backend.
 
-![Pantalla de inicio de sesión](docs/capturas/login.png)
+![Pantalla de inicio de sesión](docs/capturas/login.jpg)
 
 ## Cómo se ve
 
-**Lista de docentes.** Estadísticas generales, ranking de los mejores calificados, buscador, filtros por etiqueta y sede, y orden por calificación, reseñas, dificultad o recomendación.
+**Lista de docentes.** Estadísticas generales, ranking de los mejores calificados, buscador, filtros por facultad, sede y etiqueta, y orden por calificación, reseñas, dificultad o recomendación.
 
-![Lista de docentes](docs/capturas/docentes.png)
+![Lista de docentes](docs/capturas/docentes.jpg)
 
-**Perfil de un docente.** Nota general, porcentaje que lo volvería a llevar, dificultad, aprobación, criterios de evaluación y distribución de calificaciones.
+**Perfil de un docente.** Nota general, porcentaje que lo volvería a llevar, dificultad, criterios, distribución de notas y nota por curso, todo calculado a partir de las reseñas.
 
-![Perfil de docente](docs/capturas/perfil-docente.png)
+![Perfil de docente](docs/capturas/perfil-docente.jpg)
 
 **Facultades y sedes.** Cada facultad con su número de docentes, promedio y cursos, más filtros por sede.
 
-![Facultades y sedes](docs/capturas/facultades.png)
+![Facultades y sedes](docs/capturas/facultades.jpg)
 
 **Escribir una reseña.** Un formulario en 5 pasos: primero calificas los criterios con estrellas y luego vas completando el resto.
 
-![Formulario de reseña](docs/capturas/resena.png)
+![Formulario de reseña](docs/capturas/resena.jpg)
 
 ## Qué puedes hacer
 
 - Iniciar sesión o registrarte con tu correo institucional (`U...@utp.edu.pe`); el código de estudiante se valida con expresiones regulares.
-- Explorar 20 docentes con datos de ejemplo, repartidos en facultades, sedes y carreras de la UTP.
+- Explorar 47 docentes reales de la UTP Lima Norte. No hay notas inventadas: todas las métricas salen de las reseñas que escriben los alumnos.
 - Buscar y filtrar docentes por nombre, curso, facultad, sede o etiquetas (Exigente, Explica bien, Puntual...).
 - Ver el perfil completo de cada docente con métricas, gráficos animados y las reseñas de otros alumnos, y marcar reseñas como útiles.
 - Escribir una reseña paso a paso: criterios con estrellas, dificultad, carga de trabajo, si lo volverías a llevar, etiquetas y comentario, con vista previa antes de enviar.
@@ -68,4 +68,3 @@ npm run build      # genera dist/ listo para publicar
 
 Entra con cualquier correo del tipo `U20240001@utp.edu.pe` y una contraseña cualquiera.
 
-> Las capturas de arriba son de la versión 1 (HTML/CSS/JS sin frameworks).

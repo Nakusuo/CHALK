@@ -1,7 +1,7 @@
 import { BookOpen, GitCompare, Search } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { cx, Empty, PageHeader } from "../components/ui";
-import { allCourses, courseScore, faculties, getFaculty, getProfessor } from "../data/db";
+import { allCourses, courseScore, faculties, getFaculty, getProfessor, professors } from "../data/db";
 import { useStore } from "../lib/store";
 
 const COURSES = allCourses();
@@ -27,8 +27,8 @@ export default function Courses() {
         <Search size={18} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sub" />
         <input className="input h-12 pl-10" placeholder="Buscar curso" value={q} onChange={(e) => set("q", e.target.value)} />
       </div>
-      <div className="mb-6 flex gap-1 overflow-x-auto pb-1">
-        {[{ id: "all", name: "Todas" }, ...faculties].map((f) => (
+      <div className="mb-6 flex gap-1 no-scrollbar overflow-x-auto pb-1">
+        {[{ id: "all", name: "Todas" }, ...faculties.filter((f) => professors.some((p) => p.fac === f.id))].map((f) => (
           <button key={f.id} className={cx("chip shrink-0", fac === f.id && "chip-on")} onClick={() => set("fac", f.id)}>
             {f.name}
           </button>
