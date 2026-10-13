@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0 — 2026-10-13
+- Rediseño completo: layout de tres columnas (navegación, contenido, contexto), tarjetas de métricas grandes y comparador lado a lado.
+- Paleta UTP: Cherry, Maroon, Dark Ruby, Cotton, Pearl, Noir y Meteorite; modo oscuro a juego.
+- Monogramas en lugar de emojis, espacio para ilustración propia (public/arte/hero.png).
+- Perfil del docente con columna de contexto y acceso directo a comparar.
+
 ## 2.0.1 — 2026-10-13
 - Solo quedan los 22 docentes actuales; se retiraron los 25 anteriores.
 
