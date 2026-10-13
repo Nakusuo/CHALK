@@ -1,22 +1,24 @@
 ---
 name: CHALK
-description: Campus app tranquilo en lavanda neblina para que alumnos de la UTP Lima Norte elijan docente con métricas de reseñas reales.
+description: Campus app tranquilo en blanco perla, negro y rojo cereza UTP para que alumnos de la UTP Lima Norte elijan docente con métricas de reseñas reales.
 colors:
-  lavender-mist: "#F4F3FB"
+  cultured-pearl: "#F5F4F2"
   card-white: "#FFFFFF"
-  wash-lilac: "#EFEDFA"
-  hairline-lilac: "#E3E0F3"
-  ink-night: "#18162B"
-  sub-dusk: "#5E5A7A"
-  violet-interaction: "#6C5CE7"
-  violet-ink: "#5444D0"
-  violet-soft: "#ECE9FD"
-  halo-lilac: "#D8D0FF"
-  utp-red: "#C8102E"
-  utp-red-deep: "#9E0B23"
-  night-bg: "#100E1D"
-  night-surface: "#1B182D"
-  night-violet: "#9284FF"
+  cotton: "#EDEBDD"
+  cool-gray: "#DCD7D4"
+  noir-black: "#1B1717"
+  warm-gray: "#5E5856"
+  meteorite: "#2C2929"
+  cherry-red: "#810100"
+  maroon: "#630000"
+  cherry-soft: "#F3E6E4"
+  dark-ruby: "#70000E"
+  creme: "#C3B79D"
+  night-bg: "#0E0C0C"
+  night-surface: "#1B1717"
+  night-raised: "#2C2929"
+  night-red: "#C1272D"
+  night-red-ink: "#FF8A80"
 typography:
   display:
     fontFamily: "Geist, system-ui, sans-serif"
@@ -70,42 +72,42 @@ components:
     rounded: "{rounded.card}"
     padding: "24px"
   button-primary:
-    backgroundColor: "{colors.violet-interaction}"
+    backgroundColor: "{colors.cherry-red}"
     textColor: "{colors.card-white}"
     rounded: "{rounded.control}"
     height: "40px"
     padding: "0 16px"
   button-primary-hover:
-    backgroundColor: "{colors.violet-ink}"
+    backgroundColor: "{colors.maroon}"
   button-brand:
-    backgroundColor: "{colors.utp-red}"
+    backgroundColor: "{colors.cherry-red}"
     textColor: "{colors.card-white}"
     rounded: "{rounded.control}"
     height: "40px"
   button-brand-hover:
-    backgroundColor: "{colors.utp-red-deep}"
+    backgroundColor: "{colors.maroon}"
   button-outline:
-    backgroundColor: "{colors.wash-lilac}"
-    textColor: "{colors.ink-night}"
+    backgroundColor: "{colors.cotton}"
+    textColor: "{colors.noir-black}"
     rounded: "{rounded.control}"
     height: "40px"
   input:
     backgroundColor: "{colors.card-white}"
-    textColor: "{colors.ink-night}"
+    textColor: "{colors.noir-black}"
     rounded: "{rounded.control}"
     height: "44px"
     padding: "0 14px"
   chip:
-    backgroundColor: "{colors.wash-lilac}"
-    textColor: "{colors.sub-dusk}"
+    backgroundColor: "{colors.cotton}"
+    textColor: "{colors.warm-gray}"
     rounded: "{rounded.chip}"
     height: "32px"
   chip-on:
-    backgroundColor: "{colors.violet-soft}"
-    textColor: "{colors.violet-ink}"
+    backgroundColor: "{colors.cherry-soft}"
+    textColor: "{colors.maroon}"
   nav-item-active:
-    backgroundColor: "{colors.violet-soft}"
-    textColor: "{colors.violet-ink}"
+    backgroundColor: "{colors.cherry-soft}"
+    textColor: "{colors.maroon}"
     rounded: "{rounded.control}"
     height: "40px"
 ---
@@ -114,47 +116,47 @@ components:
 
 ## Overview
 
-**Creative North Star: "El campus en neblina"**
+**Creative North Star: "El campus en blanco, negro y cereza"**
 
-Una app de campus tranquila: lavanda neblina de fondo, tarjetas blancas que flotan sobre una sombra violeta difusa, y números grandes que se leen de un vistazo. Cada docente es una tarjeta de métrica (nota, dificultad, "lo volvería a llevar"), no una fila de resultados. La interacción es violeta; el rojo UTP queda reservado a la marca y a la acción de reseñar. Densidad media, mucho aire, ningún borde duro.
+Una app de campus tranquila: fondo blanco perla, tarjetas blancas que flotan sobre una sombra neutra difusa, y números grandes que se leen de un vistazo. Cada docente es una tarjeta de métrica (nota, dificultad, "lo volvería a llevar"), no una fila de resultados. Toda la interacción es rojo cereza; el negro noir es el segundo color fuerte. Densidad media, mucho aire, ningún borde duro.
 
 El shell son tres columnas: navegación a la izquierda, contenido al centro, contexto a la derecha. El contexto (ilustración y "Mejor calificados") lo monta cada página en un portal; si la página no aporta contexto, la columna desaparece y el contenido ocupa el ancho completo. En móvil todo colapsa a una barra superior con cajón.
 
 Rechazos confirmados por la build: la lista plana con chips como pantalla de resultados, el negro puro y el blanco puro como fondo, las sombras duras.
 
 **Key Characteristics:**
-- Lavanda neblina con halo radial violeta arriba a la derecha, fijo al scroll.
-- Superficies blancas de 16px de radio con sombra difusa teñida de violeta.
+- Fondo blanco perla liso, sin halo.
+- Superficies blancas de 16px de radio con sombra difusa neutra.
 - Una sola familia tipográfica (Geist); la jerarquía sale de tamaño, peso y números tabulares.
 - Tema oscuro completo por variables (clase `dark`), mismo reparto de roles.
 - Foco y hover elevan la tarjeta 2px en vez de cambiar su color.
 
 ## Colors
 
-Paleta restringida: neutros lavanda teñidos hacia el violeta, un acento violeta para todo lo interactivo y un rojo de marca escaso. Todos los neutros son canales RGB en variables CSS (`--bg`, `--surface`, `--muted`, `--line`, `--fg`, `--sub`, `--accent*`) para que el tema oscuro las reasigne sin tocar componentes.
+Paleta UTP: rojo cereza, blanco y negro sobre neutros cálidos. Un solo acento (cereza) para todo lo interactivo, negro noir como segundo color fuerte y crema como detalle cálido escaso. Todos los colores son canales RGB en variables CSS (`--bg`, `--surface`, `--muted`, `--line`, `--fg`, `--sub`, `--accent`, `--accent-ink`, `--accent-hover`, `--accent-soft`) para que el tema oscuro los reasigne sin tocar componentes.
 
 ### Primary
-- **Violeta de interacción** (#6C5CE7): botón primario, foco, caret, selección, ícono de verificado. En oscuro sube a #9284FF.
-- **Violeta tinta** (#5444D0): hover del primario, texto de enlaces, ítem activo del menú y chip activo (legible sobre violeta suave).
-- **Violeta suave** (#ECE9FD): fondo del ítem activo, chip activo, hover de botón outline.
+- **Rojo cereza** (#810100): botones primarios (Entrar, Continuar, Escribir reseña, Reseñar), foco, caret, selección, enlaces, ítem activo del menú, segmentos activos, barras de métrica y criterios, barra máxima de la distribución, ganador en Comparar. En oscuro el relleno sube a #C1272D y el texto de acento a #FF8A80, para cumplir AA sobre #1B1717.
+- **Granate** (#630000): hover y estado presionado del primario (#A31F24 en oscuro).
+- **Cereza suave** (#F3E6E4): fondo del ítem activo, chips activos y ganador en Comparar (#3C1616 en oscuro).
 
 ### Secondary
-- **Rojo UTP** (#C8102E, hover #9E0B23): el cuadro del logo y el botón "Escribir reseña" dentro de cada tarjeta de docente. Nada más.
+- **Rubí oscuro** (#70000E): cuadro del logo, con la letra en blanco.
+- **Crema** (#C3B79D): detalle cálido escaso; insignia "Top" y un tono de punto de curso.
 
 ### Neutral
-- **Lavanda neblina** (#F4F3FB): fondo de página. En oscuro, #100E1D.
-- **Blanco tarjeta** (#FFFFFF): superficies. En oscuro, #1B182D.
-- **Lila lavado** (#EFEDFA): chips, segmentos, hover de ítems, botón outline.
-- **Línea lila** (#E3E0F3): bordes de input, divisores, scrollbar.
-- **Tinta noche** (#18162B): texto principal.
-- **Gris crepúsculo** (#5E5A7A): texto secundario y etiquetas.
-- **Halo lila** (#D8D0FF): solo en el degradado radial del fondo, al 55% de opacidad.
+- **Cultured Pearl** (#F5F4F2): fondo de página, sin halo. En oscuro, #0E0C0C.
+- **Blanco tarjeta** (#FFFFFF): superficies. En oscuro, #1B1717.
+- **Cotton** (#EDEBDD): rellenos neutros (chips, segmentos, botón secundario, marco de la ilustración). En oscuro, #2C2929.
+- **Cool Gray** (#DCD7D4): bordes de input, divisores, scrollbar. En oscuro, #3A3535.
+- **Noir** (#1B1717): texto principal. En oscuro, el texto pasa a Cotton #EDEBDD.
+- **Gris cálido** (#5E5856): texto secundario y etiquetas (AA sobre Pearl y Cotton). En oscuro, #A9A19E.
 
 ### Named Rules
-**The Red Is Brand Rule.** El rojo UTP aparece en el logo y en la acción de reseñar. Nunca en estados, errores decorativos ni navegación.
-**The Violet Means Touch Rule.** Si es violeta, se puede tocar o está activo. El violeta no decora.
-**The Tinted Neutral Rule.** Ningún neutro es gris puro ni #000/#FFF de fondo; todos llevan matiz violeta.
-**The Course Dot Rule.** Los cursos y avatares se distinguen con un punto o chip de color tomado de una paleta de seis tonos (violeta, cielo, esmeralda, ámbar, rosa, verde azulado) elegida por hash del nombre; es identidad de curso, no semántica.
+**The Red Means Touch Rule.** Si es rojo cereza, se puede tocar o está activo. El rojo no decora.
+**The Ruby Is Brand Rule.** El rubí oscuro #70000E solo aparece en el cuadro del logo; el rojo UTP #C8102E ya no se usa en la interfaz.
+**The Warm Neutral Rule.** Los neutros son cálidos (Pearl, Cotton, Cool Gray, Noir); nada de lavanda, violeta ni grises azulados.
+**The Course Dot Rule.** Cursos y monogramas toman uno de seis tonos (cereza, granate, noir, crema, cool gray, meteorito) por hash del nombre: fondos claros con texto oscuro en claro y #2C2929 con texto tintado en oscuro. Es identidad, no semántica.
 
 ## Typography
 
@@ -185,47 +187,47 @@ Padding de página 16px (24px desde `sm`), 32px arriba en escritorio, 64px abajo
 
 ## Elevation & Depth
 
-Híbrido suave: las superficies blancas se separan del fondo por tono y por una sombra difusa teñida de violeta; no hay bordes en las tarjetas. La profundidad responde al estado, no al reposo.
+Híbrido suave: las superficies blancas se separan del fondo por tono y por una sombra difusa neutra; no hay bordes en las tarjetas. La profundidad responde al estado, no al reposo.
 
 ### Shadow Vocabulary
 - **Card** (`0 1px 2px rgb(76 62 160 / .05), 0 10px 28px -12px rgb(76 62 160 / .18)`): tarjetas, buscador, segmento activo.
 - **Lift** (`0 2px 4px rgb(76 62 160 / .06), 0 18px 40px -14px rgb(76 62 160 / .28)`): hover y foco de tarjetas `lift`, y el cajón móvil. En oscuro ambas pasan a negro puro con más opacidad.
 
 ### Named Rules
-**The Focused Card Lifts Rule.** Una tarjeta interactiva sube 2px y pasa a la sombra Lift en hover, en `:focus-visible` y cuando un hijo tiene foco (`:has(:focus-visible)`); con foco añade un anillo de 2px violeta. Con `prefers-reduced-motion` no hay transición ni desplazamiento. Transición: 180ms, `cubic-bezier(0.16, 1, 0.3, 1)`.
-**The Diffuse Violet Shadow Rule.** Las sombras son anchas, de offset vertical y matiz violeta. Nunca desplazamientos duros ni sombra negra en claro.
+**The Focused Card Lifts Rule.** Una tarjeta interactiva sube 2px y pasa a la sombra Lift en hover, en `:focus-visible` y cuando un hijo tiene foco (`:has(:focus-visible)`); con foco añade un anillo de 2px rojo cereza. Con `prefers-reduced-motion` no hay transición ni desplazamiento. Transición: 180ms, `cubic-bezier(0.16, 1, 0.3, 1)`.
+**The Diffuse Neutral Shadow Rule.** Las sombras son anchas, de offset vertical y en noir a baja opacidad. Nunca desplazamientos duros.
 
 ## Shapes
 
-Formas suaves y consistentes: tarjetas 16px (token `card`), controles y botones 12px (`rounded-xl`), buscador grande 16px, ítems de menú 12px, chips y avatares totalmente redondos. El cuadro del logo es de 12px. El marco vacío de la ilustración usa borde discontinuo violeta al 35% sobre violeta suave al 50%. Sin esquinas rectas ni cortes angulares.
+Formas suaves y consistentes: tarjetas 16px (token `card`), controles y botones 12px (`rounded-xl`), buscador grande 16px, ítems de menú 12px, chips y avatares totalmente redondos. El cuadro del logo es de 12px. El marco vacío de la ilustración usa borde discontinuo Cool Gray sobre Cotton. Sin esquinas rectas ni cortes angulares.
 
 ## Components
 
 ### Buttons
 - **Shape:** 12px, alto 40px, texto 14px semibold, padding horizontal 16px.
-- **Primary:** violeta de interacción con texto blanco (texto #120F24 en oscuro); hover a violeta tinta.
-- **Brand:** rojo UTP con texto blanco; hover rojo profundo. Solo para reseñar. Dentro de la tarjeta de docente baja a 32px de alto, radio 8px.
-- **Outline:** lila lavado con texto de tinta; hover violeta suave con texto violeta tinta.
-- **Ghost:** transparente; hover lila lavado. Los botones de ícono son de 36px cuadrados.
+- **Primary:** rojo cereza con texto blanco; hover granate.
+- **Brand (reseñar):** mismo rojo cereza que el primario, con texto blanco y hover granate. Dentro de la tarjeta de docente baja a 32px de alto, radio 8px.
+- **Outline:** relleno Cotton con texto noir; hover Cool Gray.
+- **Ghost:** transparente; hover Cotton. Los botones de ícono son de 36px cuadrados.
 - **Disabled:** 50% de opacidad, sin eventos.
 
 ### Chips
-- **Style:** píldora de 32px, fondo lila lavado, texto gris crepúsculo 12px medio.
-- **State:** activo en violeta suave con texto violeta tinta. Los chips de curso dentro de tarjeta son píldoras estáticas de 12px.
+- **Style:** píldora de 32px, fondo Cotton, texto gris cálido 12px medio.
+- **State:** activo en cereza suave con texto cereza. Los chips de curso dentro de tarjeta son píldoras estáticas de 12px.
 
 ### Cards / Containers
 - **Corner Style:** 16px. **Background:** blanco tarjeta. **Shadow:** Card en reposo, Lift en estado. **Border:** ninguno. **Padding:** 20/24px.
 - **Tarjeta de docente:** nombre en 17px semibold con el enlace extendido a toda la tarjeta, rango y verificado, departamento, cursos como chips, y una fila de métricas (nota con estrella ámbar, barra de dificultad, "% lo volvería a llevar") con el botón rojo a la derecha.
 
 ### Inputs / Fields
-- **Style:** 44px de alto, 12px de radio, borde línea lila, fondo blanco, texto 14px.
-- **Focus:** borde violeta y halo de 4px violeta al 15%. Placeholder en gris crepúsculo.
+- **Style:** 44px de alto, 12px de radio, borde Cool Gray, fondo blanco, texto 14px.
+- **Focus:** borde cereza y halo de 4px cereza al 15%. Placeholder en gris cálido.
 - **Buscador:** 56px de alto, 16px de radio, borde transparente y sombra Card, ícono a la izquierda.
 
 ### Navigation
-- Ítems de 40px, ícono de 18px + etiqueta 14px medio. Reposo gris crepúsculo; hover lila lavado; activo violeta suave con texto violeta tinta. Docentes está activo en sus subrutas; el resto requiere coincidencia exacta.
-- Pie de la sidebar: avatar de iniciales en círculo violeta suave, tema y salir. En el riel se apila en vertical.
-- **Segmento:** contenedor lila lavado con opciones de 12px semibold; la activa es blanca con sombra Card.
+- Ítems de 40px, ícono de 18px + etiqueta 14px medio. Reposo gris cálido; hover Cotton; activo cereza suave con texto cereza. Docentes está activo en sus subrutas; el resto requiere coincidencia exacta.
+- Pie de la sidebar: avatar de iniciales en círculo cereza suave, tema y salir. En el riel se apila en vertical.
+- **Segmento:** contenedor Cotton con opciones de 12px semibold; la activa es blanca con sombra Card.
 
 ### Ranura de ilustración (signature)
 Columna de contexto con la ilustración propia en `public/arte/hero.png`; si falta, muestra un marco discontinuo con la ruta esperada. No se inventan ilustraciones de personas.
@@ -235,18 +237,18 @@ Columna de contexto con la ilustración propia en `public/arte/hero.png`; si fal
 ### Do:
 - **Do** usar variables RGB (`bg-bg`, `bg-surface`, `text-sub`, `bg-accent-soft`) para todo color de superficie y texto, de modo que el tema oscuro funcione sin ramas.
 - **Do** poner `num` en cada cifra y dejar las métricas como lo más grande de su tarjeta.
-- **Do** elevar tarjetas interactivas con `lift` y mantener el foco visible con el anillo violeta de 2px.
+- **Do** elevar tarjetas interactivas con `lift` y mantener el foco visible con el anillo cereza de 2px.
 - **Do** mostrar "Sin reseñas aún" y "—" cuando no hay datos reales.
 - **Do** mantener objetivos táctiles de al menos 36px (40–44px en controles principales).
 
 ### Don't:
-- **Don't** usar el rojo UTP para nada fuera del logo y la acción de reseñar.
+- **Don't** usar rojo cereza para decorar, ni volver a la lavanda o al violeta.
 - **Don't** usar #000 ni #FFF como fondo de página, ni bordes de 1px como separación de tarjetas.
-- **Don't** dar sombras duras ni desplazadas; todas son difusas y violetas.
+- **Don't** dar sombras duras ni desplazadas; todas son difusas y neutras.
 - **Don't** volver a una lista plana de docentes con filas y chips como contenido principal.
 - **Don't** añadir una segunda familia tipográfica ni cifras proporcionales en métricas.
 - **Don't** rodear una tarjeta con otra tarjeta; la columna de contexto apila tarjetas, no las anida.
 
 ## Not canonized
 
-La build usa `text-[11px]` en el historial del perfil y varios `text-[15px]`/`text-[17px]` sueltos; son valores puntuales, no escala. El texto de 11px queda bajo el piso de legibilidad y se registra como defecto de la build, no como regla. El contrato pedía tarjetas de 20px y fondo #F3F2FA; la build usa 16px y #F4F3FB y esos valores mandan.
+La build usa `text-[11px]` en el historial del perfil y varios `text-[15px]`/`text-[17px]` sueltos; son valores puntuales, no escala. El texto de 11px queda bajo el piso de legibilidad y se registra como defecto de la build, no como regla. El contrato pedía tarjetas de 20px; la build usa 16px y ese valor manda. La paleta lavanda/violeta original se sustituyó por la paleta UTP del usuario.

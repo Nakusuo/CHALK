@@ -4,95 +4,217 @@
   "title": "Design System: CHALK",
   "extensions": {
     "colorMeta": {
-      "violet-interaction": { "role": "primary", "displayName": "Violeta de interacción", "canonical": "#6C5CE7", "tonalRamp": ["#2A2470", "#3B31A0", "#5444D0", "#6C5CE7", "#9284FF", "#B5ABFF", "#D8D0FF", "#ECE9FD"] },
-      "utp-red": { "role": "secondary", "displayName": "Rojo UTP", "canonical": "#C8102E", "tonalRamp": ["#5C0716", "#7C0A1C", "#9E0B23", "#C8102E", "#E01636", "#F0627A", "#FBE4E8", "#FDF2F4"] },
-      "lavender-mist": { "role": "neutral", "displayName": "Lavanda neblina", "canonical": "#F4F3FB", "tonalRamp": ["#18162B", "#3A3656", "#5E5A7A", "#8F8BAA", "#C2BFD8", "#E3E0F3", "#EFEDFA", "#F4F3FB"] }
+      "cherry-red": {
+        "role": "primary",
+        "displayName": "Rojo cereza",
+        "canonical": "#810100",
+        "tonalRamp": [
+          "#3C1616",
+          "#630000",
+          "#70000E",
+          "#810100",
+          "#A31F24",
+          "#C1272D",
+          "#FF8A80",
+          "#F3E6E4"
+        ]
+      },
+      "noir-black": {
+        "role": "secondary",
+        "displayName": "Negro noir",
+        "canonical": "#1B1717",
+        "tonalRamp": [
+          "#030303",
+          "#0E0C0C",
+          "#1B1717",
+          "#2C2929",
+          "#3A3535",
+          "#5E5856",
+          "#A9A19E",
+          "#DCD7D4"
+        ]
+      },
+      "creme": {
+        "role": "tertiary",
+        "displayName": "Crema",
+        "canonical": "#C3B79D",
+        "tonalRamp": [
+          "#4A3F27",
+          "#5A4E33",
+          "#8C7F63",
+          "#C3B79D",
+          "#D9D0BC",
+          "#EDEBDD"
+        ]
+      },
+      "cultured-pearl": {
+        "role": "neutral",
+        "displayName": "Cultured Pearl",
+        "canonical": "#F5F4F2",
+        "tonalRamp": [
+          "#1B1717",
+          "#2C2929",
+          "#5E5856",
+          "#A9A19E",
+          "#DCD7D4",
+          "#EDEBDD",
+          "#F5F4F2",
+          "#FFFFFF"
+        ]
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Saludo de la portada de docentes." },
-      "metric": { "displayName": "Métrica", "purpose": "Cifras grandes tabulares de las tarjetas de métrica." },
-      "title": { "displayName": "Título", "purpose": "Nombre de docente y de facultad en tarjeta." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Saludo de la portada de docentes."
+      },
+      "metric": {
+        "displayName": "Métrica",
+        "purpose": "Cifras grandes tabulares de las tarjetas de métrica."
+      },
+      "title": {
+        "displayName": "Título",
+        "purpose": "Nombre de docente y de facultad en tarjeta."
+      }
     },
     "shadows": [
-      { "name": "card", "value": "0 1px 2px rgb(76 62 160 / 0.05), 0 10px 28px -12px rgb(76 62 160 / 0.18)", "purpose": "Tarjetas en reposo." },
-      { "name": "lift", "value": "0 2px 4px rgb(76 62 160 / 0.06), 0 18px 40px -14px rgb(76 62 160 / 0.28)", "purpose": "Hover y foco de tarjetas, cajón móvil." }
+      {
+        "name": "card",
+        "value": "0 1px 2px rgb(76 62 160 / 0.05), 0 10px 28px -12px rgb(76 62 160 / 0.18)",
+        "purpose": "Tarjetas en reposo."
+      },
+      {
+        "name": "lift",
+        "value": "0 2px 4px rgb(76 62 160 / 0.06), 0 18px 40px -14px rgb(76 62 160 / 0.28)",
+        "purpose": "Hover y foco de tarjetas, cajón móvil."
+      }
     ],
     "motion": [
-      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Elevación de tarjetas, 180ms." }
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Elevación de tarjetas, 180ms."
+      }
     ],
     "breakpoints": [
-      { "name": "lg", "value": "1024px" },
-      { "name": "xl", "value": "1280px" }
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
     ]
   },
   "components": [
     {
-      "name": "Botón primario", "kind": "button", "refersTo": "button-primary",
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "button-primary",
       "description": "Acción principal de interacción.",
       "html": "<button class=\"ds-btn-primary\">Entrar</button>",
-      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 16px;border:0;border-radius:12px;background:#6C5CE7;color:#fff;font:600 14px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-primary:hover{background:#5444D0}.ds-btn-primary:focus-visible{outline:2px solid #6C5CE7;outline-offset:2px}"
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 16px;border:0;border-radius:12px;background:#810100;color:#fff;font:600 14px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-primary:hover{background:#630000}.ds-btn-primary:focus-visible{outline:2px solid #810100;outline-offset:2px}"
     },
     {
-      "name": "Botón de reseña", "kind": "button", "refersTo": "button-brand",
-      "description": "CTA rojo UTP para escribir una reseña.",
+      "name": "Botón de reseña",
+      "kind": "button",
+      "refersTo": "button-brand",
+      "description": "CTA rojo cereza para escribir una reseña.",
       "html": "<button class=\"ds-btn-brand\">Escribir reseña</button>",
-      "css": ".ds-btn-brand{height:32px;padding:0 12px;border:0;border-radius:8px;background:#C8102E;color:#fff;font:600 12px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-brand:hover{background:#9E0B23}.ds-btn-brand:focus-visible{outline:2px solid #6C5CE7;outline-offset:2px}"
+      "css": ".ds-btn-brand{height:32px;padding:0 12px;border:0;border-radius:8px;background:#810100;color:#fff;font:600 12px Geist,system-ui,sans-serif;transition:background .15s}.ds-btn-brand:hover{background:#630000}.ds-btn-brand:focus-visible{outline:2px solid #810100;outline-offset:2px}"
     },
     {
-      "name": "Campo de texto", "kind": "input", "refersTo": "input",
-      "description": "Input estándar con halo violeta al enfocar.",
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Input estándar con halo cereza al enfocar.",
       "html": "<input class=\"ds-input\" placeholder=\"U20240001\">",
-      "css": ".ds-input{height:44px;width:100%;box-sizing:border-box;padding:0 14px;border:1px solid #E3E0F3;border-radius:12px;background:#fff;color:#18162B;font:14px Geist,system-ui,sans-serif;outline:none;transition:.15s}.ds-input::placeholder{color:#5E5A7A}.ds-input:focus{border-color:#6C5CE7;box-shadow:0 0 0 4px rgba(108,92,231,.15)}"
+      "css": ".ds-input{height:44px;width:100%;box-sizing:border-box;padding:0 14px;border:1px solid #DCD7D4;border-radius:12px;background:#fff;color:#1B1717;font:14px Geist,system-ui,sans-serif;outline:none;transition:.15s}.ds-input::placeholder{color:#5E5856}.ds-input:focus{border-color:#810100;box-shadow:0 0 0 4px rgba(129,1,0,.15)}"
     },
     {
-      "name": "Chip", "kind": "chip", "refersTo": "chip",
-      "description": "Filtro en píldora; el activo va en violeta suave.",
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filtro en píldora; el activo va en cereza suave.",
       "html": "<span class=\"ds-chip\">Sistemas</span> <span class=\"ds-chip ds-chip-on\">Software</span>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:9999px;background:#EFEDFA;color:#5E5A7A;font:500 12px Geist,system-ui,sans-serif}.ds-chip:hover{color:#18162B}.ds-chip-on{background:#ECE9FD;color:#5444D0}"
+      "css": ".ds-chip{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:9999px;background:#EDEBDD;color:#5E5856;font:500 12px Geist,system-ui,sans-serif}.ds-chip:hover{color:#1B1717}.ds-chip-on{background:#F3E6E4;color:#630000}"
     },
     {
-      "name": "Ítem de navegación", "kind": "nav", "refersTo": "nav-item-active",
-      "description": "Ítem de la sidebar; activo en violeta suave.",
+      "name": "Ítem de navegación",
+      "kind": "nav",
+      "refersTo": "nav-item-active",
+      "description": "Ítem de la sidebar; activo en cereza suave.",
       "html": "<a class=\"ds-nav ds-nav-on\" href=\"#\">Docentes</a>",
-      "css": ".ds-nav{display:flex;align-items:center;height:40px;padding:0 12px;border-radius:12px;color:#5E5A7A;font:500 14px Geist,system-ui,sans-serif;text-decoration:none;transition:background .15s}.ds-nav:hover{background:#EFEDFA;color:#18162B}.ds-nav-on,.ds-nav-on:hover{background:#ECE9FD;color:#5444D0}"
+      "css": ".ds-nav{display:flex;align-items:center;height:40px;padding:0 12px;border-radius:12px;color:#5E5856;font:500 14px Geist,system-ui,sans-serif;text-decoration:none;transition:background .15s}.ds-nav:hover{background:#EDEBDD;color:#1B1717}.ds-nav-on,.ds-nav-on:hover{background:#F3E6E4;color:#630000}"
     },
     {
-      "name": "Tarjeta de métrica", "kind": "card", "refersTo": "card",
+      "name": "Tarjeta de métrica",
+      "kind": "card",
+      "refersTo": "card",
       "description": "Superficie blanca que se eleva 2px en hover y foco.",
       "html": "<article class=\"ds-card\"><b class=\"ds-num\">4.6</b><span>12 reseñas</span></article>",
-      "css": ".ds-card{display:flex;align-items:baseline;gap:8px;padding:24px;border-radius:16px;background:#fff;color:#18162B;font:14px Geist,system-ui,sans-serif;box-shadow:0 1px 2px rgba(76,62,160,.05),0 10px 28px -12px rgba(76,62,160,.18);transition:transform .18s cubic-bezier(.16,1,.3,1),box-shadow .18s cubic-bezier(.16,1,.3,1)}.ds-card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(76,62,160,.06),0 18px 40px -14px rgba(76,62,160,.28)}.ds-num{font-size:36px;line-height:1;font-weight:700;letter-spacing:-.025em;font-variant-numeric:tabular-nums}"
+      "css": ".ds-card{display:flex;align-items:baseline;gap:8px;padding:24px;border-radius:16px;background:#fff;color:#1B1717;font:14px Geist,system-ui,sans-serif;box-shadow:0 1px 2px rgba(76,62,160,.05),0 10px 28px -12px rgba(76,62,160,.18);transition:transform .18s cubic-bezier(.16,1,.3,1),box-shadow .18s cubic-bezier(.16,1,.3,1)}.ds-card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(76,62,160,.06),0 18px 40px -14px rgba(76,62,160,.28)}.ds-num{font-size:36px;line-height:1;font-weight:700;letter-spacing:-.025em;font-variant-numeric:tabular-nums}"
     }
   ],
   "narrative": {
-    "northStar": "El campus en neblina",
-    "overview": "Una app de campus tranquila: lavanda neblina de fondo, tarjetas blancas que flotan sobre una sombra violeta difusa, y números grandes que se leen de un vistazo. Cada docente es una tarjeta de métrica, no una fila de resultados. La interacción es violeta; el rojo UTP queda reservado a la marca y a la acción de reseñar.",
+    "northStar": "El campus en blanco, negro y cereza",
+    "overview": "Una app de campus tranquila: fondo blanco perla, tarjetas blancas que flotan sobre una sombra neutra difusa, y números grandes que se leen de un vistazo. Cada docente es una tarjeta de métrica, no una fila de resultados. Toda la interacción es rojo cereza; el negro noir es el segundo color fuerte.",
     "keyCharacteristics": [
-      "Lavanda neblina con halo radial violeta arriba a la derecha, fijo al scroll.",
-      "Superficies blancas de 16px de radio con sombra difusa teñida de violeta.",
+      "Fondo blanco perla (#F5F4F2) liso, sin halo.",
+      "Superficies blancas de 16px de radio con sombra difusa neutra.",
       "Una sola familia tipográfica (Geist); la jerarquía sale de tamaño, peso y números tabulares.",
       "Tema oscuro completo por variables (clase dark), mismo reparto de roles.",
       "Foco y hover elevan la tarjeta 2px en vez de cambiar su color."
     ],
     "rules": [
-      { "name": "The Red Is Brand Rule", "body": "El rojo UTP aparece en el logo y en la acción de reseñar. Nunca en estados, errores decorativos ni navegación.", "section": "colors" },
-      { "name": "The Violet Means Touch Rule", "body": "Si es violeta, se puede tocar o está activo. El violeta no decora.", "section": "colors" },
-      { "name": "The Tinted Neutral Rule", "body": "Ningún neutro es gris puro ni #000/#FFF de fondo; todos llevan matiz violeta.", "section": "colors" },
-      { "name": "The Tabular Numbers Rule", "body": "Toda cifra lleva la clase num (tabular-nums). Las cifras son lo más grande de cada tarjeta.", "section": "typography" },
-      { "name": "The One Family Rule", "body": "Una familia, jerarquía por peso y tamaño.", "section": "typography" },
-      { "name": "The Focused Card Lifts Rule", "body": "Una tarjeta interactiva sube 2px y pasa a la sombra Lift en hover y foco; con foco añade anillo de 2px violeta. Con prefers-reduced-motion no hay desplazamiento.", "section": "elevation" },
-      { "name": "The Diffuse Violet Shadow Rule", "body": "Las sombras son anchas, de offset vertical y matiz violeta. Nunca desplazamientos duros.", "section": "elevation" }
+      {
+        "name": "The Ruby Is Brand Rule",
+        "body": "El rubí oscuro #70000E solo aparece en el cuadro del logo.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red Means Touch Rule",
+        "body": "Si es rojo cereza, se puede tocar o está activo. El rojo no decora.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Neutral Rule",
+        "body": "Los neutros son cálidos (Pearl, Cotton, Cool Gray, Noir); nada de lavanda ni violeta.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Toda cifra lleva la clase num (tabular-nums). Las cifras son lo más grande de cada tarjeta.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Una familia, jerarquía por peso y tamaño.",
+        "section": "typography"
+      },
+      {
+        "name": "The Focused Card Lifts Rule",
+        "body": "Una tarjeta interactiva sube 2px y pasa a la sombra Lift en hover y foco; con foco añade anillo de 2px cereza. Con prefers-reduced-motion no hay desplazamiento.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Diffuse Neutral Shadow Rule",
+        "body": "Las sombras son anchas, de offset vertical y en noir a baja opacidad. Nunca desplazamientos duros.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do usar variables RGB (bg-bg, bg-surface, text-sub, bg-accent-soft) para todo color de superficie y texto.",
       "Do poner num en cada cifra y dejar las métricas como lo más grande de su tarjeta.",
-      "Do elevar tarjetas interactivas con lift y mantener el foco visible con el anillo violeta de 2px.",
+      "Do elevar tarjetas interactivas con lift y mantener el foco visible con el anillo cereza de 2px.",
       "Do mostrar \"Sin reseñas aún\" y \"—\" cuando no hay datos reales.",
       "Do mantener objetivos táctiles de al menos 36px."
     ],
     "donts": [
-      "Don't usar el rojo UTP para nada fuera del logo y la acción de reseñar.",
+      "Don't usar rojo cereza para decorar, ni volver a la lavanda o al violeta.",
       "Don't usar #000 ni #FFF como fondo de página, ni bordes de 1px como separación de tarjetas.",
-      "Don't dar sombras duras ni desplazadas; todas son difusas y violetas.",
+      "Don't dar sombras duras ni desplazadas; todas son difusas y neutras.",
       "Don't volver a una lista plana de docentes con filas y chips como contenido principal.",
       "Don't añadir una segunda familia tipográfica ni cifras proporcionales en métricas.",
       "Don't rodear una tarjeta con otra tarjeta."

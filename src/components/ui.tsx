@@ -83,8 +83,8 @@ export function Difficulty({ value }: { value: number }) {
 export function BadgeTag({ badge }: { badge: BadgeT | null }) {
   if (!badge) return null;
   const cls = {
-    top: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
-    trending: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
+    top: "bg-[#C3B79D]/35 text-[#4A3F27] dark:text-[#C3B79D]",
+    trending: "bg-accent-soft text-accent-ink",
     recommended: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
   }[badge.type];
   return <span className={cx("rounded-md px-2 py-0.5 text-[11px] font-semibold", cls)}>{badge.label}</span>;
@@ -135,12 +135,12 @@ export function Stat({
 }
 
 const TINTS = [
-  { bg: "bg-violet-100 text-violet-800 dark:bg-violet-400/20 dark:text-violet-100", dot: "bg-violet-500" },
-  { bg: "bg-sky-100 text-sky-800 dark:bg-sky-400/20 dark:text-sky-100", dot: "bg-sky-500" },
-  { bg: "bg-emerald-100 text-emerald-800 dark:bg-emerald-400/20 dark:text-emerald-100", dot: "bg-emerald-500" },
-  { bg: "bg-amber-100 text-amber-900 dark:bg-amber-400/20 dark:text-amber-100", dot: "bg-amber-500" },
-  { bg: "bg-rose-100 text-rose-800 dark:bg-rose-400/20 dark:text-rose-100", dot: "bg-rose-500" },
-  { bg: "bg-teal-100 text-teal-800 dark:bg-teal-400/20 dark:text-teal-100", dot: "bg-teal-500" },
+  { bg: "bg-[#F3E6E4] text-[#630000] dark:bg-[#2C2929] dark:text-[#FF8A80]", dot: "bg-[#810100] dark:bg-[#C1272D]" },
+  { bg: "bg-[#EBD9D6] text-[#630000] dark:bg-[#2C2929] dark:text-[#F3B3AC]", dot: "bg-[#630000] dark:bg-[#F3B3AC]" },
+  { bg: "bg-[#E4E1DF] text-[#1B1717] dark:bg-[#2C2929] dark:text-[#EDEBDD]", dot: "bg-[#1B1717] dark:bg-[#EDEBDD]" },
+  { bg: "bg-[#EDEBDD] text-[#5A4E33] dark:bg-[#2C2929] dark:text-[#C3B79D]", dot: "bg-[#C3B79D]" },
+  { bg: "bg-[#F0EDEB] text-[#4A4443] dark:bg-[#2C2929] dark:text-[#DCD7D4]", dot: "bg-[#DCD7D4] dark:bg-[#A9A19E]" },
+  { bg: "bg-[#DCD7D4] text-[#2C2929] dark:bg-[#2C2929] dark:text-[#A9A19E]", dot: "bg-[#2C2929] dark:bg-[#6E6664]" },
 ];
 
 /** Tono estable por facultad/departamento (misma entrada → mismo color). */

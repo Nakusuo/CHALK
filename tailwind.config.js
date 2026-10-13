@@ -8,7 +8,7 @@ export default {
         sans: ["Geist", "system-ui", "sans-serif"],
       },
       colors: {
-        brand: { DEFAULT: "#C8102E", 50: "#FDF2F4", 100: "#FBE4E8", 500: "#E01636", 600: "#C8102E", 700: "#9E0B23" },
+        brand: { DEFAULT: "#70000E", ruby: "#70000E", cherry: "#810100", maroon: "#630000", creme: "#C3B79D", cotton: "#EDEBDD", noir: "#1B1717" },
         accent: {
           DEFAULT: "rgb(var(--accent) / <alpha-value>)",
           ink: "rgb(var(--accent-ink) / <alpha-value>)",
