@@ -35,12 +35,21 @@ function write(key: string, value: unknown) {
   }
 }
 
-let state: State = {
-  user: read(KEYS.user, null),
-  reviews: read(KEYS.reviews, []),
-  helpful: read(KEYS.helpful, {}),
-  favorites: read(KEYS.favorites, []),
-};
+function load(): State {
+  return {
+    user: read(KEYS.user, null),
+    reviews: read(KEYS.reviews, []),
+    helpful: read(KEYS.helpful, {}),
+    favorites: read(KEYS.favorites, []),
+  };
+}
+
+let state: State = load();
+
+/** Solo para tests: vuelve a leer localStorage. */
+export function resetStoreForTests() {
+  state = load();
+}
 
 const listeners = new Set<() => void>();
 
