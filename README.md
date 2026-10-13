@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://github.com/Nakusuo"><img src="https://raw.githubusercontent.com/Nakusuo/Nakusuo/main/assets/covers/CHALK.svg" width="100%" alt="CHALK — Nakusu"/></a>
+</p>
+
 # CHALK
 
 CHALK es una comunidad docente para estudiantes de la UTP: un sitio donde puedes buscar profesores por facultad, sede o curso, ver cómo los califican otros alumnos y dejar tu propia reseña antes de matricularte. La idea nació de algo muy simple: todos preguntamos "¿qué tal es este profe?" antes de elegir horario, y quería tener esas respuestas en un solo lugar.
