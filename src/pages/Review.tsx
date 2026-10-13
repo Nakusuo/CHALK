@@ -245,7 +245,7 @@ export default function ReviewPage() {
 
           {step === 4 && (
             <div className="rounded-xl border border-dashed border-line px-5">
-              <ReviewItem r={draft} />
+              <ReviewItem r={draft} readOnly />
             </div>
           )}
 

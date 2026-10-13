@@ -3,7 +3,7 @@ import type { Review } from "../data/types";
 import { store, useStore } from "../lib/store";
 import { Avatar, cx, Stars, Tag } from "./ui";
 
-export default function ReviewItem({ r, showProf }: { r: Review; showProf?: string }) {
+export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showProf?: string; readOnly?: boolean }) {
   const voted = useStore((s) => !!s.helpful[r.id]);
   const mine = r.id.startsWith("user-");
   return (
@@ -36,16 +36,18 @@ export default function ReviewItem({ r, showProf }: { r: Review; showProf?: stri
             {r.wouldTakeAgain ? "Lo volvería a llevar" : "No lo volvería a llevar"}
           </span>
         )}
-        <div className="ml-auto flex items-center gap-1">
-          {mine && (
-            <button className="btn-ghost h-8 px-2 text-xs text-sub" onClick={() => store.deleteReview(r.id)}>
-              <Trash2 size={14} /> Borrar
+        {!readOnly && (
+          <div className="ml-auto flex items-center gap-1">
+            {mine && (
+              <button className="btn-ghost h-8 px-2 text-xs text-sub" onClick={() => store.deleteReview(r.id)}>
+                <Trash2 size={14} /> Borrar
+              </button>
+            )}
+            <button className={cx("btn-ghost h-8 px-2 text-xs", voted ? "text-brand" : "text-sub")} aria-pressed={voted} onClick={() => store.toggleHelpful(r.id)}>
+              <ThumbsUp size={14} fill={voted ? "currentColor" : "none"} /> Útil · {r.helpful + (voted ? 1 : 0)}
             </button>
-          )}
-          <button className={cx("btn-ghost h-8 px-2 text-xs", voted ? "text-brand" : "text-sub")} aria-pressed={voted} onClick={() => store.toggleHelpful(r.id)}>
-            <ThumbsUp size={14} fill={voted ? "currentColor" : "none"} /> Útil · {r.helpful + (voted ? 1 : 0)}
-          </button>
-        </div>
+          </div>
+        )}
       </div>
     </article>
   );
