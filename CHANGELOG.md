@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1 — 2026-10-13
+- Solo quedan los 22 docentes actuales; se retiraron los 25 anteriores.
+
 ## 2.0.0 — 2026-10-13
 - Reescritura en Vite + React + TypeScript con diseño nuevo y modo claro/oscuro.
 - 22 docentes reales de la UTP Lima Norte; todas las métricas salen de las reseñas de los alumnos.
