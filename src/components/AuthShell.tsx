@@ -15,8 +15,8 @@ export default function AuthShell({ title, subtitle, children }: { title: string
     <div className="grid min-h-screen gap-6 p-4 sm:p-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
       <aside className="hidden flex-col rounded-[24px] bg-accent-soft/70 p-10 lg:flex xl:p-12">
         <Logo to="/" />
-        <ArtSlot className="mt-10 aspect-[4/3] w-full" alt="Ilustración de CHALK" />
-        <div className="mt-auto max-w-md pt-10">
+        <ArtSlot className="mt-8 aspect-[4/3] max-h-[38vh] w-full" alt="Ilustración de CHALK" />
+        <div className="mt-auto max-w-md pt-8">
           <h2 className="text-[34px] font-bold leading-[1.15] tracking-tight">¿Qué tal es este profe? Pregúntale a quien ya lo llevó.</h2>
           <ul className="mt-7 space-y-3">
             {POINTS.map(({ icon: Icon, text }) => (

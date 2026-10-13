@@ -111,13 +111,25 @@ export function Avatar({ children, size = 40, className }: { children: ReactNode
   );
 }
 
-export function Stat({ label, value, hint, children }: { label: string; value: ReactNode; hint?: ReactNode; children?: ReactNode }) {
+export function Stat({
+  label,
+  value,
+  hint,
+  children,
+  compact,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  children?: ReactNode;
+  compact?: boolean;
+}) {
   return (
-    <div className="card flex flex-col p-5">
-      <div className="text-sm font-medium text-sub">{label}</div>
-      <div className="num mt-2 text-4xl font-bold tracking-tight">{value}</div>
-      {hint && <div className="mt-1 text-xs text-sub">{hint}</div>}
-      {children && <div className="mt-auto pt-4">{children}</div>}
+    <div className={cx("card flex min-w-0 flex-col", compact ? "p-3 sm:p-5" : "p-5")}>
+      <div className={cx("truncate font-medium text-sub", compact ? "text-xs sm:text-sm" : "text-sm")}>{label}</div>
+      <div className={cx("num font-bold tracking-tight", compact ? "mt-1 text-2xl sm:mt-2 sm:text-4xl" : "mt-2 text-4xl")}>{value}</div>
+      {hint && <div className={cx("mt-1 text-xs text-sub", compact && "hidden sm:block")}>{hint}</div>}
+      {children && <div className={cx("mt-auto pt-4", compact && "hidden sm:block")}>{children}</div>}
     </div>
   );
 }

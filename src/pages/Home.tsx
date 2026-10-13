@@ -81,16 +81,22 @@ export default function Home() {
         <p className="mt-1 text-sub">Encuentra al profe ideal antes de matricularte.</p>
       </div>
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <Stat label="Docentes" value={professors.length} hint={`${COURSE_COUNT} cursos en Lima Norte`} />
+      <div className="mb-8 grid grid-cols-3 gap-2 sm:gap-4">
+        <Stat compact label="Docentes" value={professors.length} hint={`${COURSE_COUNT} cursos en Lima Norte`} />
         <Stat
+          compact
           label="Reseñas"
           value={totalReviews.toLocaleString("es-PE")}
           hint={`${ratedList.length} de ${professors.length} docentes con reseñas`}
         >
           <Meter value={ratedList.length} max={professors.length} />
         </Stat>
-        <Stat label="Nota promedio" value={avg === null ? "—" : avg.toFixed(2)} hint={avg === null ? "aún sin reseñas" : "sobre 5.0"}>
+        <Stat
+          compact
+          label="Nota promedio"
+          value={avg === null ? "—" : avg.toFixed(2)}
+          hint={avg === null ? "aún sin reseñas" : "sobre 5.0"}
+        >
           {avg !== null && <Meter value={avg} />}
         </Stat>
       </div>

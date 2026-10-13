@@ -1,6 +1,6 @@
 import { ArrowLeftRight, GitCompare, Trophy, X } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
-import { cx, Empty, Monogram, PageHeader, Stars } from "../components/ui";
+import { cx, Empty, Monogram, PageHeader, plural, Stars } from "../components/ui";
 import { criteriaLabels, getProfessor, professors, profMetrics, workloadLabels } from "../data/db";
 import type { CriteriaKey, Professor } from "../data/types";
 import { useStore } from "../lib/store";
@@ -149,17 +149,17 @@ export default function Compare() {
   return (
     <>
       <PageHeader title="Comparar docentes" subtitle="Ponlos lado a lado antes de elegir horario." />
-      <div className="relative grid grid-cols-2 gap-3 sm:gap-5">
+      <div className="relative grid gap-3 sm:grid-cols-2 sm:gap-5">
         <Picker label="Docente A" value={a} other={b} onChange={(v) => set("a", v)} />
-        <Picker label="Docente B" value={b} other={a} onChange={(v) => set("b", v)} />
         <button
-          className="btn absolute left-1/2 top-[108px] z-10 h-10 w-10 -translate-x-1/2 bg-surface px-0 text-sub shadow-card hover:text-accent-ink"
+          className="btn mx-auto h-10 w-10 sm:absolute sm:left-1/2 sm:top-[108px] sm:z-10 sm:-translate-x-1/2 bg-surface px-0 text-sub shadow-card hover:text-accent-ink"
           aria-label="Intercambiar"
           onClick={swap}
           disabled={!a && !b}
         >
           <ArrowLeftRight size={16} />
         </button>
+        <Picker label="Docente B" value={b} other={a} onChange={(v) => set("b", v)} />
       </div>
 
       {a && b ? (
@@ -170,7 +170,7 @@ export default function Compare() {
               return (
                 <div key={k} className={cx("text-sm font-semibold", lead ? "text-accent-ink" : "text-sub")}>
                   {lead && <Trophy size={16} className="mr-1 inline" aria-hidden />}
-                  <span className="num">{k === "a" ? wins.a : wins.b}</span> criterios
+                  <span className="num">{plural(k === "a" ? wins.a : wins.b, "criterio", "criterios")}</span>
                 </div>
               );
             })}

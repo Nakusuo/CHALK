@@ -22,3 +22,9 @@
 - `public/arte/hero.png` no existe, así que se ve el marco vacío.
 - Hay que revisar a ojo la posición del botón Intercambiar en Compare (`top-[108px]`).
 - Faltan DESIGN.md y el veredicto de la revisión final (los pide el contrato; aún no se hacen).
+
+## Ronda de correcciones (capturas)
+1. AuthShell: el arte queda en `aspect-[4/3] max-h-[38vh]`, así el titular y los 3 puntos caben en un alto de 900px.
+2. Compare: bajo 640px los selectores se apilan en una sola columna (select a lo ancho con la X al lado, monograma y nombre debajo, Intercambiar entre ambos). Desde 640px vuelve a ser lado a lado. El encabezado de victorias usa `plural` ("1 criterio" / "N criterios").
+3. Home: las métricas son una fila de 3 columnas compacta en móvil (`Stat compact`: número 2xl, sin subtítulo ni barra bajo 640px).
+4. Sidebar: el contador de un curso solo se muestra si es mayor que 1.

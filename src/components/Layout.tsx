@@ -92,9 +92,11 @@ function CourseList() {
             >
               <span className={cx("h-2 w-2 shrink-0 rounded-full", tint(c.name).dot)} aria-hidden />
               <span className="min-w-0 flex-1 truncate">{c.name}</span>
-              <span className="num text-xs text-sub" aria-label={`${c.profs.length} docentes`}>
-                {c.profs.length}
-              </span>
+              {c.profs.length > 1 && (
+                <span className="num text-xs text-sub" aria-label={`${c.profs.length} docentes`}>
+                  {c.profs.length}
+                </span>
+              )}
             </Link>
           </li>
         ))}
