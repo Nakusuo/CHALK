@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { allCourses, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profStats } from "./db";
 import type { Review } from "./types";
 
-const p1 = getProfessor(1)!;
+// Fixture con nota semilla: los docentes reales arrancan sin reseñas.
+const p1 = { ...getProfessor(1)!, score: 4.7, reviews: 134 };
 const review = (score: number): Review => ({
   id: "user-1", profId: 1, user: "X", initials: "X", date: "Mayo 2025", score, tags: [], tagType: [],
   text: "", helpful: 0, course: "Principios de Algoritmos", difficulty: 3, wouldTakeAgain: true,
@@ -18,6 +19,9 @@ describe("validadores", () => {
 });
 
 describe("profStats", () => {
+  it("docente sin reseñas promedia solo las del usuario", () => {
+    expect(profStats(getProfessor(1)!, [review(4)])).toEqual({ score: 4, count: 1 });
+  });
   it("sin reseñas propias usa la nota semilla", () => {
     expect(profStats(p1, [])).toEqual({ score: 4.7, count: 134 });
   });
