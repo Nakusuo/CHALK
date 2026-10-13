@@ -36,19 +36,20 @@ export function scoreTone(score: number) {
   return score >= 4.3 ? "good" : score >= 3.5 ? "warn" : "bad";
 }
 
-export function ScorePill({ score, size = "md" }: { score: number; size?: "md" | "lg" }) {
-  const t = scoreTone(score);
+export function ScorePill({ score, size = "md" }: { score: number | null; size?: "md" | "lg" }) {
+  const t = score === null ? null : scoreTone(score);
   return (
     <div
       className={cx(
         "grid place-items-center rounded-xl font-mono font-bold",
+        t === null && "bg-muted text-sub",
         t === "good" && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
         t === "warn" && "bg-amber-500/10 text-amber-700 dark:text-amber-300",
         t === "bad" && "bg-red-500/10 text-red-700 dark:text-red-300",
         size === "md" ? "h-12 w-12 text-lg" : "h-20 w-20 text-3xl rounded-2xl",
       )}
     >
-      {score.toFixed(1)}
+      {score === null ? "—" : score.toFixed(1)}
     </div>
   );
 }

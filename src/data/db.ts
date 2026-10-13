@@ -31,20 +31,41 @@ export const getSedeName = (id: string) => sedes.find((s) => s.id === id)?.name 
 
 export const allReviews = (userReviews: Review[]) => [...seedReviews, ...userReviews];
 
-export function profStats(p: Professor, userReviews: Review[]) {
+export interface ProfMetrics {
+  score: number;
+  count: number;
+  difficulty: number | null;
+  wouldTakeAgain: number | null;
+  rated: boolean;
+}
+
+/** Mezcla la nota semilla (ponderada por p.reviews) con las reseñas del usuario. Sin datos → null. */
+export function profMetrics(p: Professor, userReviews: Review[]): ProfMetrics {
   const mine = userReviews.filter((r) => r.profId === p.id);
   const count = p.reviews + mine.length;
-  const score = mine.length ? (p.score * p.reviews + mine.reduce((s, r) => s + r.score, 0)) / count : p.score;
+  if (count === 0) return { score: 0, count: 0, difficulty: null, wouldTakeAgain: null, rated: false };
+  const sum = (f: (r: Review) => number) => mine.reduce((s, r) => s + f(r), 0);
+  const score = (p.score * p.reviews + sum((r) => r.score)) / count;
+  const difficulty = (p.difficulty * p.reviews + sum((r) => r.difficulty)) / count;
+  const votes = mine.filter((r) => r.wouldTakeAgain !== null);
+  const yes = (p.wouldTakeAgain / 100) * p.reviews + votes.filter((r) => r.wouldTakeAgain).length;
+  const total = p.reviews + votes.length;
+  return { score, count, difficulty, wouldTakeAgain: total ? (yes / total) * 100 : null, rated: true };
+}
+
+export function profStats(p: Professor, userReviews: Review[]) {
+  const { score, count } = profMetrics(p, userReviews);
   return { score, count };
 }
 
 export type Badge = { type: "top" | "trending" | "recommended"; label: string };
 
-export function profBadge(p: Professor, score: number): Badge | null {
-  if (score >= 4.7 && p.wouldTakeAgain >= 90) return { type: "top", label: "Top" };
+export function profBadge(p: Professor, score: number, wouldTakeAgain: number | null): Badge | null {
+  const wta = wouldTakeAgain ?? 0;
+  if (score >= 4.7 && wta >= 90) return { type: "top", label: "Top" };
   const h = p.historicalRatings;
   if (h.length >= 2 && h[h.length - 1].rating - h[h.length - 2].rating >= 0.2) return { type: "trending", label: "En alza" };
-  if (p.wouldTakeAgain >= 90) return { type: "recommended", label: "Recomendado" };
+  if (wta >= 90) return { type: "recommended", label: "Recomendado" };
   return null;
 }
 

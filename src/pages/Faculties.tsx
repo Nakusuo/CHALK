@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { cx, PageHeader } from "../components/ui";
-import { careersBySede, faculties, professors, profStats, sedes } from "../data/db";
+import { careersBySede, faculties, professors, profMetrics, sedes } from "../data/db";
 import { useStore } from "../lib/store";
 
 export default function Faculties() {
@@ -25,10 +25,12 @@ export default function Faculties() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {faculties.map((f) => {
           const list = profs.filter((p) => p.fac === f.id);
-          const avg = list.length ? list.reduce((s, p) => s + profStats(p, reviews).score, 0) / list.length : 0;
+          if (!list.length) return null;
+          const rated = list.map((p) => profMetrics(p, reviews)).filter((m) => m.rated);
+          const avg = rated.length ? rated.reduce((s, m) => s + m.score, 0) / rated.length : null;
           const courses = new Set(list.flatMap((p) => p.courses)).size;
           return (
-            <Link key={f.id} to={`/docentes?fac=${f.id}${sede !== "all" ? `&sede=${sede}` : ""}`} className={cx("card p-5 transition hover:-translate-y-0.5 hover:border-fg/20", !list.length && "opacity-50")}>
+            <Link key={f.id} to={`/docentes?fac=${f.id}${sede !== "all" ? `&sede=${sede}` : ""}`} className={"card p-5 transition hover:-translate-y-0.5 hover:border-fg/20"}>
               <div className="text-2xl">{f.icon}</div>
               <h2 className="mt-3 font-semibold">{f.name}</h2>
               <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-4 text-center">
@@ -37,7 +39,7 @@ export default function Faculties() {
                   <div className="text-[11px] text-sub">docentes</div>
                 </div>
                 <div>
-                  <div className="font-mono text-lg font-bold">{avg ? avg.toFixed(1) : "—"}</div>
+                  <div className="font-mono text-lg font-bold">{avg !== null ? avg.toFixed(1) : "—"}</div>
                   <div className="text-[11px] text-sub">promedio</div>
                 </div>
                 <div>

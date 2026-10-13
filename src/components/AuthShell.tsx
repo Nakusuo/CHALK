@@ -30,7 +30,7 @@ export default function AuthShell({ title, subtitle, children }: { title: string
               </li>
             ))}
           </ul>
-          <p className="mt-10 text-sm text-white/50">{professors.length} docentes de ejemplo en las sedes de la UTP.</p>
+          <p className="mt-10 text-sm text-white/50">{professors.length} docentes de la UTP Lima Norte.</p>
         </div>
       </aside>
       <section className="flex flex-col px-4 py-6 sm:px-10">
