@@ -83,9 +83,9 @@ export function Difficulty({ value }: { value: number }) {
 export function BadgeTag({ badge }: { badge: BadgeT | null }) {
   if (!badge) return null;
   const cls = {
-    top: "bg-[#C3B79D]/35 text-[#4A3F27] dark:text-[#C3B79D]",
+    top: "bg-[#C3B79D] text-[#1B1717]",
     trending: "bg-accent-soft text-accent-ink",
-    recommended: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    recommended: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
   }[badge.type];
   return <span className={cx("rounded-md px-2 py-0.5 text-[11px] font-semibold", cls)}>{badge.label}</span>;
 }

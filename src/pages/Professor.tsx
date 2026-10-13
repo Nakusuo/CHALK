@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/ProfessorCard";
 import ReviewItem from "../components/ReviewItem";
 import Aside from "../components/Aside";
-import { BadgeTag, cx, Empty, Meter, Monogram, Stars, Stat, Tag, tint } from "../components/ui";
+import { BadgeTag, cx, Empty, Meter, Monogram, plural, Stars, Stat, Tag, tint } from "../components/ui";
 import {
   allReviews,
   courseScore,
@@ -61,19 +61,19 @@ export default function ProfessorPage() {
         <ArrowLeft size={16} /> Docentes
       </Link>
 
-      <section className="card p-6 sm:p-8">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <Monogram name={p.name} tone={p.dept} size={88} />
+      <section className="block-noir -mx-4 px-5 py-8 sm:-mx-6 sm:px-8 lg:mx-0 lg:rounded-card lg:p-10">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+          <Monogram name={p.name} tone={p.dept} size={72} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-[28px] font-bold leading-tight tracking-tight">{p.name}</h1>
-              {p.verified && <BadgeCheck size={20} className="text-accent" aria-label="Verificado" />}
+              <h1 className="display text-[clamp(2.25rem,5vw,4.5rem)]">{p.name}</h1>
+              {p.verified && <BadgeCheck size={22} className="text-[#EDEBDD]" aria-label="Verificado" />}
               {rated && <BadgeTag badge={profBadge(p, score, wouldTakeAgain, count)} />}
             </div>
-            <div className="mt-1 text-sub">
+            <div className="mt-3 text-lg text-[#EDEBDD]/80">
               {p.dept} · {getFaculty(p.fac)?.name}
             </div>
-            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-sub">
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-[#EDEBDD]/75">
               <span className="inline-flex items-center gap-1">
                 <MapPin size={14} aria-hidden /> {p.sedes.map(getSedeName).join(", ")}
               </span>
@@ -87,19 +87,28 @@ export default function ProfessorPage() {
               </div>
             )}
           </div>
+          <div
+            className="grid h-28 w-28 shrink-0 place-items-center rounded-card bg-[#EDEBDD] text-[#810100] sm:h-36 sm:w-36"
+            aria-label={rated ? `Nota ${score.toFixed(1)} de 5` : "Sin nota aún"}
+          >
+            <div className="text-center" aria-hidden>
+              <div className="num display text-[clamp(2.75rem,5vw,4rem)]">{rated ? score.toFixed(1) : "—"}</div>
+              <div className="mt-1 text-xs font-semibold text-[#1B1717]">{rated ? plural(count, "reseña", "reseñas") : "sin reseñas"}</div>
+            </div>
+          </div>
         </div>
         <div className="mt-6 flex flex-wrap gap-2">
-          <Link to={`/docentes/${p.id}/resena`} className="btn-brand">
+          <Link to={`/docentes/${p.id}/resena`} className="btn bg-[#810100] text-[#EDEBDD] hover:bg-[#630000] dark:bg-[#C1272D] dark:text-white dark:hover:bg-[#A31F24]">
             <PenLine size={16} /> Escribir reseña
           </Link>
-          <Link to={`/comparar?a=${p.id}`} className="btn-outline">
+          <Link to={`/comparar?a=${p.id}`} className="btn-on-block">
             <GitCompare size={16} /> Comparar
           </Link>
-          <FavoriteButton id={p.id} label className="btn-outline h-10 text-fg" />
+          <FavoriteButton id={p.id} label onBlock />
         </div>
       </section>
 
-      <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
         <Stat label="Nota" value={rated ? score.toFixed(1) : "—"} hint={rated ? "sobre 5.0" : "Sin reseñas aún"}>
           {rated && <Stars value={score} />}
         </Stat>
@@ -135,10 +144,10 @@ export default function ProfessorPage() {
       </div>
 
       {(criteria !== null || peak > 0) && (
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <div className="mt-10 grid gap-8 md:grid-cols-2">
           {criteria !== null && (
-            <section className="card p-6">
-              <h2 className="mb-5 font-semibold">Criterios</h2>
+            <section className="rule pt-4">
+              <h2 className="mb-5 text-xl font-extrabold tracking-tight">Criterios</h2>
               <div className="space-y-3.5">
                 {(Object.entries(criteria) as [CriteriaKey, number][]).map(([k, v]) => (
                   <div key={k} className="grid grid-cols-[100px_minmax(0,1fr)_32px] items-center gap-3 text-sm">
@@ -151,8 +160,8 @@ export default function ProfessorPage() {
             </section>
           )}
           {peak > 0 && (
-            <section className="card p-6">
-              <h2 className="mb-5 font-semibold">Distribución de notas</h2>
+            <section className="rule pt-4">
+              <h2 className="mb-5 text-xl font-extrabold tracking-tight">Distribución de notas</h2>
               <div
                 className="flex h-40 items-end gap-3"
                 role="img"
@@ -162,7 +171,7 @@ export default function ProfessorPage() {
                   <div key={j} className="flex h-full flex-1 flex-col items-center justify-end gap-1.5">
                     <span className={cx("num text-xs", n === peak ? "font-bold text-fg" : "text-sub")}>{n}</span>
                     <div
-                      className={cx("w-full rounded-lg", n === peak ? "bg-accent" : "bg-accent/20")}
+                      className={cx("grow-y w-full rounded-t-[4px]", n === peak ? "bg-accent" : "bg-accent/20")}
                       style={{ height: `${Math.max(6, (n / distMax) * 75)}%` }}
                     />
                     <span className="num text-xs text-sub">{j + 1}★</span>
@@ -175,14 +184,14 @@ export default function ProfessorPage() {
       )}
 
       {hasSeed && (
-        <section className="card mt-5 p-6">
-          <h2 className="mb-4 font-semibold">Evolución por ciclo</h2>
+        <section className="rule mt-10 pt-4">
+          <h2 className="mb-5 text-xl font-extrabold tracking-tight">Evolución por ciclo</h2>
           <div className="flex h-32 items-end gap-3">
             {hist.map((h, i) => (
               <div key={h.cycle} className="flex flex-1 flex-col items-center gap-1">
                 <span className="num text-[11px] text-sub">{h.rating.toFixed(1)}</span>
                 <div
-                  className={cx("w-full rounded-lg", i === hist.length - 1 ? "bg-accent" : "bg-accent/20")}
+                  className={cx("grow-y w-full rounded-t-[4px]", i === hist.length - 1 ? "bg-accent" : "bg-accent/20")}
                   style={{ height: `${((h.rating - 3) / 2) * 80 + 8}px` }}
                 />
                 <span className="text-[11px] text-sub">{h.cycle}</span>
@@ -192,9 +201,9 @@ export default function ProfessorPage() {
         </section>
       )}
 
-      <section className="mt-8">
+      <section className="rule mt-12 pt-4">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <h2 className="flex items-center gap-2 text-2xl font-extrabold tracking-tight">
             <MessageSquareText size={18} aria-hidden /> Reseñas
           </h2>
           <div className="flex max-w-full flex-wrap items-center gap-2">
@@ -247,7 +256,7 @@ export default function ProfessorPage() {
       <Aside>
         {p.courses.length > 0 && (
           <section className="card p-5">
-            <h2 className="mb-3 font-semibold">Cursos que dicta</h2>
+            <h2 className="mb-3 text-lg font-extrabold tracking-tight">Cursos que dicta</h2>
             <ul className="space-y-1">
               {p.courses.map((c) => {
                 const v = courseScore(p, c, userReviews);
@@ -255,7 +264,7 @@ export default function ProfessorPage() {
                   <li key={c}>
                     <Link
                       to={`/cursos?q=${encodeURIComponent(c)}`}
-                      className="-mx-2 flex items-center gap-3 rounded-xl px-2 py-2 text-sm hover:bg-muted"
+                      className="-mx-2 flex items-center gap-3 rounded-control px-2 py-2 text-sm hover:bg-muted"
                     >
                       <span className={cx("h-2 w-2 shrink-0 rounded-full", tint(c).dot)} aria-hidden />
                       <span className="min-w-0 flex-1">{c}</span>
@@ -269,13 +278,13 @@ export default function ProfessorPage() {
         )}
         {others.length > 0 && (
           <section className="card p-5">
-            <h2 className="mb-3 font-semibold">También dictan estos cursos</h2>
+            <h2 className="mb-3 text-lg font-extrabold tracking-tight">También dictan estos cursos</h2>
             <ul className="space-y-1">
               {others.slice(0, 6).map((o) => {
                 const m = profMetrics(o, userReviews);
                 return (
                   <li key={o.id}>
-                    <Link to={`/docentes/${o.id}`} className="-mx-2 flex items-center gap-3 rounded-xl px-2 py-1.5 hover:bg-muted">
+                    <Link to={`/docentes/${o.id}`} className="-mx-2 flex items-center gap-3 rounded-control px-2 py-1.5 hover:bg-muted">
                       <Monogram name={o.name} tone={o.dept} size={34} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium">{o.name}</span>
@@ -290,7 +299,7 @@ export default function ProfessorPage() {
           </section>
         )}
         <Link to={`/comparar?a=${p.id}`} className="card lift flex items-center gap-4 p-5">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent-ink">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-control bg-accent-soft text-accent-ink">
             <GitCompare size={20} aria-hidden />
           </span>
           <span className="min-w-0 flex-1">

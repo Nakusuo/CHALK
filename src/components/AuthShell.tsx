@@ -13,7 +13,7 @@ const POINTS = [
 export default function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {
   return (
     <div className="grid min-h-screen gap-6 p-4 sm:p-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-      <aside className="hidden flex-col rounded-[24px] bg-accent-soft/70 p-10 lg:flex xl:p-12">
+      <aside className="hidden flex-col rounded-card bg-accent-soft/70 p-10 lg:flex xl:p-12">
         <Logo to="/" />
         <ArtSlot className="mt-8 aspect-[4/3] max-h-[38vh] w-full" alt="Ilustración de CHALK" />
         <div className="mt-auto max-w-md pt-8">
@@ -21,7 +21,7 @@ export default function AuthShell({ title, subtitle, children }: { title: string
           <ul className="mt-7 space-y-3">
             {POINTS.map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-center gap-3 text-[15px] text-fg/80">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-surface text-accent-ink shadow-card">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-surface text-accent-ink shadow-card">
                   <Icon size={17} />
                 </span>
                 {text}

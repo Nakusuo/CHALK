@@ -26,7 +26,7 @@ export default function Courses() {
       <div className="relative mb-4">
         <Search size={18} aria-hidden className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sub" />
         <input
-          className="input h-12 rounded-2xl border-transparent pl-11 shadow-card"
+          className="input h-12 rounded-card border-transparent pl-11 shadow-card"
           aria-label="Buscar curso"
           placeholder="Buscar curso"
           value={q}
@@ -82,7 +82,7 @@ export default function Courses() {
                       <li key={p.id}>
                         <Link
                           to={`/docentes/${p.id}`}
-                          className="-mx-2 flex items-center gap-3 rounded-xl px-2 py-1.5 text-sm hover:bg-muted"
+                          className="-mx-2 flex items-center gap-3 rounded-control px-2 py-1.5 text-sm hover:bg-muted"
                         >
                           <Monogram name={p.name} tone={p.dept} size={30} />
                           <span className="min-w-0 flex-1 truncate">{p.name}</span>

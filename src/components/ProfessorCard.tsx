@@ -6,11 +6,11 @@ import { store, useStore } from "../lib/store";
 import { toast } from "./Toast";
 import { BadgeTag, cx, Difficulty, Monogram, plural } from "./ui";
 
-export function FavoriteButton({ id, className, label }: { id: number; className?: string; label?: boolean }) {
+export function FavoriteButton({ id, className, label, onBlock }: { id: number; className?: string; label?: boolean; onBlock?: boolean }) {
   const fav = useStore((s) => s.favorites.includes(id));
   return (
     <button
-      className={cx("btn-ghost h-9 px-0", label ? "px-4" : "w-9", fav ? "text-accent-ink" : "text-sub hover:text-fg", className)}
+      className={cx(onBlock ? "btn-on-block" : "btn-ghost h-9 px-0", label ? "px-4" : "w-9", !onBlock && (fav ? "text-accent-ink" : "text-sub hover:text-fg"), className)}
       aria-label={fav ? "Quitar de guardados" : "Guardar docente"}
       aria-pressed={fav}
       onClick={(e) => {
@@ -29,17 +29,17 @@ export default function ProfessorCard({ p, rank }: { p: Professor; rank?: number
   const reviews = useStore((s) => s.reviews);
   const { score, count, difficulty, wouldTakeAgain, rated } = profMetrics(p, reviews);
   return (
-    <article className="card lift relative flex gap-4 p-5 sm:p-6">
+    <article className="row flex gap-4 py-6 sm:gap-5">
       <Monogram name={p.name} tone={p.dept} size={52} />
       <div className="min-w-0 flex-1">
         <div className="flex items-start gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               {rank !== undefined && <span className="num text-xs text-sub">#{rank}</span>}
-              <h3 className="text-[17px] font-semibold">
+              <h3 className="text-[clamp(1.25rem,2.4vw,1.75rem)] font-extrabold leading-tight tracking-[-0.03em]">
                 <Link
                   to={`/docentes/${p.id}`}
-                  className="rounded outline-none after:absolute after:inset-0 after:rounded-card hover:text-accent-ink"
+                  className="outline-none after:absolute after:inset-0 hover:text-accent-ink"
                 >
                   {p.name}
                 </Link>
@@ -55,13 +55,17 @@ export default function ProfessorCard({ p, rank }: { p: Professor; rank?: number
               </span>
             </div>
           </div>
+          <div className="shrink-0 text-right">
+            <div className={cx("num display text-[clamp(2rem,4vw,3rem)]", !rated && "text-sub")}>{rated ? score.toFixed(1) : "—"}</div>
+            <div className="text-xs text-sub">nota</div>
+          </div>
           <FavoriteButton id={p.id} className="relative z-10 -mr-2 -mt-1" />
         </div>
 
         {p.courses.length > 0 && (
           <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Cursos">
             {p.courses.map((c) => (
-              <li key={c} className="rounded-full bg-muted px-2.5 py-1 text-xs text-fg/80">
+              <li key={c} className="rounded-control bg-muted px-2 py-0.5 text-xs text-fg/80">
                 {c}
               </li>
             ))}
@@ -73,8 +77,7 @@ export default function ProfessorCard({ p, rank }: { p: Professor; rank?: number
             {rated ? (
               <>
                 <Star size={14} className="self-center text-amber-400" fill="currentColor" strokeWidth={0} aria-hidden />
-                <b className="num text-lg">{score.toFixed(1)}</b>
-                <span className="text-xs text-sub">{plural(count, "reseña", "reseñas")}</span>
+                <span className="num text-sm font-semibold">{plural(count, "reseña", "reseñas")}</span>
               </>
             ) : (
               <span className="text-sm text-sub">Sin reseñas aún</span>
@@ -88,7 +91,7 @@ export default function ProfessorCard({ p, rank }: { p: Professor; rank?: number
           </span>
           <Link
             to={`/docentes/${p.id}/resena`}
-            className="btn-brand relative z-10 h-8 justify-self-start rounded-lg px-3 text-xs sm:justify-self-end"
+            className="btn-brand relative z-10 h-8 justify-self-start rounded-control px-3 text-xs sm:justify-self-end"
           >
             <PenLine size={14} /> Reseñar
           </Link>

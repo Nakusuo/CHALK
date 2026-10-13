@@ -175,7 +175,7 @@ export default function ReviewPage() {
                 key={s}
                 aria-current={i === step ? "step" : undefined}
                 className={cx(
-                  "flex items-center gap-2.5 rounded-xl px-2 py-1.5 text-sm",
+                  "flex items-center gap-2.5 rounded-control px-2 py-1.5 text-sm",
                   i === step ? "bg-accent-soft font-semibold text-accent-ink" : "text-sub",
                 )}
               >

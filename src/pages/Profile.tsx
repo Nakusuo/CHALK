@@ -78,7 +78,7 @@ export default function Profile() {
             <Bookmark size={18} /> Guardados
           </h2>
           {favorites.length ? (
-            <div className="space-y-4">
+            <div className="rule">
               {favorites.map((id) => {
                 const p = getProfessor(id);
                 return p && <ProfessorCard key={id} p={p} />;

@@ -46,7 +46,7 @@ export default function Faculties() {
           const courses = new Set(list.flatMap((p) => p.courses)).size;
           return (
             <Link key={f.id} to={`/docentes?fac=${f.id}${sede !== "all" ? `&sede=${sede}` : ""}`} className="card lift p-6">
-              <span className={cx("grid h-11 w-11 place-items-center rounded-xl", tint(f.id).bg)}>
+              <span className={cx("grid h-11 w-11 place-items-center rounded-control", tint(f.id).bg)}>
                 <Icon size={20} aria-hidden />
               </span>
               <h2 className="mt-4 text-[17px] font-semibold">{f.name}</h2>

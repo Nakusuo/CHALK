@@ -65,7 +65,7 @@ function Picker({
 
 function Value({ v, win }: { v: string; win: boolean }) {
   return (
-    <div className={cx("rounded-xl px-2 py-3 text-center", win && "bg-accent-soft")}>
+    <div className={cx("rounded-control px-2 py-3 text-center", win && "bg-accent-soft")}>
       <div
         className={cx(
           "num text-[28px] font-bold leading-none tracking-tight sm:text-4xl",
