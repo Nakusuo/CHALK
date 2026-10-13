@@ -31,7 +31,7 @@ Lo hice como proyecto de la universidad mientras estudio Ingeniería de Software
 ## Qué puedes hacer
 
 - Iniciar sesión o registrarte con tu correo institucional (`U...@utp.edu.pe`); el código de estudiante se valida con expresiones regulares.
-- Explorar 47 docentes reales de la UTP Lima Norte. No hay notas inventadas: todas las métricas salen de las reseñas que escriben los alumnos.
+- Explorar 22 docentes reales de la UTP Lima Norte. No hay notas inventadas: todas las métricas salen de las reseñas que escriben los alumnos.
 - Buscar y filtrar docentes por nombre, curso, facultad, sede o etiquetas (Exigente, Explica bien, Puntual...).
 - Ver el perfil completo de cada docente con métricas, gráficos animados y las reseñas de otros alumnos, y marcar reseñas como útiles.
 - Escribir una reseña paso a paso: criterios con estrellas, dificultad, carga de trabajo, si lo volverías a llevar, etiquetas y comentario, con vista previa antes de enviar.

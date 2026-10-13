@@ -280,37 +280,10 @@ function prof(id: number, name: string, emoji: string, dept: string, fac: string
 }
 
 const SIS = "Ingeniería de Sistemas / Software";
-const CIE = "Ciencias Básicas";
 const HUM = "Humanidades";
-const IDI = "Idiomas";
 const NEG = "Negocios";
 
 export const professors: Professor[] = [
-  prof(1, "Fernando del Castillo Oyarse", "📐", CIE, "ing", ["Introducción a la matemática para ingeniería"]),
-  prof(2, "Emperatriz Nieves Salvador Cordero", "📐", CIE, "ing", ["Introducción a la matemática para ingeniería"]),
-  prof(3, "Erik Giancarlo Sayes Zevallos", "✍️", HUM, "general", ["Comprensión y redacción de textos I"]),
-  prof(4, "Maribel Catalina Mercedes Huatay", "🌎", IDI, "general", ["Inglés I"]),
-  prof(5, "Gisela Silva Escudero", "🌱", HUM, "general", ["Individuo y medio ambiente"]),
-  prof(6, "Carlos Alberto Ponce Peña", "🎓", SIS, "ing", ["Introducción a la vida universitaria: ingeniería de TI y telecomunicaciones"]),
-  prof(7, "Teodomiro Arquimedes Chauca Carranza", "⚗️", CIE, "ing", ["Química general"]),
-  prof(8, "Nalda Milena Jara Espinoza", "🧪", CIE, "ing", ["Laboratorio de química general"]),
-  prof(9, "Renzo Espinoza Gonzales", "📐", CIE, "ing", ["Matemática para ingenieros I"]),
-  prof(10, "Cesar Hernan Patricio Peralta", "💻", SIS, "ing", ["Principios de algoritmos"]),
-  prof(11, "Jenifer Jubel Trejo Chavez", "🌎", IDI, "general", ["Inglés II"]),
-  prof(12, "Marilu Soledad Atanasio Asencios", "✍️", HUM, "general", ["Comprensión y redacción de textos II"]),
-  prof(13, "Jimmy William Munayco Solorzano", "🔭", CIE, "ing", ["Cálculo aplicado a la física 1", "Laboratorio de cálculo aplicado a la física 1"]),
-  prof(14, "Alejandro Manuel Salazar Yabar", "💻", SIS, "ing", ["Introducción a las TIC", "Programación orientada a objetos"]),
-  prof(15, "Miguel Martin Correa Coronel", "📐", CIE, "ing", ["Matemática para ingenieros II"]),
-  prof(16, "Efracio Herminio Asis Lopez", "📊", CIE, "ing", ["Estadística descriptiva y probabilidades"]),
-  prof(17, "Carlos Efrain Palomino Vidal", "💻", SIS, "ing", ["Taller de programación"]),
-  prof(18, "Clemente Angel Alvites Rojas", "🧩", SIS, "ing", ["Teoría general de sistemas"]),
-  prof(19, "Shirley Ponce Montenegro", "🔭", CIE, "ing", ["Cálculo aplicado a la física 2", "Laboratorio de cálculo aplicado a la física 2"]),
-  prof(20, "Susana Angelica Davila Guevara", "⚖️", HUM, "general", ["Ciudadanía y reflexión ética"]),
-  prof(21, "Joseline Elizabeth Camacho Salamanca", "🔎", HUM, "general", ["Investigación académica"]),
-  prof(22, "Omer Maritza Chavez Sanchez", "🇵🇪", HUM, "general", ["Problemas y desafíos en el Perú actual"]),
-  prof(23, "Julio Cesar Quispe Linares", "🗄️", SIS, "ing", ["Base de datos"]),
-  prof(24, "Maritza Marcelo Atencia", "📊", CIE, "ing", ["Estadística inferencial"]),
-  prof(25, "Jury Yesenia Aquino Trujillo", "📈", SIS, "ing", ["Herramientas informáticas para la toma de decisiones"]),
   prof(26, "Augusto Oscar Becerra Pacherres", "🧩", SIS, "ing", ["Diseño de patrones"]),
   prof(27, "Ronald Angel Ayra Pinto", "🗄️", SIS, "ing", ["Base de datos II", "Desarrollo full stack"]),
   prof(28, "Alex Tito Belleza Porras", "🌐", SIS, "ing", ["Taller de programación web"]),
