@@ -65,23 +65,22 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative">
-        <Search size={20} className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sub" aria-hidden />
-        <input
-          className="input h-14 rounded-2xl border-transparent pl-14 text-[15px] shadow-card"
-          placeholder="Busca por nombre, curso o departamento"
-          aria-label="Buscar docentes"
-          value={q}
-          onChange={(e) => set("q", e.target.value)}
-        />
-      </div>
+      <section className="block-cherry -mx-4 -mt-4 mb-10 px-5 pb-8 pt-8 sm:-mx-6 sm:px-8 lg:mx-0 lg:mt-0 lg:rounded-card lg:px-10 lg:pb-10 lg:pt-10">
+        <p className="text-lg font-semibold">Hola, {firstName}.</p>
+        <h1 className="display mt-3 max-w-[14ch] text-[clamp(2.75rem,6vw,5.5rem)]">¿Con quién llevas el curso?</h1>
+        <div className="relative mt-8">
+          <Search size={20} className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-[#5E5856]" aria-hidden />
+          <input
+            className="input h-14 border-transparent bg-white pl-14 text-[15px] text-[#1B1717] placeholder:text-[#5E5856] focus:border-[#1B1717] focus:ring-[#EDEBDD]/40"
+            placeholder="Busca por nombre, curso o departamento"
+            aria-label="Buscar docentes"
+            value={q}
+            onChange={(e) => set("q", e.target.value)}
+          />
+        </div>
+      </section>
 
-      <div className="mb-6 mt-8">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-[34px]">Hola, {firstName}</h1>
-        <p className="mt-1 text-sub">Encuentra al profe ideal antes de matricularte.</p>
-      </div>
-
-      <div className="mb-8 grid grid-cols-3 gap-2 sm:gap-4">
+      <div className="mb-10 grid grid-cols-3 gap-3 sm:gap-6">
         <Stat compact label="Docentes" value={professors.length} hint={`${COURSE_COUNT} cursos en Lima Norte`} />
         <Stat
           compact
@@ -166,7 +165,7 @@ export default function Home() {
         </label>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div className="rule mt-4">
         {list.map(({ p }) => (
           <ProfessorCard key={p.id} p={p} />
         ))}
@@ -182,7 +181,7 @@ export default function Home() {
       <Aside>
         <ArtSlot className="aspect-[4/3] w-full" alt="Ilustración de CHALK" />
         <section className="card p-5">
-          <h2 className="mb-4 flex items-center gap-2 font-semibold">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-extrabold tracking-tight">
             <Trophy size={16} className="text-amber-500" aria-hidden /> Mejor calificados
           </h2>
           {top.length === 0 && (
@@ -191,7 +190,7 @@ export default function Home() {
           <ol className="space-y-1">
             {top.map(({ p, score }, i) => (
               <li key={p.id}>
-                <Link to={`/docentes/${p.id}`} className="-mx-2 flex items-center gap-3 rounded-xl px-2 py-1.5 text-sm hover:bg-muted">
+                <Link to={`/docentes/${p.id}`} className="-mx-2 flex items-center gap-3 rounded-control px-2 py-1.5 text-sm hover:bg-muted">
                   <span className="num w-4 text-xs text-sub">{i + 1}</span>
                   <Monogram name={p.name} tone={p.dept} size={30} />
                   <span className="min-w-0 flex-1 truncate">{p.name}</span>
@@ -202,7 +201,7 @@ export default function Home() {
           </ol>
         </section>
         <Link to="/comparar" className="card lift flex items-center gap-4 p-5">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent-ink">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-control bg-accent-soft text-accent-ink">
             <GitCompare size={20} aria-hidden />
           </span>
           <span className="min-w-0 flex-1">

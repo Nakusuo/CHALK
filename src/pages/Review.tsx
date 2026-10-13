@@ -175,7 +175,7 @@ export default function ReviewPage() {
                 key={s}
                 aria-current={i === step ? "step" : undefined}
                 className={cx(
-                  "flex items-center gap-2.5 rounded-xl px-2 py-1.5 text-sm",
+                  "flex items-center gap-2.5 rounded-control px-2 py-1.5 text-sm",
                   i === step ? "bg-accent-soft font-semibold text-accent-ink" : "text-sub",
                 )}
               >
@@ -196,7 +196,7 @@ export default function ReviewPage() {
 
       <section className="card p-6 sm:p-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">
+          <h1 className="display text-[clamp(2rem,4vw,3.25rem)]">
             {
               ["Califica los criterios", "¿Cómo fue la experiencia?", "Descríbelo en pocas palabras", "Cuéntanos más", "Revisa y publica"][
                 step

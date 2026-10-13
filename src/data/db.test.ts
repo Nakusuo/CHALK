@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allCourses, courseScore, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profMetrics, profStats } from "./db";
+import { allCourses, courseScore, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profMetrics, profStats, profWorkload, professors } from "./db";
 import type { CriteriaKey, Review } from "./types";
 
 // Fixture con nota semilla: los docentes reales arrancan sin reseñas.
@@ -131,5 +131,21 @@ describe("courseScore", () => {
   });
   it("prefiere courseRatings de la semilla", () => {
     expect(courseScore({ ...pr, courseRatings: { [course]: 4.4 } }, course, [{ ...review(1), course }])).toBe(4.4);
+  });
+});
+
+describe("profWorkload", () => {
+  const base = professors[0];
+  const rev = (workload: Review["workload"]) =>
+    ({ id: "u", profId: base.id, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [], text: "", helpful: 0, course: "X", difficulty: 3, wouldTakeAgain: true, workload }) as Review;
+  it("sin reseñas ni semilla devuelve null", () => {
+    expect(profWorkload({ ...base, reviews: 0 }, [])).toBeNull();
+  });
+  it("usa la más frecuente y en empate la más pesada", () => {
+    expect(profWorkload({ ...base, reviews: 0 }, [rev("light"), rev("light"), rev("heavy")])).toBe("light");
+    expect(profWorkload({ ...base, reviews: 0 }, [rev("light"), rev("heavy")])).toBe("heavy");
+  });
+  it("con semilla y sin reseñas usa la semilla", () => {
+    expect(profWorkload({ ...base, reviews: 3, workload: "moderate" }, [])).toBe("moderate");
   });
 });

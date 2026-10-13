@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.0 — 2026-10-13
+- Estilo más atrevido: sidebar negro sólido, franja Cherry en el inicio, cabecera del docente en bloque negro con nombre gigante.
+- Contraste editorial: radios de 8px, reglas negras, lista de docentes en filas y comparador tipo marcador.
+- Movimiento: números que cuentan, barras que crecen y entrada escalonada (respeta reducir movimiento).
+- La carga de trabajo sin reseñas ahora muestra "—".
+
 ## 2.1.0 — 2026-10-13
 - Rediseño completo: layout de tres columnas (navegación, contenido, contexto), tarjetas de métricas grandes y comparador lado a lado.
 - Paleta UTP: Cherry, Maroon, Dark Ruby, Cotton, Pearl, Noir y Meteorite; modo oscuro a juego.
