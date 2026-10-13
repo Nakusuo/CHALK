@@ -61,7 +61,7 @@ export default function ProfessorPage() {
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-2xl font-bold tracking-tight">{p.name}</h1>
               {p.verified && <BadgeCheck size={20} className="text-sky-500" aria-label="Verificado" />}
-              {rated && <BadgeTag badge={profBadge(p, score)} />}
+              {rated && <BadgeTag badge={profBadge(p, score, wouldTakeAgain)} />}
             </div>
             <div className="mt-1 text-sub">
               {p.dept} · {getFaculty(p.fac)?.name}

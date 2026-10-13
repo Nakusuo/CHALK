@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ReviewItem from "../components/ReviewItem";
 import { Avatar, cx, Stars } from "../components/ui";
-import { criteriaHints, criteriaLabels, difficultyLabel, getProfessor, MONTHS, profStats, tagCategories, workloadLabels } from "../data/db";
+import { criteriaHints, criteriaLabels, difficultyLabel, getProfessor, MONTHS, profMetrics, tagCategories, workloadLabels } from "../data/db";
 import type { CriteriaKey, Review, Workload } from "../data/types";
 import { store, useStore } from "../lib/store";
 import NotFound from "./NotFound";
@@ -47,7 +47,7 @@ export default function ReviewPage() {
 
   const rated = KEYS.filter((k) => criteria[k] > 0);
   const avg = rated.length ? rated.reduce((s, k) => s + criteria[k], 0) / rated.length : 0;
-  const { score, count } = profStats(p, userReviews);
+  const { score, count, rated: hasRatings } = profMetrics(p, userReviews);
 
   const canNext = [rated.length === KEYS.length, wta !== null && !!workload, true, text.trim().length >= MIN_TEXT, true][step];
   const hint = ["Califica los 6 criterios para continuar", "Responde si lo volverías a llevar y la carga", "", `Escribe al menos ${MIN_TEXT} caracteres`, ""][step];
@@ -113,8 +113,14 @@ export default function ReviewPage() {
           <div className="mt-3 font-semibold">{p.name}</div>
           <div className="text-sm text-sub">{p.dept}</div>
           <div className="mt-3 flex items-center gap-2 text-sm">
-            <b className="font-mono">{score.toFixed(1)}</b> <Stars value={score} size={12} />
-            <span className="text-xs text-sub">({count})</span>
+            {hasRatings ? (
+              <>
+                <b className="font-mono">{score.toFixed(1)}</b> <Stars value={score} size={12} />
+                <span className="text-xs text-sub">({count})</span>
+              </>
+            ) : (
+              <span className="text-xs text-sub">Sin reseñas aún</span>
+            )}
           </div>
           <ol className="mt-6 space-y-1 border-t border-line pt-4">
             {STEPS.map((s, i) => (

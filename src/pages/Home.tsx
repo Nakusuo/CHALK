@@ -13,6 +13,7 @@ const SORTS = [
   { id: "wta", label: "Recomendación" },
 ] as const;
 
+const COURSE_COUNT = allCourses().length;
 const TAGS = [...new Set(professors.flatMap((p) => p.tags))].sort();
 
 export default function Home() {
@@ -64,7 +65,7 @@ export default function Home() {
         <Stat label="Docentes" value={professors.length} />
         <Stat label="Reseñas" value={totalReviews.toLocaleString("es-PE")} />
         <Stat label="Nota promedio" value={avg === null ? "—" : avg.toFixed(2)} hint={avg === null ? "aún sin reseñas" : "sobre 5.0"} />
-        <Stat label="Cursos" value={allCourses().length} />
+        <Stat label="Cursos" value={COURSE_COUNT} />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_280px]">

@@ -37,10 +37,15 @@ describe("profStats", () => {
 
 describe("profBadge", () => {
   it("top si score ≥ 4.7 y ≥ 90 % lo volvería a llevar", () => {
-    expect(profBadge({ ...p1, wouldTakeAgain: 95 }, 4.8)?.type).toBe("top");
+    expect(profBadge(p1, 4.8, 95)?.type).toBe("top");
+  });
+  it("docente solo con reseñas de usuario puede tener insignia", () => {
+    const rs = [{ ...review(5), wouldTakeAgain: true }];
+    const m = profMetrics(getProfessor(1)!, rs);
+    expect(profBadge(getProfessor(1)!, m.score, m.wouldTakeAgain)?.type).toBe("top");
   });
   it("null si no cumple nada", () => {
-    expect(profBadge({ ...p1, wouldTakeAgain: 50, historicalRatings: [] }, 3)).toBeNull();
+    expect(profBadge({ ...p1, historicalRatings: [] }, 3, 50)).toBeNull();
   });
 });
 
@@ -78,6 +83,11 @@ describe("profMetrics", () => {
     expect(m.difficulty).toBeCloseTo((3 * 134 + 5) / 135, 5);
     expect(m.wouldTakeAgain).toBeCloseTo((80 * 134) / 135, 5);
     expect(m.rated).toBe(true);
+  });
+  it("solo votos nulos: calificado pero sin % de recomendación", () => {
+    const m = profMetrics(getProfessor(1)!, [{ ...review(4), wouldTakeAgain: null }]);
+    expect(m.rated).toBe(true);
+    expect(m.wouldTakeAgain).toBeNull();
   });
   it("semilla sin reseñas propias devuelve la semilla", () => {
     expect(profMetrics(seedP, [])).toEqual({ score: 4.7, count: 134, difficulty: 3, wouldTakeAgain: 80, rated: true });

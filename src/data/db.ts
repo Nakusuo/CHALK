@@ -60,11 +60,12 @@ export function profStats(p: Professor, userReviews: Review[]) {
 
 export type Badge = { type: "top" | "trending" | "recommended"; label: string };
 
-export function profBadge(p: Professor, score: number): Badge | null {
-  if (score >= 4.7 && p.wouldTakeAgain >= 90) return { type: "top", label: "Top" };
+export function profBadge(p: Professor, score: number, wouldTakeAgain: number | null): Badge | null {
+  const wta = wouldTakeAgain ?? 0;
+  if (score >= 4.7 && wta >= 90) return { type: "top", label: "Top" };
   const h = p.historicalRatings;
   if (h.length >= 2 && h[h.length - 1].rating - h[h.length - 2].rating >= 0.2) return { type: "trending", label: "En alza" };
-  if (p.wouldTakeAgain >= 90) return { type: "recommended", label: "Recomendado" };
+  if (wta >= 90) return { type: "recommended", label: "Recomendado" };
   return null;
 }
 
