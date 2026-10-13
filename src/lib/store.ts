@@ -83,6 +83,8 @@ export const store = {
     return review;
   },
   deleteReview: (id: string) => set({ reviews: state.reviews.filter((r) => r.id !== id) }),
+  updateReview: (id: string, patch: Partial<Review>) =>
+    set({ reviews: state.reviews.map((r) => (r.id === id ? { ...r, ...patch, id: r.id } : r)) }),
   restoreReview: (r: Review) =>
     set({ reviews: [...state.reviews, r].sort((a, b) => (a.createdAt ?? "").localeCompare(b.createdAt ?? "")) }),
 

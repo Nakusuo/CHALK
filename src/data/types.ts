@@ -44,6 +44,7 @@ export interface Review {
   difficulty: number;
   wouldTakeAgain: boolean | null;
   workload?: Workload | "";
+  criteria?: Record<CriteriaKey, number>;
   createdAt?: string;
   authorCode?: string;
 }
