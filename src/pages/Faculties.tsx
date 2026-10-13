@@ -52,15 +52,15 @@ export default function Faculties() {
               <h2 className="mt-4 text-[17px] font-semibold">{f.name}</h2>
               <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-4">
                 <div>
-                  <div className="num text-2xl font-bold tracking-tight">{list.length}</div>
+                  <div className="num display text-[clamp(2rem,3.5vw,3rem)]">{list.length}</div>
                   <div className="text-xs text-sub">docentes</div>
                 </div>
                 <div>
-                  <div className="num text-2xl font-bold tracking-tight">{avg !== null ? avg.toFixed(1) : "—"}</div>
+                  <div className="num display text-[clamp(2rem,3.5vw,3rem)]">{avg !== null ? avg.toFixed(1) : "—"}</div>
                   <div className="text-xs text-sub">promedio</div>
                 </div>
                 <div>
-                  <div className="num text-2xl font-bold tracking-tight">{courses}</div>
+                  <div className="num display text-[clamp(2rem,3.5vw,3rem)]">{courses}</div>
                   <div className="text-xs text-sub">cursos</div>
                 </div>
               </div>

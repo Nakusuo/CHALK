@@ -196,7 +196,7 @@ export default function ReviewPage() {
 
       <section className="card p-6 sm:p-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">
+          <h1 className="display text-[clamp(2rem,4vw,3.25rem)]">
             {
               ["Califica los criterios", "¿Cómo fue la experiencia?", "Descríbelo en pocas palabras", "Cuéntanos más", "Revisa y publica"][
                 step

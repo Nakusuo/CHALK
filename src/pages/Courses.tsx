@@ -26,7 +26,7 @@ export default function Courses() {
       <div className="relative mb-4">
         <Search size={18} aria-hidden className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sub" />
         <input
-          className="input h-12 rounded-card border-transparent pl-11 shadow-card"
+          className="input h-12 border-fg/80 pl-11"
           aria-label="Buscar curso"
           placeholder="Buscar curso"
           value={q}
