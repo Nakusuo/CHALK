@@ -214,6 +214,10 @@
     background: #c1272d;
     color: #ffffff;
   }
+  .block-noir :focus-visible,
+  .block-cherry :focus-visible {
+    outline-color: #edebdd;
+  }
   .btn-on-block {
     @apply btn border border-[#EDEBDD]/45 text-[#EDEBDD] hover:bg-white/10;
   }
