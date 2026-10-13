@@ -257,7 +257,7 @@ export const careersBySede: Record<string, string[]> = {
   ]
 };
 
-/** Docente real sin calificaciones: todas las métricas arrancan en 0 hasta que lleguen reseñas. */
+/** Docente real sin calificaciones: los ceros son valores de relleno que nunca se muestran; las métricas salen de las reseñas. */
 function prof(id: number, name: string, emoji: string, dept: string, fac: string, courses: string[]): Professor {
   return {
     id, name, emoji, dept, fac, courses,
