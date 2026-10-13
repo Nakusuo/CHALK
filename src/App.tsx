@@ -1,17 +1,19 @@
+import { lazy } from "react";
 import { HashRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { Toaster } from "./components/Toast";
 import Layout from "./components/Layout";
 import { useStore } from "./lib/store";
-import Compare from "./pages/Compare";
-import Courses from "./pages/Courses";
-import Faculties from "./pages/Faculties";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import ProfessorPage from "./pages/Professor";
-import Profile from "./pages/Profile";
 import Register from "./pages/Register";
-import ReviewPage from "./pages/Review";
+
+const Home = lazy(() => import("./pages/Home"));
+const ProfessorPage = lazy(() => import("./pages/Professor"));
+const ReviewPage = lazy(() => import("./pages/Review"));
+const Faculties = lazy(() => import("./pages/Faculties"));
+const Courses = lazy(() => import("./pages/Courses"));
+const Compare = lazy(() => import("./pages/Compare"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 function Protected() {
   const user = useStore((s) => s.user);

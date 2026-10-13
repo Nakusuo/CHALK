@@ -1,5 +1,5 @@
 import { LogOut, Menu, Moon, Sun, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { getTheme, setTheme, store, useStore } from "../lib/store";
 import { cx } from "./ui";
@@ -90,7 +90,9 @@ export default function Layout() {
         )}
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
-        <Outlet />
+        <Suspense fallback={<div className="py-24 text-center text-sm text-sub">Cargando…</div>}>
+          <Outlet />
+        </Suspense>
       </main>
       <footer className="border-t border-line py-8 text-center text-xs text-sub">
         CHALK · Comunidad docente UTP · Reseñas guardadas en tu navegador
