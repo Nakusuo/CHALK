@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Badge as BadgeT } from "../data/db";
 import { difficultyLabel, difficultyTone } from "../data/db";
 
@@ -43,12 +43,12 @@ export function ScorePill({ score, size = "md" }: { score: number | null; size?:
   return (
     <div
       className={cx(
-        "num grid shrink-0 place-items-center rounded-xl font-bold",
+        "num grid shrink-0 place-items-center rounded-control font-bold",
         t === null && "bg-muted text-sub",
         t === "good" && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
         t === "warn" && "bg-amber-500/10 text-amber-700 dark:text-amber-300",
         t === "bad" && "bg-red-500/10 text-red-700 dark:text-red-300",
-        size === "md" ? "h-12 w-12 text-lg" : "h-20 w-20 text-3xl rounded-2xl",
+        size === "md" ? "h-12 w-12 text-lg" : "h-20 w-20 text-3xl rounded-card",
       )}
     >
       {score === null ? "—" : score.toFixed(1)}
@@ -58,9 +58,9 @@ export function ScorePill({ score, size = "md" }: { score: number | null; size?:
 
 export function Meter({ value, max = 5, tone }: { value: number; max?: number; tone?: keyof typeof toneBg }) {
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted motion-reduce:[&>div]:transition-none">
+    <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
       <div
-        className={cx("h-full rounded-full transition-[width] duration-700 ease-out", tone ? toneBg[tone] : "bg-accent")}
+        className={cx("grow-x h-full rounded-full", tone ? toneBg[tone] : "bg-accent")}
         style={{ width: `${Math.min(100, (value / max) * 100)}%` }}
       />
     </div>
@@ -111,24 +111,71 @@ export function Avatar({ children, size = 40, className }: { children: ReactNode
   );
 }
 
-export function Stat({
-  label,
-  value,
-  hint,
-  children,
-  compact,
-}: {
-  label: string;
-  value: ReactNode;
-  hint?: ReactNode;
-  children?: ReactNode;
-  compact?: boolean;
-}) {
+const reducedMotion = () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+/** Cuenta desde 0 hasta la cifra del texto ("4.6", "86%", "1,234") la primera vez que entra en pantalla.
+ *  Sin IntersectionObserver o con movimiento reducido muestra el valor final desde el inicio. */
+export function CountUp({ value }: { value: string }) {
+  const m = value.match(/^(\D*)([\d.,]+)(\D*)$/);
+  const [shown, setShown] = useState(value);
+  const ref = useRef<HTMLSpanElement>(null);
+  const canAnimate = !!m && typeof IntersectionObserver !== "undefined" && !reducedMotion();
+
+  useLayoutEffect(() => {
+    if (canAnimate && m) setShown(m[1] + m[2].replace(/\d/g, "0") + m[3]);
+    else setShown(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  useEffect(() => {
+    if (!canAnimate || !m || !ref.current) return;
+    const raw = m[2];
+    const decimals = raw.includes(".") ? raw.split(".")[1].length : 0;
+    const target = Number(raw.replace(/,/g, ""));
+    let raf = 0;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      const start = performance.now();
+      const tick = (t: number) => {
+        const k = Math.min(1, (t - start) / 900);
+        const eased = 1 - Math.pow(2, -10 * k);
+        const n = k === 1 ? target : target * eased;
+        const txt = decimals ? n.toFixed(decimals) : Math.round(n).toLocaleString("es-PE");
+        setShown(m[1] + txt + m[3]);
+        if (k < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    });
+    io.observe(ref.current);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
   return (
-    <div className={cx("card flex min-w-0 flex-col", compact ? "p-3 sm:p-5" : "p-5")}>
-      <div className={cx("truncate font-medium text-sub", compact ? "text-xs sm:text-sm" : "text-sm")}>{label}</div>
-      <div className={cx("num font-bold tracking-tight", compact ? "mt-1 text-2xl sm:mt-2 sm:text-4xl" : "mt-2 text-4xl")}>{value}</div>
-      {hint && <div className={cx("mt-1 text-xs text-sub", compact && "hidden sm:block")}>{hint}</div>}
+    <span ref={ref} aria-label={value}>
+      <span aria-hidden>{shown}</span>
+    </span>
+  );
+}
+
+export function Stat({ label, value, hint, children, compact }: { label: string; value: ReactNode; hint?: ReactNode; children?: ReactNode; compact?: boolean }) {
+  const v = typeof value === "number" ? String(value) : value;
+  return (
+    <div className={cx("rule flex min-w-0 flex-col bg-transparent", compact ? "pt-2 sm:pt-3" : "pt-3")}>
+      <div className={cx("truncate font-semibold text-fg", compact ? "text-xs sm:text-sm" : "text-sm")}>{label}</div>
+      <div
+        className={cx(
+          "num display mt-2",
+          compact ? "text-[clamp(1.75rem,7vw,4.5rem)]" : "text-[clamp(2.5rem,5vw,4.5rem)]",
+        )}
+      >
+        {typeof v === "string" ? <CountUp value={v} /> : v}
+      </div>
+      {hint && <div className={cx("mt-2 text-xs text-sub", compact && "hidden sm:block")}>{hint}</div>}
       {children && <div className={cx("mt-auto pt-4", compact && "hidden sm:block")}>{children}</div>}
     </div>
   );
@@ -174,7 +221,7 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4 pt-2">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-[34px]">{title}</h1>
+        <h1 className="display text-[clamp(2.25rem,5vw,4rem)]">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-sub">{subtitle}</p>}
       </div>
       {actions}
