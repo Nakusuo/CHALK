@@ -1,6 +1,7 @@
 import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import type { Review } from "../data/types";
 import { store, useStore } from "../lib/store";
+import { toast } from "./Toast";
 import { Avatar, cx, Stars, Tag } from "./ui";
 
 export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showProf?: string; readOnly?: boolean }) {
@@ -9,7 +10,9 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
   return (
     <article className="border-b border-line py-5 last:border-0">
       <div className="flex items-start gap-3">
-        <Avatar size={36} className="text-xs">{r.initials}</Avatar>
+        <Avatar size={36} className="text-xs">
+          {r.initials}
+        </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 text-sm">
             <b>{r.user}</b>
@@ -39,11 +42,21 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
         {!readOnly && (
           <div className="ml-auto flex items-center gap-1">
             {mine && (
-              <button className="btn-ghost h-8 px-2 text-xs text-sub" onClick={() => store.deleteReview(r.id)}>
+              <button
+                className="btn-ghost h-8 px-2 text-xs text-sub"
+                onClick={() => {
+                  store.deleteReview(r.id);
+                  toast("Reseña borrada", { label: "Deshacer", onClick: () => store.restoreReview(r) });
+                }}
+              >
                 <Trash2 size={14} /> Borrar
               </button>
             )}
-            <button className={cx("btn-ghost h-8 px-2 text-xs", voted ? "text-brand" : "text-sub")} aria-pressed={voted} onClick={() => store.toggleHelpful(r.id)}>
+            <button
+              className={cx("btn-ghost h-8 px-2 text-xs", voted ? "text-brand" : "text-sub")}
+              aria-pressed={voted}
+              onClick={() => store.toggleHelpful(r.id)}
+            >
               <ThumbsUp size={14} fill={voted ? "currentColor" : "none"} /> Útil · {r.helpful + (voted ? 1 : 0)}
             </button>
           </div>

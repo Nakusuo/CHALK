@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getSedeName, profBadge, profMetrics } from "../data/db";
 import type { Professor } from "../data/types";
 import { store, useStore } from "../lib/store";
+import { toast } from "./Toast";
 import { Avatar, BadgeTag, cx, Difficulty, ScorePill, Stars } from "./ui";
 
 export function FavoriteButton({ id, className }: { id: number; className?: string }) {
@@ -15,6 +16,7 @@ export function FavoriteButton({ id, className }: { id: number; className?: stri
       onClick={(e) => {
         e.preventDefault();
         store.toggleFavorite(id);
+        toast(fav ? "Quitado de guardados" : "Docente guardado");
       }}
     >
       <Bookmark size={18} fill={fav ? "currentColor" : "none"} />

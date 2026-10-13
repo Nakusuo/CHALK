@@ -1,4 +1,5 @@
 import { HashRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Toaster } from "./components/Toast";
 import Layout from "./components/Layout";
 import { useStore } from "./lib/store";
 import Compare from "./pages/Compare";
@@ -26,6 +27,7 @@ function GuestOnly() {
 export default function App() {
   return (
     <HashRouter>
+      <Toaster />
       <Routes>
         <Route element={<GuestOnly />}>
           <Route path="/" element={<Login />} />
