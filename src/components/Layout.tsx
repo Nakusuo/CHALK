@@ -93,7 +93,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="border-t border-line py-8 text-center text-xs text-sub">
-        CHALK · Comunidad docente UTP · Datos de ejemplo guardados en tu navegador
+        CHALK · Comunidad docente UTP · Reseñas guardadas en tu navegador
       </footer>
     </div>
   );

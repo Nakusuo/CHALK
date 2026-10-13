@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allCourses, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profStats } from "./db";
+import { allCourses, dateRank, difficultyLabel, getProfessor, isValidCode, isValidEmail, profBadge, profMetrics, profStats } from "./db";
 import type { Review } from "./types";
 
 // Fixture con nota semilla: los docentes reales arrancan sin reseñas.
@@ -56,4 +56,30 @@ it("allCourses no repite cursos y está ordenado", () => {
   const names = allCourses().map((c) => c.name);
   expect(new Set(names).size).toBe(names.length);
   expect([...names].sort((a, b) => a.localeCompare(b))).toEqual(names);
+});
+
+describe("profMetrics", () => {
+  const seedP = { ...p1, difficulty: 3, wouldTakeAgain: 80 };
+  it("sin reseñas: no calificado y valores nulos", () => {
+    expect(profMetrics(getProfessor(1)!, [])).toEqual({ score: 0, count: 0, difficulty: null, wouldTakeAgain: null, rated: false });
+  });
+  it("dos reseñas del usuario: promedios", () => {
+    const rs = [{ ...review(5), difficulty: 2, wouldTakeAgain: true }, { ...review(3), difficulty: 4, wouldTakeAgain: null }];
+    expect(profMetrics(getProfessor(1)!, rs)).toEqual({ score: 4, count: 2, difficulty: 3, wouldTakeAgain: 100, rated: true });
+  });
+  it("wouldTakeAgain es el % de true entre no nulos", () => {
+    const rs = [{ ...review(4), wouldTakeAgain: true }, { ...review(4), wouldTakeAgain: false }];
+    expect(profMetrics(getProfessor(1)!, rs).wouldTakeAgain).toBe(50);
+  });
+  it("mezcla semilla ponderada por reseñas", () => {
+    const m = profMetrics(seedP, [{ ...review(1), difficulty: 5, wouldTakeAgain: false }]);
+    expect(m.count).toBe(135);
+    expect(m.score).toBeCloseTo((4.7 * 134 + 1) / 135, 5);
+    expect(m.difficulty).toBeCloseTo((3 * 134 + 5) / 135, 5);
+    expect(m.wouldTakeAgain).toBeCloseTo((80 * 134) / 135, 5);
+    expect(m.rated).toBe(true);
+  });
+  it("semilla sin reseñas propias devuelve la semilla", () => {
+    expect(profMetrics(seedP, [])).toEqual({ score: 4.7, count: 134, difficulty: 3, wouldTakeAgain: 80, rated: true });
+  });
 });

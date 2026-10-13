@@ -12,7 +12,7 @@ import {
   getProfessor,
   getSedeName,
   profBadge,
-  profStats,
+  profMetrics,
   workloadLabels,
 } from "../data/db";
 import type { CriteriaKey } from "../data/types";
@@ -34,7 +34,7 @@ export default function ProfessorPage() {
   const [course, setCourse] = useState("all");
 
   if (!p) return <NotFound />;
-  const { score, count } = profStats(p, userReviews);
+  const { score, count, difficulty, wouldTakeAgain, rated } = profMetrics(p, userReviews);
 
   let reviews = allReviews(userReviews).filter((r) => r.profId === p.id && (course === "all" || r.course === course));
   if (filter === "positive") reviews = reviews.filter((r) => r.score >= 4);
@@ -43,8 +43,9 @@ export default function ProfessorPage() {
 
   const dist = p.gradeDistribution;
   const distMax = Math.max(1, ...dist);
-  // Las métricas agregadas vienen del seed; un docente sin reseñas aún no las tiene.
-  const rated = p.reviews > 0;
+  // Aprobación, aprendizaje, criterios, distribución y evolución solo existen en la semilla.
+  const hasSeed = p.reviews > 0;
+  const courseRatings = Object.entries(p.courseRatings);
   const hist = p.historicalRatings;
 
   return (
@@ -60,7 +61,7 @@ export default function ProfessorPage() {
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-2xl font-bold tracking-tight">{p.name}</h1>
               {p.verified && <BadgeCheck size={20} className="text-sky-500" aria-label="Verificado" />}
-              <BadgeTag badge={profBadge(p, score)} />
+              {rated && <BadgeTag badge={profBadge(p, score)} />}
             </div>
             <div className="mt-1 text-sub">
               {p.dept} · {getFaculty(p.fac)?.name}
@@ -78,10 +79,16 @@ export default function ProfessorPage() {
             </div>
           </div>
           <div className="flex items-center gap-4 sm:flex-col sm:items-end">
-            <ScorePill score={score} size="lg" />
+            <ScorePill score={rated ? score : null} size="lg" />
             <div className="sm:text-right">
-              <Stars value={score} />
-              <div className="mt-1 text-xs text-sub">{count} reseñas</div>
+              {rated ? (
+                <>
+                  <Stars value={score} />
+                  <div className="mt-1 text-xs text-sub">{count} reseñas</div>
+                </>
+              ) : (
+                <div className="text-xs text-sub">Sin reseñas aún</div>
+              )}
             </div>
           </div>
         </div>
@@ -99,9 +106,15 @@ export default function ProfessorPage() {
       {rated && (
         <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {[
-            { label: "Lo volvería a llevar", value: `${p.wouldTakeAgain}%`, v: p.wouldTakeAgain },
-            { label: "Aprobación", value: `${p.approvalRate}%`, v: p.approvalRate },
-            { label: "Aprendizaje", value: `${p.learningScore}%`, v: p.learningScore },
+            ...(wouldTakeAgain !== null
+              ? [{ label: "Lo volvería a llevar", value: `${Math.round(wouldTakeAgain)}%`, v: wouldTakeAgain }]
+              : []),
+            ...(hasSeed
+              ? [
+                  { label: "Aprobación", value: `${p.approvalRate}%`, v: p.approvalRate },
+                  { label: "Aprendizaje", value: `${p.learningScore}%`, v: p.learningScore },
+                ]
+              : []),
           ].map((m) => (
             <div key={m.label} className="card p-4">
               <div className="eyebrow">{m.label}</div>
@@ -109,11 +122,13 @@ export default function ProfessorPage() {
               <Meter value={m.v} max={100} />
             </div>
           ))}
-          <div className="card p-4">
-            <div className="eyebrow">Dificultad · Carga {workloadLabels[p.workload].toLowerCase()}</div>
-            <div className="mb-3 mt-1 text-2xl font-bold">{p.difficulty.toFixed(1)}</div>
-            <Difficulty value={p.difficulty} />
-          </div>
+          {difficulty !== null && (
+            <div className="card p-4">
+              <div className="eyebrow">Dificultad{hasSeed && ` · Carga ${workloadLabels[p.workload].toLowerCase()}`}</div>
+              <div className="mb-3 mt-1 text-2xl font-bold">{difficulty.toFixed(1)}</div>
+              <Difficulty value={difficulty} />
+            </div>
+          )}
         </div>
       )}
 
@@ -155,7 +170,7 @@ export default function ProfessorPage() {
           )}
         </section>
 
-        {rated && (
+        {hasSeed && (
           <aside className="space-y-6">
             <section className="card p-5">
               <h2 className="mb-4 font-semibold">Criterios</h2>
@@ -203,19 +218,21 @@ export default function ProfessorPage() {
               </div>
             </section>
 
-            <section className="card p-5">
-              <h2 className="mb-3 font-semibold">Por curso</h2>
-              {Object.entries(p.courseRatings).map(([c, v]) => (
-                <Link
-                  key={c}
-                  to={`/cursos?q=${encodeURIComponent(c)}`}
-                  className="flex justify-between border-b border-line py-2 text-sm last:border-0 hover:text-brand"
-                >
-                  <span>{c}</span>
-                  <b className="font-mono">{v.toFixed(1)}</b>
-                </Link>
-              ))}
-            </section>
+            {courseRatings.length > 0 && (
+              <section className="card p-5">
+                <h2 className="mb-3 font-semibold">Por curso</h2>
+                {courseRatings.map(([c, v]) => (
+                  <Link
+                    key={c}
+                    to={`/cursos?q=${encodeURIComponent(c)}`}
+                    className="flex justify-between border-b border-line py-2 text-sm last:border-0 hover:text-brand"
+                  >
+                    <span>{c}</span>
+                    <b className="font-mono">{v.toFixed(1)}</b>
+                  </Link>
+                ))}
+              </section>
+            )}
           </aside>
         )}
       </div>

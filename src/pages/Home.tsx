@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ProfessorCard from "../components/ProfessorCard";
 import { cx, PageHeader, Stat } from "../components/ui";
-import { faculties, professors, profStats, sedes } from "../data/db";
+import { allCourses, faculties, professors, profMetrics, sedes } from "../data/db";
 import { useStore } from "../lib/store";
 
 const SORTS = [
@@ -33,7 +33,7 @@ export default function Home() {
     setParams(next, { replace: true });
   };
 
-  const withStats = useMemo(() => professors.map((p) => ({ p, ...profStats(p, reviews) })), [reviews]);
+  const withStats = useMemo(() => professors.map((p) => ({ p, ...profMetrics(p, reviews) })), [reviews]);
 
   const list = useMemo(() => {
     const term = q.toLowerCase().trim();
@@ -45,16 +45,16 @@ export default function Home() {
       .filter(({ p }) => !term || [p.name, p.dept, ...p.courses].some((s) => s.toLowerCase().includes(term)))
       .sort((a, b) => {
         if (sort === "reviews") return b.count - a.count;
-        if (sort === "difficulty") return a.p.difficulty - b.p.difficulty;
-        if (sort === "wta") return b.p.wouldTakeAgain - a.p.wouldTakeAgain;
+        if (sort === "difficulty") return (a.difficulty ?? Infinity) - (b.difficulty ?? Infinity) || 0;
+        if (sort === "wta") return (b.wouldTakeAgain ?? -1) - (a.wouldTakeAgain ?? -1);
         return b.score - a.score;
       });
   }, [withStats, q, fac, sede, tag, sort, saved, favorites]);
 
   const totalReviews = withStats.reduce((s, x) => s + x.count, 0);
-  const avg = withStats.reduce((s, x) => s + x.score, 0) / withStats.length;
-  const approval = professors.reduce((s, p) => s + p.approvalRate, 0) / professors.length;
-  const top = [...withStats].sort((a, b) => b.score - a.score).slice(0, 5);
+  const ratedList = withStats.filter((x) => x.rated);
+  const avg = ratedList.length ? ratedList.reduce((s, x) => s + x.score, 0) / ratedList.length : null;
+  const top = [...ratedList].sort((a, b) => b.score - a.score).slice(0, 5);
 
   return (
     <>
@@ -63,8 +63,8 @@ export default function Home() {
       <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="Docentes" value={professors.length} />
         <Stat label="Reseñas" value={totalReviews.toLocaleString("es-PE")} />
-        <Stat label="Nota promedio" value={avg.toFixed(2)} hint="sobre 5.0" />
-        <Stat label="Aprobación media" value={`${Math.round(approval)}%`} />
+        <Stat label="Nota promedio" value={avg === null ? "—" : avg.toFixed(2)} hint={avg === null ? "aún sin reseñas" : "sobre 5.0"} />
+        <Stat label="Cursos" value={allCourses().length} />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
@@ -140,6 +140,11 @@ export default function Home() {
             <div className="mb-4 flex items-center gap-2 font-semibold">
               <Trophy size={16} className="text-amber-500" /> Mejor calificados
             </div>
+            {top.length === 0 && (
+              <p className="text-sm text-sub">
+                Aún no hay docentes calificados. Abre un perfil y escribe la primera reseña.
+              </p>
+            )}
             <ol className="space-y-3">
               {top.map(({ p, score }, i) => (
                 <li key={p.id}>

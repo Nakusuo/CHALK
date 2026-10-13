@@ -2,7 +2,7 @@ import { ArrowLeftRight, GitCompare, Trophy, X } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Avatar, cx, Empty, PageHeader, Stars } from "../components/ui";
-import { criteriaLabels, getProfessor, professors, profStats, workloadLabels } from "../data/db";
+import { criteriaLabels, getProfessor, professors, profMetrics, workloadLabels } from "../data/db";
 import type { CriteriaKey, Professor } from "../data/types";
 import { useStore } from "../lib/store";
 
@@ -53,24 +53,37 @@ export default function Compare() {
   };
   const swap = () => setParams({ ...(b && { a: String(b.id) }), ...(a && { b: String(a.id) }) }, { replace: true });
 
-  const rows: { label: string; get: (p: Professor) => number; fmt: (n: number) => string; lowerBetter?: boolean }[] = a && b
-    ? [
-        { label: "Calificación", get: (p) => profStats(p, reviews).score, fmt: (n) => n.toFixed(1) },
-        { label: "Reseñas", get: (p) => profStats(p, reviews).count, fmt: String },
-        { label: "Lo volvería a llevar", get: (p) => p.wouldTakeAgain, fmt: (n) => `${n}%` },
-        { label: "Aprobación", get: (p) => p.approvalRate, fmt: (n) => `${n}%` },
-        { label: "Aprendizaje", get: (p) => p.learningScore, fmt: (n) => `${n}%` },
-        { label: "Dificultad", get: (p) => p.difficulty, fmt: (n) => n.toFixed(1), lowerBetter: true },
-        ...(Object.keys(criteriaLabels) as CriteriaKey[]).map((k) => ({ label: criteriaLabels[k], get: (p: Professor) => p.criteria[k], fmt: (n: number) => n.toFixed(1) })),
-      ]
-    : [];
+  type Row = { label: string; get: (p: Professor) => number | null; fmt: (n: number) => string; lowerBetter?: boolean };
+  // Aprobación, aprendizaje y criterios solo existen en la semilla: sin ella no hay nada que comparar.
+  const hasSeed = !!a && !!b && (a.reviews > 0 || b.reviews > 0);
+  const rows: Row[] =
+    a && b
+      ? [
+          { label: "Calificación", get: (p) => { const m = profMetrics(p, reviews); return m.rated ? m.score : null; }, fmt: (n) => n.toFixed(1) },
+          { label: "Reseñas", get: (p) => profMetrics(p, reviews).count, fmt: String },
+          { label: "Lo volvería a llevar", get: (p) => profMetrics(p, reviews).wouldTakeAgain, fmt: (n) => `${Math.round(n)}%` },
+          { label: "Dificultad", get: (p) => profMetrics(p, reviews).difficulty, fmt: (n) => n.toFixed(1), lowerBetter: true },
+          ...(hasSeed
+            ? [
+                { label: "Aprobación", get: (p: Professor) => (p.reviews ? p.approvalRate : null), fmt: (n: number) => `${n}%` },
+                { label: "Aprendizaje", get: (p: Professor) => (p.reviews ? p.learningScore : null), fmt: (n: number) => `${n}%` },
+                ...(Object.keys(criteriaLabels) as CriteriaKey[]).map((k) => ({ label: criteriaLabels[k], get: (p: Professor) => (p.reviews ? p.criteria[k] : null), fmt: (n: number) => n.toFixed(1) })),
+              ]
+            : []),
+        ]
+      : [];
+
+  const winner = (r: Row, x: Professor, y: Professor): "a" | "b" | null => {
+    const [vx, vy] = [r.get(x), r.get(y)];
+    if (vx === null || vy === null || vx === vy) return null;
+    return (r.lowerBetter ? vx < vy : vx > vy) ? "a" : "b";
+  };
 
   const wins = rows.reduce(
     (w, r) => {
-      const [va, vb] = [r.get(a!), r.get(b!)];
-      if (va === vb) return w;
-      const aWins = r.lowerBetter ? va < vb : va > vb;
-      return aWins ? { ...w, a: w.a + 1 } : { ...w, b: w.b + 1 };
+      const res = winner(r, a!, b!);
+      if (!res) return w;
+      return res === "a" ? { ...w, a: w.a + 1 } : { ...w, b: w.b + 1 };
     },
     { a: 0, b: 0 },
   );
@@ -101,12 +114,12 @@ export default function Compare() {
           </div>
           {rows.map((r) => {
             const [va, vb] = [r.get(a), r.get(b)];
-            const better = va === vb ? null : (r.lowerBetter ? va < vb : va > vb) ? "a" : "b";
+            const better = winner(r, a, b);
             return (
               <div key={r.label} className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-line px-5 py-3 text-sm last:border-0">
-                <div className={cx("text-right font-mono", better === "a" ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-sub")}>{r.fmt(va)}</div>
+                <div className={cx("text-right font-mono", better === "a" ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-sub")}>{va === null ? "—" : r.fmt(va)}</div>
                 <div className="w-32 text-center text-xs text-sub sm:w-44">{r.label}</div>
-                <div className={cx("font-mono", better === "b" ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-sub")}>{r.fmt(vb)}</div>
+                <div className={cx("font-mono", better === "b" ? "font-bold text-emerald-600 dark:text-emerald-400" : "text-sub")}>{vb === null ? "—" : r.fmt(vb)}</div>
               </div>
             );
           })}
@@ -116,11 +129,14 @@ export default function Compare() {
             <div>{workloadLabels[b.workload]}</div>
           </div>
           <div className="grid grid-cols-2 gap-4 border-t border-line p-5">
-            {[a, b].map((p) => (
-              <div key={p.id} className={cx("flex items-center gap-2 text-xs text-sub", p === a && "justify-end")}>
-                <Stars value={profStats(p, reviews).score} size={12} />
-              </div>
-            ))}
+            {[a, b].map((p) => {
+              const m = profMetrics(p, reviews);
+              return (
+                <div key={p.id} className={cx("flex items-center gap-2 text-xs text-sub", p === a && "justify-end")}>
+                  {m.rated ? <Stars value={m.score} size={12} /> : "Sin reseñas aún"}
+                </div>
+              );
+            })}
           </div>
         </section>
       ) : (
