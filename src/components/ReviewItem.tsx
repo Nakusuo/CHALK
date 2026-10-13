@@ -9,15 +9,15 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
   const voted = useStore((s) => !!s.helpful[r.id]);
   const mine = r.id.startsWith("user-");
   return (
-    <article className="border-b border-line py-5 last:border-0">
+    <article className="card p-5 sm:p-6">
       <div className="flex items-start gap-3">
-        <Avatar size={36} className="text-xs">
+        <Avatar size={38} className="bg-accent-soft text-xs text-accent-ink">
           {r.initials}
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 text-sm">
             <b>{r.user}</b>
-            {mine && <span className="rounded bg-brand/10 px-1.5 text-[10px] font-bold text-brand">TÚ</span>}
+            {mine && <span className="rounded-full bg-accent-soft px-2 text-[11px] font-semibold text-accent-ink">Tú</span>}
             <span className="text-sub">· {r.date}</span>
           </div>
           <div className="mt-0.5 text-xs text-sub">
@@ -27,7 +27,7 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
         </div>
         <Stars value={r.score} size={13} />
       </div>
-      {r.text && <p className="mt-3 text-sm leading-relaxed">{r.text}</p>}
+      {r.text && <p className="mt-3 max-w-[70ch] text-[15px] leading-relaxed">{r.text}</p>}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {r.tags.map((t, i) => (
           <Tag key={t} type={r.tagType[i]}>
@@ -59,11 +59,12 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
               </button>
             )}
             <button
-              className={cx("btn-ghost h-8 px-2 text-xs", voted ? "text-brand" : "text-sub")}
+              className={cx("btn-ghost h-8 px-2 text-xs", voted ? "text-accent-ink" : "text-sub")}
               aria-pressed={voted}
               onClick={() => store.toggleHelpful(r.id)}
             >
-              <ThumbsUp size={14} fill={voted ? "currentColor" : "none"} /> Útil · {r.helpful + (voted ? 1 : 0)}
+              <ThumbsUp size={14} fill={voted ? "currentColor" : "none"} /> Útil ·{" "}
+              <span className="num">{r.helpful + (voted ? 1 : 0)}</span>
             </button>
           </div>
         )}
