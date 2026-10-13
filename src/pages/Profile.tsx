@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ProfessorCard from "../components/ProfessorCard";
 import ReviewItem from "../components/ReviewItem";
 import { toast } from "../components/Toast";
+import Aside from "../components/Aside";
 import { Empty, PageHeader, Stat } from "../components/ui";
 import { faculties, getFaculty, getProfessor, getSedeName, sedes } from "../data/db";
 import { store, useStore } from "../lib/store";
@@ -42,53 +43,57 @@ export default function Profile() {
         }
       />
 
-      <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat label="Reseñas escritas" value={mine.length} />
         <Stat label="Nota media que das" value={avg ? avg.toFixed(1) : "—"} />
         <Stat label="Docentes guardados" value={favorites.length} />
         <Stat label="Votos útiles" value={Object.values(helpful).filter(Boolean).length} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
-          <section className="card p-6">
-            <h2 className="flex items-center gap-2 font-semibold">
-              <MessageSquareText size={18} /> Mis reseñas
-            </h2>
-            {mine.length ? (
-              [...mine].reverse().map((r) => <ReviewItem key={r.id} r={r} showProf={getProfessor(r.profId)?.name} />)
-            ) : (
-              <div className="mt-4">
-                <Empty icon={<MessageSquareText />} title="Aún no escribes reseñas">
-                  <Link to="/docentes" className="font-semibold text-brand hover:underline">
-                    Busca a un docente
-                  </Link>{" "}
-                  que hayas llevado y cuenta cómo te fue.
-                </Empty>
-              </div>
-            )}
-          </section>
-
-          <section>
-            <h2 className="mb-3 flex items-center gap-2 font-semibold">
-              <Bookmark size={18} /> Guardados
-            </h2>
-            {favorites.length ? (
-              <div className="space-y-3">
-                {favorites.map((id) => {
-                  const p = getProfessor(id);
-                  return p && <ProfessorCard key={id} p={p} />;
-                })}
-              </div>
-            ) : (
-              <Empty icon={<Bookmark />} title="Nada guardado todavía">
-                Usa el marcador en cualquier docente para tenerlo a mano.
+      <div className="space-y-8">
+        <section>
+          <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+            <MessageSquareText size={18} /> Mis reseñas
+          </h2>
+          {mine.length ? (
+            <div className="space-y-4">
+              {[...mine].reverse().map((r) => (
+                <ReviewItem key={r.id} r={r} showProf={getProfessor(r.profId)?.name} />
+              ))}
+            </div>
+          ) : (
+            <div>
+              <Empty icon={<MessageSquareText />} title="Aún no escribes reseñas">
+                <Link to="/docentes" className="link">
+                  Busca a un docente
+                </Link>{" "}
+                que hayas llevado y cuenta cómo te fue.
               </Empty>
-            )}
-          </section>
-        </div>
+            </div>
+          )}
+        </section>
 
-        <form onSubmit={save} className="card h-fit space-y-4 p-6 lg:sticky lg:top-24">
+        <section>
+          <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+            <Bookmark size={18} /> Guardados
+          </h2>
+          {favorites.length ? (
+            <div className="space-y-4">
+              {favorites.map((id) => {
+                const p = getProfessor(id);
+                return p && <ProfessorCard key={id} p={p} />;
+              })}
+            </div>
+          ) : (
+            <Empty icon={<Bookmark />} title="Nada guardado todavía">
+              Usa el marcador en cualquier docente para tenerlo a mano.
+            </Empty>
+          )}
+        </section>
+      </div>
+
+      <Aside>
+        <form onSubmit={save} className="card space-y-4 p-6">
           <h2 className="font-semibold">Mis datos</h2>
           <label className="block">
             <span className="label">Nombre</span>
@@ -119,7 +124,7 @@ export default function Profile() {
           <div className="text-xs text-sub">Código: {user.code}</div>
           <button className="btn-primary w-full">Guardar cambios</button>
         </form>
-      </div>
+      </Aside>
     </>
   );
 }

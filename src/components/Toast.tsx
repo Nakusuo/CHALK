@@ -30,11 +30,11 @@ export function Toaster() {
       {items.map((i) => {
         const { action } = i;
         return (
-          <div key={i.id} role="status" className="flex items-center gap-4 rounded-xl bg-fg px-4 py-3 text-sm text-bg shadow-lg">
+          <div key={i.id} role="status" className="flex items-center gap-4 rounded-xl bg-fg px-4 py-3 text-sm text-bg shadow-lift">
             {i.message}
             {action && (
               <button
-                className="font-semibold text-brand-100 hover:underline dark:text-brand-700"
+                className="font-semibold text-[#F3B3AC] hover:underline dark:text-[#810100]"
                 onClick={() => {
                   action.onClick();
                   dismiss(i.id);

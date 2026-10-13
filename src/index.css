@@ -4,28 +4,70 @@
 
 @layer base {
   :root {
-    --bg: 248 248 250;
+    --bg: 245 244 242;
     --surface: 255 255 255;
-    --muted: 241 241 244;
-    --line: 228 228 233;
-    --fg: 17 17 22;
-    --sub: 99 99 112;
+    --muted: 237 235 221;
+    --line: 220 215 212;
+    --fg: 27 23 23;
+    --sub: 94 88 86;
+    --accent: 129 1 0;
+    --accent-ink: 129 1 0;
+    --accent-hover: 99 0 0;
+    --accent-soft: 243 230 228;
+    --shadow: 0 1px 2px rgb(27 23 23 / 0.05), 0 10px 28px -12px rgb(27 23 23 / 0.14);
+    --shadow-lift: 0 2px 4px rgb(27 23 23 / 0.06), 0 18px 40px -14px rgb(27 23 23 / 0.24);
     color-scheme: light;
   }
   .dark {
-    --bg: 11 11 14;
-    --surface: 21 21 26;
-    --muted: 31 31 37;
-    --line: 42 42 50;
-    --fg: 240 240 245;
-    --sub: 150 150 165;
+    --bg: 14 12 12;
+    --surface: 27 23 23;
+    --muted: 44 41 41;
+    --line: 58 53 53;
+    --fg: 237 235 221;
+    --sub: 169 161 158;
+    --accent: 193 39 45;
+    --accent-ink: 255 138 128;
+    --accent-hover: 163 31 36;
+    --accent-soft: 60 22 22;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -12px rgb(0 0 0 / 0.7);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.45), 0 20px 44px -14px rgb(0 0 0 / 0.85);
     color-scheme: dark;
   }
+  html {
+    scrollbar-color: rgb(var(--line)) transparent;
+  }
   body {
-    @apply bg-bg text-fg font-sans antialiased;
+    @apply bg-bg font-sans text-fg antialiased;
+    caret-color: rgb(var(--accent));
+    font-feature-settings: "ss01";
   }
   ::selection {
-    @apply bg-brand/20;
+    background: rgb(var(--accent) / 0.22);
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--line));
+    border-radius: 999px;
+    border: 2px solid rgb(var(--bg));
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
+  a {
+    text-underline-offset: 3px;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -36,37 +78,76 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
 
   .card {
-    @apply rounded-2xl border border-line bg-surface shadow-card;
+    @apply rounded-card bg-surface shadow-card;
+  }
+  .lift {
+    transition:
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lift:hover,
+  .lift:focus-visible,
+  .lift:has(:focus-visible) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+  .lift:focus-visible,
+  .lift:has(:focus-visible) {
+    box-shadow: var(--shadow-lift), 0 0 0 2px rgb(var(--accent));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lift,
+    .lift:hover,
+    .lift:focus-visible,
+    .lift:has(:focus-visible) {
+      transition: none;
+      transform: none;
+    }
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 h-10 text-sm font-semibold transition
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 h-10 text-sm font-semibold transition-colors
+      disabled:opacity-50 disabled:pointer-events-none;
   }
   .btn-primary {
-    @apply btn bg-brand text-white hover:bg-brand-700;
+    @apply btn bg-accent text-white hover:bg-[rgb(var(--accent-hover))];
+  }
+  .btn-brand {
+    @apply btn bg-accent text-white hover:bg-[rgb(var(--accent-hover))];
   }
   .btn-ghost {
     @apply btn text-fg hover:bg-muted;
   }
   .btn-outline {
-    @apply btn border border-line bg-surface hover:bg-muted;
+    @apply btn bg-muted text-fg hover:bg-line;
   }
   .input {
-    @apply h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm outline-none transition
-      placeholder:text-sub/70 focus:border-brand focus:ring-4 focus:ring-brand/10;
+    @apply h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-fg outline-none transition
+      placeholder:text-sub focus:border-accent focus:ring-4 focus:ring-accent/15;
   }
   .label {
     @apply mb-1.5 block text-xs font-semibold text-sub;
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-line px-3 h-8 text-xs font-medium text-sub transition hover:text-fg hover:border-fg/30;
+    @apply inline-flex items-center gap-1.5 rounded-full bg-muted px-3 h-8 text-xs font-medium text-sub transition-colors hover:text-fg;
   }
   .chip-on {
-    @apply border-brand bg-brand/10 text-brand hover:text-brand hover:border-brand;
+    @apply bg-accent-soft text-accent-ink hover:text-accent-ink;
   }
-  .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-wider text-sub;
+  .seg {
+    @apply flex gap-1 rounded-xl bg-muted p-1;
+  }
+  .seg-item {
+    @apply shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold text-sub transition-colors hover:text-fg;
+  }
+  .seg-on {
+    @apply bg-surface text-fg shadow-card;
+  }
+  .link {
+    @apply font-semibold text-accent-ink hover:underline;
   }
 }

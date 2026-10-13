@@ -72,11 +72,11 @@ export default function Register() {
         <Field label="Contraseña" error={tried && errors.pass}>
           <input className="input" type="password" autoComplete="new-password" value={f.pass} onChange={up("pass")} />
         </Field>
-        <button className="btn-primary h-11 w-full">Crear cuenta</button>
+        <button className="btn-primary h-12 w-full text-[15px]">Crear cuenta</button>
       </form>
       <p className="mt-6 text-center text-sm text-sub">
         ¿Ya tienes cuenta?{" "}
-        <Link to="/" className="font-semibold text-brand hover:underline">
+        <Link to="/" className="link">
           Inicia sesión
         </Link>
       </p>

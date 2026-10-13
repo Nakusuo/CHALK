@@ -43,7 +43,7 @@ export function ScorePill({ score, size = "md" }: { score: number | null; size?:
   return (
     <div
       className={cx(
-        "grid place-items-center rounded-xl font-mono font-bold",
+        "num grid shrink-0 place-items-center rounded-xl font-bold",
         t === null && "bg-muted text-sub",
         t === "good" && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
         t === "warn" && "bg-amber-500/10 text-amber-700 dark:text-amber-300",
@@ -58,9 +58,9 @@ export function ScorePill({ score, size = "md" }: { score: number | null; size?:
 
 export function Meter({ value, max = 5, tone }: { value: number; max?: number; tone?: keyof typeof toneBg }) {
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted motion-reduce:[&>div]:transition-none">
       <div
-        className={cx("h-full rounded-full transition-[width] duration-700 ease-out", tone ? toneBg[tone] : "bg-brand")}
+        className={cx("h-full rounded-full transition-[width] duration-700 ease-out", tone ? toneBg[tone] : "bg-accent")}
         style={{ width: `${Math.min(100, (value / max) * 100)}%` }}
       />
     </div>
@@ -74,7 +74,7 @@ export function Difficulty({ value }: { value: number }) {
       <div className="flex-1">
         <Meter value={value} tone={t} />
       </div>
-      <span className={cx("font-mono text-xs font-bold", toneClass[t])}>{value.toFixed(1)}</span>
+      <span className={cx("num text-xs font-bold", toneClass[t])}>{value.toFixed(1)}</span>
       <span className="text-xs text-sub">{difficultyLabel(value)}</span>
     </div>
   );
@@ -83,8 +83,8 @@ export function Difficulty({ value }: { value: number }) {
 export function BadgeTag({ badge }: { badge: BadgeT | null }) {
   if (!badge) return null;
   const cls = {
-    top: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
-    trending: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
+    top: "bg-[#C3B79D]/35 text-[#4A3F27] dark:text-[#C3B79D]",
+    trending: "bg-accent-soft text-accent-ink",
     recommended: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
   }[badge.type];
   return <span className={cx("rounded-md px-2 py-0.5 text-[11px] font-semibold", cls)}>{badge.label}</span>;
@@ -103,7 +103,7 @@ export function Tag({ children, type = "neu" }: { children: ReactNode; type?: st
 export function Avatar({ children, size = 40, className }: { children: ReactNode; size?: number; className?: string }) {
   return (
     <div
-      className={cx("grid shrink-0 place-items-center rounded-xl bg-muted font-semibold", className)}
+      className={cx("grid shrink-0 place-items-center rounded-full bg-muted font-semibold text-sub", className)}
       style={{ width: size, height: size, fontSize: size * 0.42 }}
     >
       {children}
@@ -111,21 +111,70 @@ export function Avatar({ children, size = 40, className }: { children: ReactNode
   );
 }
 
-export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: ReactNode }) {
+export function Stat({
+  label,
+  value,
+  hint,
+  children,
+  compact,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  children?: ReactNode;
+  compact?: boolean;
+}) {
   return (
-    <div className="card p-4">
-      <div className="eyebrow">{label}</div>
-      <div className="mt-1 text-2xl font-bold tracking-tight">{value}</div>
-      {hint && <div className="mt-0.5 text-xs text-sub">{hint}</div>}
+    <div className={cx("card flex min-w-0 flex-col", compact ? "p-3 sm:p-5" : "p-5")}>
+      <div className={cx("truncate font-medium text-sub", compact ? "text-xs sm:text-sm" : "text-sm")}>{label}</div>
+      <div className={cx("num font-bold tracking-tight", compact ? "mt-1 text-2xl sm:mt-2 sm:text-4xl" : "mt-2 text-4xl")}>{value}</div>
+      {hint && <div className={cx("mt-1 text-xs text-sub", compact && "hidden sm:block")}>{hint}</div>}
+      {children && <div className={cx("mt-auto pt-4", compact && "hidden sm:block")}>{children}</div>}
     </div>
+  );
+}
+
+const TINTS = [
+  { bg: "bg-[#F3E6E4] text-[#630000] dark:bg-[#2C2929] dark:text-[#FF8A80]", dot: "bg-[#810100] dark:bg-[#C1272D]" },
+  { bg: "bg-[#EBD9D6] text-[#630000] dark:bg-[#2C2929] dark:text-[#F3B3AC]", dot: "bg-[#630000] dark:bg-[#F3B3AC]" },
+  { bg: "bg-[#E4E1DF] text-[#1B1717] dark:bg-[#2C2929] dark:text-[#EDEBDD]", dot: "bg-[#1B1717] dark:bg-[#EDEBDD]" },
+  { bg: "bg-[#EDEBDD] text-[#5A4E33] dark:bg-[#2C2929] dark:text-[#C3B79D]", dot: "bg-[#C3B79D]" },
+  { bg: "bg-[#F0EDEB] text-[#4A4443] dark:bg-[#2C2929] dark:text-[#DCD7D4]", dot: "bg-[#DCD7D4] dark:bg-[#A9A19E]" },
+  { bg: "bg-[#DCD7D4] text-[#2C2929] dark:bg-[#2C2929] dark:text-[#A9A19E]", dot: "bg-[#2C2929] dark:bg-[#6E6664]" },
+];
+
+/** Tono estable por facultad/departamento (misma entrada → mismo color). */
+export function tint(key: string) {
+  let h = 0;
+  for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return TINTS[h % TINTS.length];
+}
+
+/** "Ronald Angel Ayra Pinto" → "RA": primer nombre + primer apellido. */
+export function initialsOf(name: string) {
+  const w = name.trim().split(/\s+/).filter(Boolean);
+  if (!w.length) return "?";
+  const last = w.length >= 4 ? w[w.length - 2] : w.length === 3 ? w[1] : w[w.length - 1];
+  return (w[0][0] + (w.length > 1 ? last[0] : "")).toUpperCase();
+}
+
+export function Monogram({ name, tone, size = 44, className }: { name: string; tone: string; size?: number; className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cx("grid shrink-0 select-none place-items-center rounded-full font-semibold", tint(tone).bg, className)}
+      style={{ width: size, height: size, fontSize: Math.round(size * 0.36) }}
+    >
+      {initialsOf(name)}
+    </span>
   );
 }
 
 export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-4 pt-2">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-[34px]">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-sub">{subtitle}</p>}
       </div>
       {actions}
@@ -136,7 +185,7 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
 export function Empty({ icon, title, children }: { icon: ReactNode; title: string; children?: ReactNode }) {
   return (
     <div className="card flex flex-col items-center px-6 py-14 text-center">
-      <div className="mb-3 text-sub">{icon}</div>
+      <div className="mb-4 grid h-12 w-12 place-items-center rounded-full bg-accent-soft text-accent-ink">{icon}</div>
       <div className="font-semibold">{title}</div>
       {children && <div className="mt-1 max-w-sm text-sm text-sub">{children}</div>}
     </div>

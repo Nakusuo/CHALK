@@ -5,11 +5,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
+        sans: ["Geist", "system-ui", "sans-serif"],
       },
       colors: {
-        brand: { DEFAULT: "#C8102E", 50: "#FDF2F4", 100: "#FBE4E8", 500: "#E01636", 600: "#C8102E", 700: "#9E0B23" },
+        brand: { DEFAULT: "#70000E", ruby: "#70000E", cherry: "#810100", maroon: "#630000", creme: "#C3B79D", cotton: "#EDEBDD", noir: "#1B1717" },
+        accent: {
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          ink: "rgb(var(--accent-ink) / <alpha-value>)",
+          soft: "rgb(var(--accent-soft) / <alpha-value>)",
+        },
         bg: "rgb(var(--bg) / <alpha-value>)",
         surface: "rgb(var(--surface) / <alpha-value>)",
         muted: "rgb(var(--muted) / <alpha-value>)",
@@ -17,7 +21,12 @@ export default {
         fg: "rgb(var(--fg) / <alpha-value>)",
         sub: "rgb(var(--sub) / <alpha-value>)",
       },
-      boxShadow: { card: "0 1px 2px rgb(0 0 0 / 0.04), 0 1px 3px rgb(0 0 0 / 0.06)" },
+      borderRadius: { card: "16px" },
+      boxShadow: {
+        card: "var(--shadow)",
+        lift: "var(--shadow-lift)",
+      },
+      transitionTimingFunction: { out: "cubic-bezier(0.16, 1, 0.3, 1)" },
     },
   },
   plugins: [],
