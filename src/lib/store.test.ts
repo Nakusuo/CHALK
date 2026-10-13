@@ -34,4 +34,14 @@ describe("store", () => {
     resetStoreForTests();
     expect(store.get().helpful["seed-1"]).toBe(true);
   });
+
+  it("restoreReview devuelve una reseña borrada", () => {
+    const r = store.addReview({
+      profId: 1, user: "A", initials: "A", date: "Mayo 2025", score: 4, tags: [], tagType: [],
+      text: "x", helpful: 0, course: "X", difficulty: 3, wouldTakeAgain: true,
+    });
+    store.deleteReview(r.id);
+    store.restoreReview(r);
+    expect(store.get().reviews.map((x) => x.id)).toEqual([r.id]);
+  });
 });

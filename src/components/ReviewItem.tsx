@@ -1,6 +1,7 @@
 import { ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import type { Review } from "../data/types";
 import { store, useStore } from "../lib/store";
+import { toast } from "./Toast";
 import { Avatar, cx, Stars, Tag } from "./ui";
 
 export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showProf?: string; readOnly?: boolean }) {
@@ -39,7 +40,11 @@ export default function ReviewItem({ r, showProf, readOnly }: { r: Review; showP
         {!readOnly && (
           <div className="ml-auto flex items-center gap-1">
             {mine && (
-              <button className="btn-ghost h-8 px-2 text-xs text-sub" onClick={() => store.deleteReview(r.id)}>
+              <button className="btn-ghost h-8 px-2 text-xs text-sub" onClick={() => {
+                  store.deleteReview(r.id);
+                  toast("Reseña borrada", { label: "Deshacer", onClick: () => store.restoreReview(r) });
+                }}
+              >
                 <Trash2 size={14} /> Borrar
               </button>
             )}

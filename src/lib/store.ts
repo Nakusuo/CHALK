@@ -83,6 +83,8 @@ export const store = {
     return review;
   },
   deleteReview: (id: string) => set({ reviews: state.reviews.filter((r) => r.id !== id) }),
+  restoreReview: (r: Review) =>
+    set({ reviews: [...state.reviews, r].sort((a, b) => (a.createdAt ?? "").localeCompare(b.createdAt ?? "")) }),
 
   toggleHelpful: (id: string) => set({ helpful: { ...state.helpful, [id]: !state.helpful[id] } }),
 

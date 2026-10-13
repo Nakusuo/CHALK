@@ -3,6 +3,7 @@ import { type FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import ProfessorCard from "../components/ProfessorCard";
 import ReviewItem from "../components/ReviewItem";
+import { toast } from "../components/Toast";
 import { Empty, PageHeader, Stat } from "../components/ui";
 import { faculties, getFaculty, getProfessor, getSedeName, sedes } from "../data/db";
 import { store, useStore } from "../lib/store";
@@ -13,7 +14,6 @@ export default function Profile() {
   const favorites = useStore((s) => s.favorites);
   const helpful = useStore((s) => s.helpful);
   const [form, setForm] = useState({ name: user.name, fac: user.fac ?? "", sede: user.sede ?? "" });
-  const [saved, setSaved] = useState(false);
 
   const avg = mine.length ? mine.reduce((s, r) => s + r.score, 0) / mine.length : 0;
 
@@ -27,8 +27,7 @@ export default function Profile() {
       fac: form.fac || undefined,
       sede: form.sede || undefined,
     });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    toast("Datos guardados");
   }
 
   return (
@@ -118,7 +117,7 @@ export default function Profile() {
             </select>
           </label>
           <div className="text-xs text-sub">Código: {user.code}</div>
-          <button className="btn-primary w-full">{saved ? "Guardado ✓" : "Guardar cambios"}</button>
+          <button className="btn-primary w-full">Guardar cambios</button>
         </form>
       </div>
     </>
